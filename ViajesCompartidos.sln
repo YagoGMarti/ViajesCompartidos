@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32901.82
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViajesCompartidos", "ViajesCompartidos\ViajesCompartidos.csproj", "{D7AD8E96-2E51-4424-9CA0-384380EFD4B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViajesCompartidos.Tests", "ViajesCompartidos.Tests\ViajesCompartidos.Tests.csproj", "{6C1BC30E-0364-476D-B2EF-B39578747159}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D7AD8E96-2E51-4424-9CA0-384380EFD4B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7AD8E96-2E51-4424-9CA0-384380EFD4B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7AD8E96-2E51-4424-9CA0-384380EFD4B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7AD8E96-2E51-4424-9CA0-384380EFD4B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C1BC30E-0364-476D-B2EF-B39578747159}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C1BC30E-0364-476D-B2EF-B39578747159}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C1BC30E-0364-476D-B2EF-B39578747159}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C1BC30E-0364-476D-B2EF-B39578747159}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {84CB8E8A-8B67-4345-8F4B-B069D839C16E}
+	EndGlobalSection
+EndGlobal

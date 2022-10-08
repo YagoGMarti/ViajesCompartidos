@@ -1,0 +1,114 @@
+﻿@model SistemaViajesCompartidos.Models.VehiculoModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>VehiculoModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Patente)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Patente)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AsientosLibres)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AsientosLibres)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ComprobantePoliza)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ComprobantePoliza)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TipoImagenComprobantePoliza)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TipoImagenComprobantePoliza)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaVencimientoComprobantePoliza)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaVencimientoComprobantePoliza)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaVencimientoComprobantePolizaActiva)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaVencimientoComprobantePolizaActiva)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CarnetConducir)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CarnetConducir)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TipoImagenCarnetConducir)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TipoImagenCarnetConducir)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaVencimientoCarnetConducir)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaVencimientoCarnetConducir)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaVencimientoCarnetConducirActiva)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaVencimientoCarnetConducirActiva)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaAlta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaAlta)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaBaja)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaBaja)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
