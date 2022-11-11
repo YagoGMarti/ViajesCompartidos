@@ -7,121 +7,95 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SistemaViajesCompartidos.Context;
+using SistemaViajesCompartidos.Enums;
 using SistemaViajesCompartidos.Models;
+using ViajesCompartidos.Handlers;
 
 namespace ViajesCompartidos.Controllers
 {
+    [RevisarRoles(RolesEmpleadoFlag.ADMINISTRADOR)]
     public class EmpresasController : BaseController
     {
-        // GET: EmpresasController
         public ActionResult Index()
         {
-            return View(db.Empresas.ToList());
+            return View("Index", EmpresaHandler.GetEmpresas());
         }
 
-        // GET: EmpresasController/Details/5
-        public ActionResult Details(Guid? id)
+        public ActionResult Detalles(Guid? ID)
         {
-            if (id == null)
+            if (ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            EmpresaModel empresaModel = db.Empresas.Find(id);
+
+            EmpresaModel empresaModel = EmpresaHandler.GetEmpresa(ID.Value);
+            
             if (empresaModel == null)
             {
                 return HttpNotFound();
             }
+
             return View(empresaModel);
         }
 
-        // GET: EmpresasController/Create
-        public ActionResult Create()
+        public ActionResult Crear()
         {
             return View();
         }
 
-        // POST: EmpresasController/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nombre,RazonSocial,CUIT,TipoEmpresa,Logo,FormatoImagenLogo,FechaAlta,FechaBaja")] EmpresaModel empresaModel)
+        public ActionResult Crear(EmpresaModel empresaModel)
         {
             if (ModelState.IsValid)
             {
-                empresaModel.Id = Guid.NewGuid();
-                db.Empresas.Add(empresaModel);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                EmpresaHandler.CrearEmpresa(empresaModel);
+                SesionHandler.EnviarClave(empresaModel);
+                return RedirectToAction("Detalles", new { ID = empresaModel.ID });
             }
 
             return View(empresaModel);
         }
 
-        // GET: EmpresasController/Edit/5
-        public ActionResult Edit(Guid? id)
+        public ActionResult Editar(Guid? ID)
         {
-            if (id == null)
+            if (ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            EmpresaModel empresaModel = db.Empresas.Find(id);
+            EmpresaModel empresaModel = EmpresaHandler.GetEmpresa(ID.Value);
+            
             if (empresaModel == null)
             {
                 return HttpNotFound();
             }
+
             return View(empresaModel);
         }
 
-        // POST: EmpresasController/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Nombre,RazonSocial,CUIT,TipoEmpresa,Logo,FormatoImagenLogo,FechaAlta,FechaBaja")] EmpresaModel empresaModel)
+        public ActionResult Editar(EmpresaModel empresaModel)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(empresaModel).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                EmpresaHandler.EditarEmpresa(empresaModel);
+                return RedirectToAction("Detalles", new { ID = empresaModel.ID });
             }
+
             return View(empresaModel);
         }
 
-        // GET: EmpresasController/Delete/5
-        public ActionResult Delete(Guid? id)
+        public ActionResult Desactivar(Guid ID)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            EmpresaModel empresaModel = db.Empresas.Find(id);
-            if (empresaModel == null)
-            {
-                return HttpNotFound();
-            }
-            return View(empresaModel);
+            EmpresaHandler.CambiarEstadoActivo(ID, false);
+            return this.Index();
         }
 
-        // POST: EmpresasController/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(Guid id)
+        public ActionResult Activar(Guid ID)
         {
-            EmpresaModel empresaModel = db.Empresas.Find(id);
-            db.Empresas.Remove(empresaModel);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
+            EmpresaHandler.CambiarEstadoActivo(ID, true);
+            return this.Index();
         }
     }
 }

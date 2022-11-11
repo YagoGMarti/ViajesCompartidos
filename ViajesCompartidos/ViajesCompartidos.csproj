@@ -132,41 +132,72 @@
     <Compile Include="Context\ViajesCompartidosContext.cs" />
     <Compile Include="Context\ViajesCompartidosInitializer.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\ContactosController.cs" />
     <Compile Include="Controllers\EmpleadosController.cs" />
     <Compile Include="Controllers\EmpresasController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\SucursalesController.cs" />
     <Compile Include="Controllers\VehiculosController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Handlers\BaseHandler.cs" />
+    <Compile Include="Handlers\VehiculoHandler.cs" />
+    <Compile Include="Handlers\ContactoHandler.cs" />
+    <Compile Include="Handlers\EmpresaHandler.cs" />
+    <Compile Include="Handlers\EncriptadoHandler.cs" />
+    <Compile Include="Handlers\Enumerable.cs" />
+    <Compile Include="Handlers\SesionHandler.cs" />
+    <Compile Include="Handlers\SucursalHandler.cs" />
+    <Compile Include="Handlers\EmpleadoHandler.cs" />
     <Compile Include="Models\BaseModel.cs" />
+    <Compile Include="Models\ContactoModel.cs" />
     <Compile Include="Models\EmpleadoModel.cs" />
     <Compile Include="Models\EmpresaModel.cs" />
-    <Compile Include="Models\Enums\DiasTrabajoFlag.cs" />
-    <Compile Include="Models\Enums\HorarioTrabajoEnum.cs" />
-    <Compile Include="Models\Enums\RolesEmpleadoFlag.cs" />
-    <Compile Include="Models\Enums\EstadoRecorridoEnum.cs" />
-    <Compile Include="Models\ErrorViewModel.cs" />
+    <Compile Include="Enums\DiasTrabajoFlag.cs" />
+    <Compile Include="Enums\HorarioTrabajoEnum.cs" />
+    <Compile Include="Enums\RolesEmpleadoFlag.cs" />
+    <Compile Include="Enums\EstadoRecorridoEnum.cs" />
+    <Compile Include="Models\Temporal\ErrorViewModel.cs" />
     <Compile Include="Models\JornadaTrabajoModel.cs" />
     <Compile Include="Models\RecorridoModel.cs" />
     <Compile Include="Models\CorreoElectrinicoRespaldoModel.cs" />
+    <Compile Include="Models\Temporal\InicioSesion.cs" />
     <Compile Include="Models\VehiculoModel.cs" />
     <Compile Include="Models\SucursalModel.cs" />
-    <Compile Include="Models\Enums\TipoEmpresaEnum.cs" />
+    <Compile Include="Enums\TipoEmpresaEnum.cs" />
     <Compile Include="Models\UbicacionModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Images\download.svg" />
+    <Content Include="Content\Images\envelope.svg" />
+    <Content Include="Content\Images\geo-alt-fill.svg" />
+    <Content Include="Content\Images\geo-alt.svg" />
+    <Content Include="Content\Images\house-fill.svg" />
+    <Content Include="Content\Images\house.svg" />
+    <Content Include="Content\Images\map.svg" />
+    <Content Include="Content\jquery-ui.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\CustomSite.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\Images\MapaRandom.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
+    <Content Include="Content\site.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\jquery-ui.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Context\ClassDiagram.cd" />
@@ -192,29 +223,28 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Login\About.cshtml" />
-    <Content Include="Views\Login\Contact.cshtml" />
-    <Content Include="Views\Login\Index.cshtml" />
-    <Content Include="Views\Empresas\Create.cshtml" />
-    <Content Include="Views\Empresas\Delete.cshtml" />
-    <Content Include="Views\Empresas\Details.cshtml" />
-    <Content Include="Views\Empresas\Edit.cshtml" />
+    <Content Include="Views\Home\Acerca.cshtml" />
+    <Content Include="Views\Home\Contacto.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Empresas\Crear.cshtml" />
+    <Content Include="Views\Empresas\Detalles.cshtml" />
+    <Content Include="Views\Empresas\Editar.cshtml" />
     <Content Include="Views\Empresas\Index.cshtml" />
-    <Content Include="Views\Sucursales\Create.cshtml" />
-    <Content Include="Views\Sucursales\Delete.cshtml" />
-    <Content Include="Views\Sucursales\Details.cshtml" />
-    <Content Include="Views\Sucursales\Edit.cshtml" />
+    <Content Include="Views\Sucursales\Crear.cshtml" />
+    <Content Include="Views\Sucursales\Detalles.cshtml" />
+    <Content Include="Views\Sucursales\Editar.cshtml" />
     <Content Include="Views\Sucursales\Index.cshtml" />
-    <Content Include="Views\Empleados\Create.cshtml" />
-    <Content Include="Views\Empleados\Delete.cshtml" />
-    <Content Include="Views\Empleados\Details.cshtml" />
-    <Content Include="Views\Empleados\Edit.cshtml" />
+    <Content Include="Views\Empleados\Crear.cshtml" />
+    <Content Include="Views\Empleados\Detalles.cshtml" />
+    <Content Include="Views\Empleados\Editar.cshtml" />
     <Content Include="Views\Empleados\Index.cshtml" />
-    <Content Include="Views\Vehiculos\Create.cshtml" />
-    <Content Include="Views\Vehiculos\Delete.cshtml" />
-    <Content Include="Views\Vehiculos\Details.cshtml" />
-    <Content Include="Views\Vehiculos\Edit.cshtml" />
+    <Content Include="Views\Vehiculos\Crear.cshtml" />
+    <Content Include="Views\Vehiculos\Detalles.cshtml" />
+    <Content Include="Views\Vehiculos\Editar.cshtml" />
     <Content Include="Views\Vehiculos\Index.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Contactos\Index.cshtml" />
+    <Content Include="Views\Vehiculos\Index - Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -668,7 +668,7 @@ $.extend( $.validator, {
 			return $( this.settings.errorElement + "." + errorClass, this.errorContext );
 		},
 
-		resetInternals: function() {
+		resetpublics: function() {
 			this.successList = [];
 			this.errorList = [];
 			this.errorMap = {};
@@ -677,7 +677,7 @@ $.extend( $.validator, {
 		},
 
 		reset: function() {
-			this.resetInternals();
+			this.resetpublics();
 			this.currentElements = $( [] );
 		},
 
@@ -1539,7 +1539,7 @@ $.extend( $.validator, {
 					validator.settings.messages[ element.name ][ method ] = previous.originalMessage;
 					if ( valid ) {
 						submitted = validator.formSubmitted;
-						validator.resetInternals();
+						validator.resetpublics();
 						validator.toHide = validator.errorsFor( element );
 						validator.formSubmitted = submitted;
 						validator.successList.push( element );

@@ -1,0 +1,50 @@
+﻿@model IEnumerable<SistemaViajesCompartidos.Models.ContactoModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h3>Contactos</h3>
+
+<table class="table">
+    <tr>
+        <th class="col-lg-2 text-center">
+            @Html.DisplayNameFor(model => model.Fecha)
+        </th>
+        <th class="col-lg-3 text-center">
+            @Html.DisplayNameFor(model => model.CorreoElectronico)
+        </th>
+        <th class="col-lg-6 text-center">
+            @Html.DisplayNameFor(model => model.Mensaje)
+        </th>
+        <th class="col-lg-1 text-center">
+            @Html.DisplayNameFor(model => model.Procesado)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Fecha)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.CorreoElectronico)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Mensaje)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Procesado)
+            </td>
+            <td class="text-center">
+                @if (item.Procesado == false)
+                {
+                    @Html.ActionLink("Procesar", "MarcarContactoRealizado", new { ID = item.ID }, new { onclick = "return confirm('¿Desea confirmar el contacto realizado?');" })
+                }
+            </td>
+        </tr>
+    }
+
+</table>

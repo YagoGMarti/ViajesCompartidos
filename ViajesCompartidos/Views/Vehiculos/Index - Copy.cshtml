@@ -1,0 +1,107 @@
+﻿@model IEnumerable<SistemaViajesCompartidos.Models.VehiculoModel>
+
+@{
+    ViewBag.Title = "Vehiculos";
+}
+
+<h3>Vehiculos</h3>
+
+<table class="table">
+    <tr>
+        <th class="col-lg-1 text-center">
+            @Html.DisplayNameFor(model => model.Patente)
+        </th>
+        <th class="col-lg-1 text-center">
+            @Html.DisplayNameFor(model => model.AsientosLibres)
+        </th>
+        <th class="col-lg-1 text-center">
+            @Html.DisplayNameFor(model => model.FechaVencimientoComprobantePoliza)
+        </th>
+        <th class="col-lg-1 text-center">
+            @Html.DisplayNameFor(model => model.ComprobantePolizaActiva)
+        </th>
+        <th class="col-lg-1 text-center">
+            @Html.DisplayNameFor(model => model.AdjuntoComprobantePoliza)
+        </th>
+        <th class="col-lg-1 text-center">
+
+        </th>
+        <th class="col-lg-1 text-center">
+            @Html.DisplayNameFor(model => model.FechaVencimientoCarnetConducir)
+        </th>
+        <th class="col-lg-1 text-center">
+            @Html.DisplayNameFor(model => model.CarnetConducirActivo)
+        </th>
+        <th class="col-lg-1 text-center">
+            @Html.DisplayNameFor(model => model.AdjuntoCarnetConducir)
+        </th>
+        <th class="col-lg-1 text-center">
+
+        </th>
+        <th class="col-lg-1 text-center"></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Patente)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.AsientosLibres)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.FechaVencimientoComprobantePoliza)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.ComprobantePolizaActiva)
+            </td>
+            <td class="text-center">
+                @if (! string.IsNullOrWhiteSpace(item.NombreArchivoComprobantePoliza))
+                {
+                    <button type="button" onclick="location.href='@Url.Action("AdjuntoPoliza", new { ID = item.ID })'" style="border: 0;background: transparent;">
+                        <img src="~/Content/Images/download.svg" alt="Bootstrap" width="16" height="16">
+                    </button>
+                }
+            </td>
+            <th class="text-center">
+                @if (item.ComprobantePolizaActiva == true)
+                {
+                    @Html.ActionLink("Desactivar", "DesactivarPoliza", new { ID = item.ID }, new { onclick = "return confirm('¿Desea marcar la poliza de seguro como INACTIVA?');" })
+                }
+                else
+                {
+                    @Html.ActionLink("Validar", "ActivarPoliza", new { ID = item.ID }, new { onclick = "return confirm('¿Desea marcar la poliza de seguro como ACTIVA?');" })
+                }
+            </th>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.FechaVencimientoCarnetConducir)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.CarnetConducirActivo)
+            </td>
+            <td class="text-center">
+                @if (!string.IsNullOrWhiteSpace(item.NombreArchivoCarnetConducir))
+                {
+                    <button type="button" onclick="location.href='@Url.Action("AdjuntoCarnet", new { ID = item.ID })'" style="border: 0;background: transparent;">
+                        <img src="~/Content/Images/download.svg" alt="Bootstrap" width="16" height="16">
+                    </button>
+                }
+            </td>
+            <th class="text-center">
+                @if (item.CarnetConducirActivo == true)
+                {
+                    @Html.ActionLink("Desactivar", "DesactivarCarnet", new { ID = item.ID }, new { onclick = "return confirm('¿Desea marcar al carnet de conducir como INACTIVO?');" })
+                }
+                else
+                {
+                    @Html.ActionLink("Validar", "ActivarCarnet", new { ID = item.ID }, new { onclick = "return confirm('¿Desea marcaral carnet de conducir como ACTIVO?');" })
+                }
+            </th>
+            <th class="text-center">
+                @Html.ActionLink("Editar", "Editar", "Vehiculos", new { ID = item.ID }, new { })
+            </th>
+        </tr>
+    }
+
+</table>

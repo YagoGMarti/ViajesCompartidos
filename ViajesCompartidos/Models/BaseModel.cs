@@ -1,18 +1,30 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace SistemaViajesCompartidos.Models
 {
     public abstract class BaseModel
     {
-        [Key]
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public BaseModel()
+        {
+            Activo = true;
+            FechaAlta = DateTime.Now;
+        }
 
-        //[DatabaseGenerated(DatabaseGeneratedOption.None)]
-        //public int CourseID { get; set; }
+        [Key] //[DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public Guid ID { get; set; } = Guid.NewGuid();
 
-        Boolean Activo = true;
-        public DateTime FechaAlta { get; set; } = DateTime.Now;
-        public DateTime? FechaBaja { get; set; }
+        public bool Activo { get; set; }
+
+        [DisplayName("Alta")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime FechaAlta { get; set; }
+
+        //[DisplayName("Baja")]
+        //[DataType(DataType.Date)]
+        //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        //public DateTime? FechaBaja { get; set; }
     }
 }

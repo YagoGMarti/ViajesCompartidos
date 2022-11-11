@@ -7,6 +7,7 @@ namespace SistemaViajesCompartidos.Models
     public class CorreoElectrinicoRespaldoModel : BaseModel
     {
         public EmpleadoModel Destinatario { get; set; }
+        
         public string Mensaje { get; set; }
     }
 }

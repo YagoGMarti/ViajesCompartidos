@@ -1,0 +1,67 @@
+﻿@model SistemaViajesCompartidos.Models.SucursalModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h3> @Html.DisplayFor(model => model.Nombre) </h3>
+<hr />
+
+<div class="form-horizontal col-md-7">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.ID)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+            @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { disabled = "disabled", @class = "form-control text-center" } })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Ubicacion.UbicacionTexto, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+            @Html.EditorFor(model => model.Ubicacion.UbicacionTexto, new { htmlAttributes = new { disabled = "disabled", @class = "form-control text-center" } })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.FechaAlta, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+            @Html.TextBoxFor(model => model.FechaAlta, new { disabled = "disabled", @type = "date", @Value = Model.FechaAlta.ToString("yyyy-MM-dd"), @class = "form-control text-center" })
+        </div>
+    </div>
+
+</div>
+
+<div class="form-horizontal col-md-5">
+    <div class="form-group">
+        <div class="map mapa" id="mapa">
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        function initializeMap() {
+            const map = new google.maps.Map(document.getElementById("mapa"), {
+                zoom: 16,
+                center: new google.maps.LatLng('@ViewBag.Latitud', '@ViewBag.Longitud'),
+                mapTypeControl: false,
+                fullscreenControl: false,
+                zoomControl: true,
+                streetViewControl: false
+            });
+
+            const marker = new google.maps.Marker({ map: map, draggable: false });
+            marker.setPosition(new google.maps.LatLng('@ViewBag.Latitud', '@ViewBag.Longitud'));
+            marker.setVisible(true);
+    }
+
+
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZrUINt7hq2Js-FUA_otyngMihK-VMRuY&libraries=places&callback=initializeMap&solution_channel=GMP_QB_addressselection_v1_cBC"></script>
+}

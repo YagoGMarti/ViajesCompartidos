@@ -2,31 +2,35 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SistemaViajesCompartidos.Context;
 using SistemaViajesCompartidos.Models;
+using ViajesCompartidos.Handlers;
 
 namespace ViajesCompartidos.Controllers
 {
     public class VehiculosController : BaseController
     {
-        // GET: Vehiculos
         public ActionResult Index()
         {
-            return View(db.Vehiculos.ToList());
+            return View("Index", VehiculoHandler.GetVehiculos());
         }
 
-        // GET: Vehiculos/Details/5
-        public ActionResult Details(Guid? id)
+        public ActionResult Detalles(Guid? ID)
         {
-            if (id == null)
+            if (ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VehiculoModel vehiculoModel = db.Vehiculos.Find(id);
+            VehiculoModel vehiculoModel = VehiculoHandler.GetVehiculo(ID.Value);
+
+            EmpleadoModel empleadoModel = EmpleadoHandler.GetEmpleado(vehiculoModel.Empleado_ID);
+            ViewBag.empleado = $"{empleadoModel.Nombre} - {empleadoModel.CorreoElectronico}";
+
             if (vehiculoModel == null)
             {
                 return HttpNotFound();
@@ -34,38 +38,39 @@ namespace ViajesCompartidos.Controllers
             return View(vehiculoModel);
         }
 
-        // GET: Vehiculos/Create
-        public ActionResult Create()
+        public ActionResult Crear()
         {
             return View();
         }
 
-        // POST: Vehiculos/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Patente,AsientosLibres,ComprobantePoliza,TipoImagenComprobantePoliza,FechaVencimientoComprobantePoliza,FechaVencimientoComprobantePolizaActiva,ComprobanteCarnetConducir,TipoImagenCarnetConducir,FechaVencimientoCarnetConducir,FechaVencimientoCarnetConducirActiva,FechaAlta,FechaBaja")] VehiculoModel vehiculoModel)
+        public ActionResult Crear(VehiculoModel vehiculoModel)
         {
+            var Empleado_ID = ObtenerUsuario((Guid)Session["SessionGUID"]);
+
             if (ModelState.IsValid)
             {
-                vehiculoModel.Id = Guid.NewGuid();
-                db.Vehiculos.Add(vehiculoModel);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                vehiculoModel.Empleado_ID = Empleado_ID;
+                _context.Vehiculos.Add(vehiculoModel);
+                _context.SaveChanges();
+                return RedirectToAction("Detalles", new { ID = vehiculoModel.ID });
             }
 
             return View(vehiculoModel);
         }
 
-        // GET: Vehiculos/Edit/5
-        public ActionResult Edit(Guid? id)
+        public ActionResult Editar(Guid? ID)
         {
-            if (id == null)
+            if (ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VehiculoModel vehiculoModel = db.Vehiculos.Find(id);
+            VehiculoModel vehiculoModel = VehiculoHandler.GetVehiculo(ID.Value);
+
+            EmpleadoModel empleadoModel = EmpleadoHandler.GetEmpleado(vehiculoModel.Empleado_ID);
+            ViewBag.empleado = $"{empleadoModel.Nombre} - {empleadoModel.CorreoElectronico}";
+
             if (vehiculoModel == null)
             {
                 return HttpNotFound();
@@ -73,30 +78,30 @@ namespace ViajesCompartidos.Controllers
             return View(vehiculoModel);
         }
 
-        // POST: Vehiculos/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Patente,AsientosLibres,ComprobantePoliza,TipoImagenComprobantePoliza,FechaVencimientoComprobantePoliza,FechaVencimientoComprobantePolizaActiva,ComprobanteCarnetConducir,TipoImagenCarnetConducir,FechaVencimientoCarnetConducir,FechaVencimientoCarnetConducirActiva,FechaAlta,FechaBaja")] VehiculoModel vehiculoModel)
+        public ActionResult Editar(VehiculoModel vehiculoModel)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(vehiculoModel).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                VehiculoHandler.EditarVehiculo(vehiculoModel);
+                return RedirectToAction("Detalles", new { ID = vehiculoModel.ID });
             }
+
             return View(vehiculoModel);
         }
 
-        // GET: Vehiculos/Delete/5
-        public ActionResult Delete(Guid? id)
+        public ActionResult Validar(Guid? ID)
         {
-            if (id == null)
+            if (ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VehiculoModel vehiculoModel = db.Vehiculos.Find(id);
+            VehiculoModel vehiculoModel = VehiculoHandler.GetVehiculo(ID.Value);
+
+            EmpleadoModel empleadoModel = EmpleadoHandler.GetEmpleado(vehiculoModel.Empleado_ID);
+            ViewBag.empleado = $"{empleadoModel.Nombre} - {empleadoModel.CorreoElectronico}";
+
             if (vehiculoModel == null)
             {
                 return HttpNotFound();
@@ -104,24 +109,29 @@ namespace ViajesCompartidos.Controllers
             return View(vehiculoModel);
         }
 
-        // POST: Vehiculos/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(Guid id)
+        public ActionResult Validar(VehiculoModel vehiculoModel)
         {
-            VehiculoModel vehiculoModel = db.Vehiculos.Find(id);
-            db.Vehiculos.Remove(vehiculoModel);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                _context.Entry(vehiculoModel).State = EntityState.Modified;
+                _context.SaveChanges();
+                return RedirectToAction("Detalles", new { ID = vehiculoModel.ID });
+            }
+            return View(vehiculoModel);
         }
 
-        protected override void Dispose(bool disposing)
+        public FileContentResult AdjuntoPoliza(Guid ID)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
+            VehiculoModel vehiculo = VehiculoHandler.GetVehiculo(ID);            
+            return File(vehiculo.AdjuntoComprobantePoliza, vehiculo.TipoImagenComprobantePoliza, vehiculo.NombreArchivoComprobantePoliza);
+        }
+
+        public FileContentResult AdjuntoCarnet(Guid ID)
+        {
+            VehiculoModel vehiculo = VehiculoHandler.GetVehiculo(ID);
+            return File(vehiculo.AdjuntoCarnetConducir, vehiculo.TipoImagenCarnetConducir, vehiculo.NombreArchivoCarnetConducir);
         }
     }
 }

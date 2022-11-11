@@ -1,0 +1,91 @@
+﻿@model SistemaViajesCompartidos.Models.VehiculoModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<div class="form-horizontal">
+    <h3>@ViewBag.empleado</h3>
+    <hr />
+    <div class="form-group">
+        @Html.LabelFor(model => model.Patente, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+            @Html.EditorFor(model => model.Patente, new { htmlAttributes = new { disabled = "disabled", @class = "form-control text-center" } })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.AsientosLibres, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+            @Html.EditorFor(model => model.AsientosLibres, new { htmlAttributes = new { disabled = "disabled", @class = "form-control text-center" } })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ImagenCarnetConducir, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+            @if (!String.IsNullOrWhiteSpace(Model.NombreArchivoCarnetConducir))
+            {
+                <span class="control-label">
+                    @Model.NombreArchivoCarnetConducir
+                    <button type="button" onclick="location.href='@Url.Action("AdjuntoCarnet", new { ID = Model.ID })'" style="border: 0;background: transparent;">
+                        <img src="~/Content/Images/download.svg" alt="Bootstrap" width="16" height="16">
+                    </button>
+                </span>
+            }
+            else
+            {<span class="control-label"> sin adjunto </span>}
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.FechaVencimientoCarnetConducir, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+            @if (Model.FechaVencimientoCarnetConducir.HasValue)
+            {
+                @Html.TextBoxFor(model => model.FechaVencimientoCarnetConducir,
+                    new { disabled = "disabled", @type = "date", @Value = Model.FechaVencimientoCarnetConducir.Value.ToString("yyyy-MM-dd"), @class = "form-control text-center" })
+            }
+            else
+            {<span class="control-label"> sin adjunto </span>}
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ImagenComprobantePoliza, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+            @if (!String.IsNullOrWhiteSpace(Model.NombreArchivoComprobantePoliza))
+            {
+                <span class="control-label">
+                    @Model.NombreArchivoComprobantePoliza
+                    <button type="button" onclick="location.href='@Url.Action("AdjuntoPoliza", new { ID = Model.ID })'" style="border: 0;background: transparent;">
+                        <img src="~/Content/Images/download.svg" alt="Bootstrap" width="16" height="16">
+                    </button>
+                </span>
+            }
+            else
+            {<span class="control-label"> sin adjunto </span>}
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.FechaVencimientoComprobantePoliza, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+            @if (Model.FechaVencimientoComprobantePoliza.HasValue)
+            {
+                @Html.TextBoxFor(model => model.FechaVencimientoComprobantePoliza,
+                    new { disabled = "disabled", @type = "date", @Value = Model.FechaVencimientoComprobantePoliza.Value.ToString("yyyy-MM-dd"), @class = "form-control text-center" })
+            }
+            else
+            {<span class="control-label"> sin adjunto </span>}
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.FechaAlta, htmlAttributes: new { @class = "control-label col-md-4" })
+        <div class="col-md-8">
+            @Html.TextBoxFor(model => model.FechaAlta, new { disabled = "disabled", @type = "date", @Value = Model.FechaAlta.ToString("yyyy-MM-dd"), @class = "form-control text-center" })
+        </div>
+    </div>
+</div>
+

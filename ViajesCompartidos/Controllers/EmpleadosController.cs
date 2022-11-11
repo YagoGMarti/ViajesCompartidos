@@ -8,121 +8,166 @@ using System.Web;
 using System.Web.Mvc;
 using SistemaViajesCompartidos.Context;
 using SistemaViajesCompartidos.Models;
+using ViajesCompartidos.Handlers;
 
 namespace ViajesCompartidos.Controllers
 {
     public class EmpleadosController : BaseController
     {
-        // GET: Empleados
-        public ActionResult Index()
+        public ActionResult Index(Guid? EmpresaID, Guid? SucursalID)
         {
-            return View(db.Empleados.ToList());
+            if (EmpresaID.HasValue || SucursalID.HasValue)
+            {
+                ViewBag.EmpresaID = EmpresaID;
+                ViewBag.SucursalID = SucursalID;
+                return View("Index", EmpleadoHandler.GetEmpleados(EmpresaID, SucursalID));
+            }
+
+            return View("Index", EmpleadoHandler.GetEmpleados(ObtenerEmpresa((Guid)Session["SessionGUID"]), SucursalID));
         }
 
-        // GET: Empleados/Details/5
-        public ActionResult Details(Guid? id)
+        public ActionResult Detalles(Guid? ID)
         {
-            if (id == null)
+            if (ID == null)
             {
-                id = db.Empleados.ToList().First().Id;
-                //return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ID = ObtenerUsuario((Guid)Session["SessionGUID"]);
+                if (ID == null)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                }
             }
-            EmpleadoModel empleadoModel = db.Empleados.Find(id);
+
+            EmpleadoModel empleadoModel = EmpleadoHandler.GetEmpleado(ID.Value);
+
             if (empleadoModel == null)
             {
                 return HttpNotFound();
             }
+
+            ViewBag.Sucursales = GetSucursales(empleadoModel.EmpresaModel_ID, empleadoModel.SucursalModel_ID);
+            ViewBag.Latitud = empleadoModel.Ubicacion.LatitudTexto;
+            ViewBag.Longitud = empleadoModel.Ubicacion.LongitudTexto;
+
             return View(empleadoModel);
         }
 
-        // GET: Empleados/Create
-        public ActionResult Create()
+        public ActionResult Crear()
         {
+            var empresaID = ObtenerEmpresa((Guid)Session["SessionGUID"]);
+            ViewBag.Sucursales = GetSucursales(empresaID, null);
+            ViewBag.Ingreso = 7;
+            ViewBag.Salida = 16;
             return View();
         }
 
-        // POST: Empleados/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nombre,CorreoElectronicoEncriptado,ClaveHash,Roles,FechaAlta,FechaBaja")] EmpleadoModel empleadoModel)
+        public ActionResult Crear(EmpleadoModel empleadoModel)
         {
-            if (ModelState.IsValid)
+            var empresaID = ObtenerEmpresa((Guid)Session["SessionGUID"]);
+
+            empleadoModel.HorarioIngreso = new TimeSpan(int.Parse(empleadoModel.HorarioIngresoTexto), 0, 0);
+            empleadoModel.HorarioSalida = new TimeSpan(int.Parse(empleadoModel.HorarioSalidaTexto), 0, 0);
+
+            if (empleadoModel.HorarioIngreso.Hours >= empleadoModel.HorarioSalida.Hours)
             {
-                empleadoModel.Id = Guid.NewGuid();
-                db.Empleados.Add(empleadoModel);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                ViewBag.HorariosInvalidos = "El horario de ingreso debe ser anterior al de salida";
             }
+            else if (ModelState.IsValid)
+            {
+                EmpleadoHandler.CrearEmpleado(empleadoModel, empresaID);
+                return RedirectToAction("Detalles", new { ID = empleadoModel.ID });
+            }
+
+            ViewBag.Sucursales = GetSucursales(empresaID, empleadoModel.SucursalModel_ID);
+            ViewBag.Ingreso = empleadoModel.HorarioIngreso.Hours.ToString();
+            ViewBag.Salida = empleadoModel.HorarioSalida.Hours.ToString();
 
             return View(empleadoModel);
         }
 
-        // GET: Empleados/Edit/5
-        public ActionResult Edit(Guid? id)
+        public ActionResult Editar(Guid? ID)
         {
-            if (id == null)
+            if (ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            EmpleadoModel empleadoModel = db.Empleados.Find(id);
+
+            EmpleadoModel empleadoModel = EmpleadoHandler.GetEmpleado(ID.Value);
+            
+            
+            ModelState.Clear();
+
             if (empleadoModel == null)
             {
                 return HttpNotFound();
             }
+
+            var empresaID = ObtenerEmpresa((Guid)Session["SessionGUID"]);
+            ViewBag.Sucursales = GetSucursales(empresaID, empleadoModel.SucursalModel_ID);
+            ViewBag.Ingreso = empleadoModel.HorarioIngreso.Hours;
+            ViewBag.Salida = empleadoModel.HorarioSalida.Hours;
+            ViewBag.Latitud = empleadoModel.Ubicacion.LatitudTexto;
+            ViewBag.Longitud = empleadoModel.Ubicacion.LongitudTexto;
+
             return View(empleadoModel);
         }
 
-        // POST: Empleados/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Nombre,CorreoElectronicoEncriptado,ClaveHash,Roles,FechaAlta,FechaBaja")] EmpleadoModel empleadoModel)
+        public ActionResult Editar(EmpleadoModel empleadoModel)
         {
-            if (ModelState.IsValid)
+            empleadoModel.HorarioIngreso = new TimeSpan(int.Parse(empleadoModel.HorarioIngresoTexto), 0, 0);
+            empleadoModel.HorarioSalida = new TimeSpan(int.Parse(empleadoModel.HorarioSalidaTexto), 0, 0);
+            
+            if(empleadoModel.HorarioIngreso.Hours >= empleadoModel.HorarioSalida.Hours)
             {
-                db.Entry(empleadoModel).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                ViewBag.HorariosInvalidos = "El horario de ingreso debe ser anterior al de salida";
             }
+            else if (ModelState.IsValid)
+            {
+                EmpleadoHandler.EditarEmpleado(empleadoModel);
+                return RedirectToAction("Detalles", new { ID = empleadoModel.ID });
+            }
+
+            var empresaID = ObtenerEmpresa((Guid)Session["SessionGUID"]);
+            ViewBag.Sucursales = GetSucursales(empresaID, empleadoModel.SucursalModel_ID);
+            ViewBag.Ingreso = empleadoModel.HorarioIngreso.Hours.ToString();
+            ViewBag.Salida = empleadoModel.HorarioSalida.Hours.ToString();
+            ViewBag.Latitud = empleadoModel.Ubicacion.LatitudTexto;
+            ViewBag.Longitud = empleadoModel.Ubicacion.LongitudTexto;
+
             return View(empleadoModel);
         }
 
-        // GET: Empleados/Delete/5
-        public ActionResult Delete(Guid? id)
+        public ActionResult RestablecerClave(Guid ID, Guid? EmpresaID, Guid? SucursalID)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            EmpleadoModel empleadoModel = db.Empleados.Find(id);
-            if (empleadoModel == null)
-            {
-                return HttpNotFound();
-            }
-            return View(empleadoModel);
+            EmpleadoHandler.RestablecerClave(ID);
+            return this.Index(EmpresaID, SucursalID);
         }
 
-        // POST: Empleados/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(Guid id)
+        public ActionResult Desactivar(Guid ID, Guid? EmpresaID, Guid? SucursalID)
         {
-            EmpleadoModel empleadoModel = db.Empleados.Find(id);
-            db.Empleados.Remove(empleadoModel);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            EmpleadoHandler.CambiarEstadoActivo(ID, false);
+            return this.Index(EmpresaID, SucursalID);
         }
 
-        protected override void Dispose(bool disposing)
+        public ActionResult Activar(Guid ID, Guid? EmpresaID, Guid? SucursalID)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
+            EmpleadoHandler.CambiarEstadoActivo(ID, true);
+            return this.Index(EmpresaID, SucursalID);
+        }
+
+        private SelectList GetSucursales(Guid EmpresaID, Guid? SucursalID)
+        {
+            var sucursales = new SelectList(SucursalHandler.GetSucursalesPorEmpresa(EmpresaID), "ID", "Nombre");
+            if (SucursalID.HasValue)
+                foreach (var Sucursal in sucursales)
+                {
+                    if (Sucursal.Value == SucursalID.ToString())
+                        Sucursal.Selected = true;
+                }
+            return sucursales;
         }
     }
 }

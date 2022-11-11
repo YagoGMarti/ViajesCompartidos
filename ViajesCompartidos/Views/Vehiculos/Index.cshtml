@@ -1,63 +1,72 @@
 ﻿@model IEnumerable<SistemaViajesCompartidos.Models.VehiculoModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Vehiculos";
 }
 
-<h2>Index</h2>
+<h3>Vehiculos</h3>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
-        <th>
+        <th class="col-lg-1 text-center">
             @Html.DisplayNameFor(model => model.Patente)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AsientosLibres)
+        <th class="col-lg-1 text-center">
+            Asientos
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FechaVencimientoComprobantePoliza)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FechaVencimientoComprobantePolizaActiva)
-        </th>
-        <th>
+
+        <th class="col-lg-2 text-center">
             @Html.DisplayNameFor(model => model.FechaVencimientoCarnetConducir)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FechaVencimientoCarnetConducirActiva)
+        <th class="col-lg-1 text-center">
+            @Html.DisplayNameFor(model => model.ValidarCarnetConducir)
         </th>
-        <th></th>
+
+        <th class="col-lg-2 text-center">
+            @Html.DisplayNameFor(model => model.FechaVencimientoComprobantePoliza)
+        </th>
+        <th class="col-lg-1 text-center">
+            @Html.DisplayNameFor(model => model.ValidarComprobantePoliza)
+        </th>
+
+        <th class="col-lg-1 text-center"></th>
+        <th class="col-lg-1 text-center"></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Patente)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AsientosLibres)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FechaVencimientoComprobantePoliza)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FechaVencimientoComprobantePolizaActiva)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FechaVencimientoCarnetConducir)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FechaVencimientoCarnetConducirActiva)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Patente)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.AsientosLibres)
+            </td>
+
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.FechaVencimientoCarnetConducir)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.ValidarCarnetConducir)
+            </td>
+
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.FechaVencimientoComprobantePoliza)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.ValidarComprobantePoliza)
+            </td>
+
+            <th class="text-center">
+                @if (item.MostrarValidar)
+                {
+                    @Html.ActionLink("Validar", "Validar", new { ID = item.ID })
+                }
+            </th>
+            <th class="text-center">
+                @Html.ActionLink("Editar", "Editar", new { ID = item.ID })
+            </th>
+        </tr>
+    }
 
 </table>

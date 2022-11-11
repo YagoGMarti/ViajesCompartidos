@@ -1,0 +1,114 @@
+﻿@model SistemaViajesCompartidos.Models.EmpleadoModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+
+<div class="form-group">
+    <div class="col-lg-11">
+        <h3>Empleado</h3>
+        <hr />
+    </div>
+    <div class="col-lg-1">
+        @if (Model.Vehiculo == null)
+        {
+            <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("Crear", "Vehiculos" )">Vehiculo &raquo;</a>
+        }
+        else
+        {
+            <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("Editar", "Vehiculos", new { ID = Model.Vehiculo.ID } )">Vehiculo &raquo;</a>
+        }
+        <hr />
+    </div>
+</div>
+
+<div class="form-group" style="display:inline-flex">
+    <hr />
+    <div class="form-horizontal col-md-7">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-4" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.Nombre, new { htmlAttributes = new { disabled = "disabled", @class = "form-control text-center" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CorreoElectronico, htmlAttributes: new { @class = "control-label col-md-4" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.CorreoElectronico, new { htmlAttributes = new { disabled = "disabled", @class = "form-control text-center" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Telefono, htmlAttributes: new { @class = "control-label col-md-4" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.Telefono, new { htmlAttributes = new { disabled = "disabled", @class = "form-control text-center" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.RRHH, htmlAttributes: new { @class = "control-label col-md-4" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.RRHH, new { htmlAttributes = new { disabled = "disabled", @class = "form-control text-center" } })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Ubicacion.UbicacionTexto, htmlAttributes: new { @class = "control-label col-md-4" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.Ubicacion.UbicacionTexto, new { htmlAttributes = new { disabled = "disabled", @class = "form-control text-center" } })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.SucursalModel_ID, htmlAttributes: new { @class = "control-label col-md-4" })
+            <div class="col-md-8">
+                @Html.DropDownListFor(model => model.SucursalModel_ID, (IEnumerable<SelectListItem>)(ViewBag.Sucursales), new { disabled = "disabled", @class = "form-control text-center" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Horario, htmlAttributes: new { @class = "control-label col-md-4" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.Horario, new { htmlAttributes = new { disabled = "disabled", @class = "form-control text-center" } })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.FechaAlta, htmlAttributes: new { @class = "control-label col-md-4" })
+            <div class="col-md-8">
+                @Html.TextBoxFor(model => model.FechaAlta, new { disabled = "disabled", @type = "date", @Value = Model.FechaAlta.ToString("yyyy-MM-dd"), @class = "form-control text-center" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-horizontal col-md-5">
+        <div class="form-group">
+            <div class="map mapa" id="mapa">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        function initializeMap() {
+            const map = new google.maps.Map(document.getElementById("mapa"), {
+                zoom: 16,
+                center: new google.maps.LatLng('@ViewBag.Latitud', '@ViewBag.Longitud'),
+                mapTypeControl: false,
+                fullscreenControl: false,
+                zoomControl: true,
+                streetViewControl: false
+            });
+
+            const marker = new google.maps.Marker({ map: map, draggable: false });
+            marker.setPosition(new google.maps.LatLng('@ViewBag.Latitud', '@ViewBag.Longitud'));
+            marker.setVisible(true);
+    }
+
+
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZrUINt7hq2Js-FUA_otyngMihK-VMRuY&libraries=places&callback=initializeMap&solution_channel=GMP_QB_addressselection_v1_cBC"></script>
+}

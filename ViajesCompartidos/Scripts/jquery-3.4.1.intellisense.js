@@ -387,7 +387,7 @@ intellisense.annotate(jQuery, {
     /// <returns type="jQuery" />
   },
   'support': function() {
-    /// <summary>A collection of properties that represent the presence of different browser features or bugs. Primarily intended for jQuery's internal use; specific properties may be removed when they are no longer needed internally to improve page startup performance.</summary>
+    /// <summary>A collection of properties that represent the presence of different browser features or bugs. Primarily intended for jQuery's public use; specific properties may be removed when they are no longer needed publicly to improve page startup performance.</summary>
     /// <returns type="Object" />
   },
   'trim': function() {
@@ -399,8 +399,8 @@ intellisense.annotate(jQuery, {
   },
   'type': function() {
     /// <signature>
-    ///   <summary>Determine the internal JavaScript [[Class]] of an object.</summary>
-    ///   <param name="obj" type="PlainObject">Object to get the internal JavaScript [[Class]] of.</param>
+    ///   <summary>Determine the public JavaScript [[Class]] of an object.</summary>
+    ///   <param name="obj" type="PlainObject">Object to get the public JavaScript [[Class]] of.</param>
     ///   <returns type="String" />
     /// </signature>
   },

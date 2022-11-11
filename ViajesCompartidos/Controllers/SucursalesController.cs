@@ -7,121 +7,116 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SistemaViajesCompartidos.Context;
+using SistemaViajesCompartidos.Enums;
 using SistemaViajesCompartidos.Models;
+using ViajesCompartidos.Handlers;
 
 namespace ViajesCompartidos.Controllers
 {
     public class SucursalesController : BaseController
     {
-        // GET: Sucursales
-        public ActionResult Index()
+        [RevisarRoles(RolesEmpleadoFlag.ADMINISTRADOR | RolesEmpleadoFlag.RRHH)]
+        public ActionResult Index(Guid? EmpresaID)
         {
-            return View(db.Sucursales.ToList());
+            if(EmpresaID == null)
+            {
+                var empleadoID = ObtenerUsuario((Guid)Session["SessionGUID"]);
+                var empresaID = EmpleadoHandler.GetEmpleado(empleadoID).EmpresaModel_ID;
+                return View("Index", SucursalHandler.GetSucursalesPorEmpresa(empresaID));
+            }
+            else
+            {
+                return View("Index", SucursalHandler.GetSucursalesPorEmpresa(EmpresaID.Value));
+            }
         }
 
-        // GET: Sucursales/Details/5
-        public ActionResult Details(Guid? id)
+        public ActionResult Detalles(Guid? ID)
         {
-            if (id == null)
+            ID = ObtenerUsuario((Guid)Session["SessionGUID"]);
+            if (ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            SucursalModel sucursalModel = db.Sucursales.Find(id);
+            
+            SucursalModel sucursalModel = SucursalHandler.GetSucursal(ID.Value);
+            
             if (sucursalModel == null)
             {
                 return HttpNotFound();
             }
+
+            ViewBag.Latitud = sucursalModel.Ubicacion.LatitudTexto;
+            ViewBag.Longitud = sucursalModel.Ubicacion.LongitudTexto;
+
             return View(sucursalModel);
         }
 
-        // GET: Sucursales/Create
-        public ActionResult Create()
+        public ActionResult Crear()
         {
             return View();
         }
 
-        // POST: Sucursales/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Nombre,FechaAlta,FechaBaja")] SucursalModel sucursalModel)
+        public ActionResult Crear(SucursalModel sucursalModel)
         {
             if (ModelState.IsValid)
             {
-                sucursalModel.Id = Guid.NewGuid();
-                db.Sucursales.Add(sucursalModel);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                var empleadoID = ObtenerUsuario((Guid)Session["SessionGUID"]);
+                var empresaID = EmpleadoHandler.GetEmpleado(empleadoID).EmpresaModel_ID;
+                SucursalHandler.CrearSucursal(sucursalModel, empresaID);
+                return RedirectToAction("Detalles", new { ID = sucursalModel.ID });
             }
 
             return View(sucursalModel);
         }
 
-        // GET: Sucursales/Edit/5
-        public ActionResult Edit(Guid? id)
+        public ActionResult Editar(Guid? ID)
         {
-            if (id == null)
+            if (ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            SucursalModel sucursalModel = db.Sucursales.Find(id);
+            
+            SucursalModel sucursalModel = SucursalHandler.GetSucursal(ID.Value);
+            
             if (sucursalModel == null)
             {
                 return HttpNotFound();
             }
+
+            ViewBag.Latitud = sucursalModel.Ubicacion.LatitudTexto;
+            ViewBag.Longitud = sucursalModel.Ubicacion.LongitudTexto;
+
             return View(sucursalModel);
         }
 
-        // POST: Sucursales/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Nombre,FechaAlta,FechaBaja")] SucursalModel sucursalModel)
+        public ActionResult Editar(SucursalModel sucursalModel)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(sucursalModel).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                SucursalHandler.EditarSucursal(sucursalModel);
+                return RedirectToAction("Detalles", new { ID = sucursalModel.ID });
             }
+
+            ViewBag.Latitud = sucursalModel.Ubicacion.LatitudTexto;
+            ViewBag.Longitud = sucursalModel.Ubicacion.LongitudTexto;
+
             return View(sucursalModel);
         }
 
-        // GET: Sucursales/Delete/5
-        public ActionResult Delete(Guid? id)
+        public ActionResult Desactivar(Guid ID)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            SucursalModel sucursalModel = db.Sucursales.Find(id);
-            if (sucursalModel == null)
-            {
-                return HttpNotFound();
-            }
-            return View(sucursalModel);
+            SucursalHandler.CambiarEstadoActivo(ID, false);
+            return this.Index(null);
         }
 
-        // POST: Sucursales/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(Guid id)
+        public ActionResult Activar(Guid ID)
         {
-            SucursalModel sucursalModel = db.Sucursales.Find(id);
-            db.Sucursales.Remove(sucursalModel);
-            db.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
+            SucursalHandler.CambiarEstadoActivo(ID, true);
+            return this.Index(null);
         }
     }
 }

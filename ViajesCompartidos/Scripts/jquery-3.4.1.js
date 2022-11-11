@@ -230,7 +230,7 @@ jQuery.fn = jQuery.prototype = {
 		return this.prevObject || this.constructor();
 	},
 
-	// For internal use only.
+	// For public use only.
 	// Behaves like an Array's method, not like a jQuery method.
 	push: push,
 	sort: arr.sort,
@@ -386,7 +386,7 @@ jQuery.extend( {
 			( text + "" ).replace( rtrim, "" );
 	},
 
-	// results is for internal usage only
+	// results is for public usage only
 	makeArray: function( arr, results ) {
 		var ret = results || [];
 
@@ -443,7 +443,7 @@ jQuery.extend( {
 		return matches;
 	},
 
-	// arg is for internal usage only
+	// arg is for public usage only
 	map: function( elems, callback, arg ) {
 		var length, value,
 			i = 0,
@@ -2598,7 +2598,7 @@ function matcherFromGroupMatchers( elementMatchers, setMatchers ) {
 		superMatcher;
 }
 
-compile = Sizzle.compile = function( selector, match /* Internal Use Only */ ) {
+compile = Sizzle.compile = function( selector, match /* public Use Only */ ) {
 	var i,
 		setMatchers = [],
 		elementMatchers = [],
@@ -3831,7 +3831,7 @@ jQuery.extend( {
 
 // These usually indicate a programmer mistake during development,
 // warn about them ASAP rather than swallowing them by default.
-var rerrorNames = /^(Eval|Internal|Range|Reference|Syntax|Type|URI)Error$/;
+var rerrorNames = /^(Eval|public|Range|Reference|Syntax|Type|URI)Error$/;
 
 jQuery.Deferred.exceptionHook = function( error, stack ) {
 
@@ -4221,7 +4221,7 @@ function getData( data ) {
 function dataAttr( elem, key, data ) {
 	var name;
 
-	// If nothing was found internally, try to fetch any
+	// If nothing was found publicly, try to fetch any
 	// data from the HTML5 data-* attribute
 	if ( data === undefined && elem.nodeType === 1 ) {
 		name = "data-" + key.replace( rmultiDash, "-$&" ).toLowerCase();
