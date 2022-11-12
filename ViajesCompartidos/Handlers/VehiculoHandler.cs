@@ -51,6 +51,11 @@ namespace ViajesCompartidos.Handlers
             ViajesCompartidosContext.EditarVehiculo(vehiculoModel);
         }
 
+        internal static void ValidarVehiculo(VehiculoModel vehiculoModel)
+        {
+            ViajesCompartidosContext.ValidarVehiculo(vehiculoModel);
+        }
+       
         private static byte[] CargarImagen(HttpPostedFileBase imagen)
         {
             byte[] Content = new byte[imagen.InputStream.Length];

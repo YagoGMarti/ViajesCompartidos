@@ -12,7 +12,7 @@ namespace SistemaViajesCompartidos.Models
     {
         [Required(ErrorMessage = "Debe indicar una patente", AllowEmptyStrings = false)]
         public string Patente { get; set; }
-        
+
         [DisplayName("Asientos Disponibles")]
         [Range(1, 7, ErrorMessage = "Los asientos se espera que sean entre 1 y 7")]
         public int AsientosLibres { get; set; }
@@ -40,7 +40,7 @@ namespace SistemaViajesCompartidos.Models
             Patente = vehiculoModel.Patente;
             AsientosLibres = vehiculoModel.AsientosLibres;
 
-            if(vehiculoModel.ImagenComprobantePoliza != null)
+            if (vehiculoModel.ImagenComprobantePoliza != null)
             {
                 AdjuntoComprobantePoliza = vehiculoModel.AdjuntoComprobantePoliza;
                 TipoImagenComprobantePoliza = vehiculoModel.TipoImagenComprobantePoliza;
@@ -48,7 +48,7 @@ namespace SistemaViajesCompartidos.Models
                 ComprobantePolizaValidado = false;
             }
 
-            if(vehiculoModel.ImagenCarnetConducir != null)
+            if (vehiculoModel.ImagenCarnetConducir != null)
             {
                 AdjuntoCarnetConducir = vehiculoModel.AdjuntoCarnetConducir;
                 TipoImagenCarnetConducir = vehiculoModel.TipoImagenCarnetConducir;
@@ -78,7 +78,7 @@ namespace SistemaViajesCompartidos.Models
         public DateTime? FechaVencimientoCarnetConducir { get; set; }
 
         public bool MostrarValidar => CalcularValidar();
-        
+
         private bool CalcularValidar()
         {
             if (ValidarComprobantePoliza)
@@ -88,6 +88,28 @@ namespace SistemaViajesCompartidos.Models
                 return true;
 
             return false;
+        }
+
+        public bool ValidoRuta => CalcularValidoRuta();
+
+        private bool CalcularValidoRuta()
+        {
+            if (!FechaVencimientoComprobantePoliza.HasValue)
+                return false;
+
+            if (DateTime.Today > FechaVencimientoComprobantePoliza.Value.Date)
+                return false;
+
+            if (!FechaVencimientoCarnetConducir.HasValue)
+                return false;
+
+            if (DateTime.Today > FechaVencimientoCarnetConducir.Value.Date)
+                return false;
+
+            if (0 >= AsientosLibres)
+                return false;
+
+            return Activo;
         }
 
         public void UpdateValidar(VehiculoModel vehiculoModel)

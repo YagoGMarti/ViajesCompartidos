@@ -34,6 +34,9 @@ namespace ViajesCompartidos.Controllers
                 Session.Remove("Roles");
                 Session.Add("Roles", (int)empleado.Roles);
 
+                Session.Remove("Empleado_ID");
+                Session.Add("Empleado_ID", empleado.ID.ToString());
+
                 Session.Remove("SessionGUID");
                 Session.Add("SessionGUID", SessionGUID);
 

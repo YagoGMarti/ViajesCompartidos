@@ -27,7 +27,7 @@ namespace ViajesCompartidos.Handlers
                 empleados = ViajesCompartidosContext.GetEmpleadosPorSucursal(SucursalID.Value);
             }
 
-            if (EmpresaID != null)
+            if (SucursalID == null && EmpresaID != null)
             {
                 empleados = ViajesCompartidosContext.GetEmpleadosPorEmpresa(EmpresaID.Value);
             }
@@ -48,29 +48,37 @@ namespace ViajesCompartidos.Handlers
             empleadoModel.EmpresaModel_ID = empresaID;
             empleadoModel.ActualizarRoles();
             empleadoModel.CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar(empleadoModel.CorreoElectronico));
+
+            if (ViajesCompartidosContext.GetEmpleadoByEmail(empleadoModel.CorreoElectronicoEncriptado) != null)
+                throw new ArgumentException(empleadoModel.CorreoElectronico);
+
             if (!string.IsNullOrWhiteSpace(empleadoModel.Telefono))
                 empleadoModel.TelefonoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar(empleadoModel.Telefono));
+            // TODO : Cambiar a envio de clave automático cuando esté el cliente HTTP ( probablemente usar el restablecer clave y no redefinir )             
+            empleadoModel.ClaveEncriptada = EncriptadoHandler.Encriptar("123123Aa!");
+
+            var sucursal = SucursalHandler.GetSucursal(empleadoModel.SucursalModel_ID);
+            empleadoModel.DistanciaSucursal = RutaHandler.CalcularDistancia(empleadoModel.Ubicacion, sucursal.Ubicacion);
+
             ViajesCompartidosContext.CrearEmpleado(empleadoModel);
         }
 
         public static void EditarEmpleado(EmpleadoModel empleadoModel)
         {
             empleadoModel.ActualizarRoles();
-            empleadoModel.CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar(empleadoModel.CorreoElectronico));
+            //empleadoModel.CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar(empleadoModel.CorreoElectronico));
             if (!string.IsNullOrWhiteSpace(empleadoModel.Telefono)) 
                 empleadoModel.TelefonoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar(empleadoModel.Telefono));
+
+            var sucursal = SucursalHandler.GetSucursal(empleadoModel.SucursalModel_ID);
+            empleadoModel.DistanciaSucursal = RutaHandler.CalcularDistancia(empleadoModel.Ubicacion, sucursal.Ubicacion);
+
             ViajesCompartidosContext.EditarEmpleado(empleadoModel);
         }
 
         internal static void CambiarEstadoActivo(Guid ID, bool estado)
         {
             ViajesCompartidosContext.CambiarEstadoActivoEmpleado(ID, estado);
-        }
-
-        internal static void RestablecerClave(Guid ID)
-        {
-            // TODO : usar HTML client y mandar una nueva clave
-            // TODO : actualizar clave del usuario con la nueva contraseña 
         }
     }
 }

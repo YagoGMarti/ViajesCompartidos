@@ -208,6 +208,7 @@ namespace SistemaViajesCompartidos.Context
                 empleado = context.Empleados
                     .Include(x => x.Ubicacion)
                     .Include(x => x.Vehiculo)
+                    .Include(x => x.Sucursal)
                     .FirstOrDefault(x => x.ID == ID);
             }
             return empleado;

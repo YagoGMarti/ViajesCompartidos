@@ -29,15 +29,13 @@
                         }
                         else
                         {
+                            <li>@Html.ActionLink("Home", "Detalles", "Empleados")</li>
+
                             if ((int)@Session["Roles"] % 2 == 1)
                             {
                                 <li>@Html.ActionLink("Sucursales", "Index", "Sucursales")</li>
                                 <li>@Html.ActionLink("Empleados", "Index", "Empleados")</li>
                                 <li>@Html.ActionLink("Vehiculos", "Index", "Vehiculos")</li>
-                            }
-                            else
-                            {
-                                <li>@Html.ActionLink("Inicio", "Detalles", "Empleados")</li>
                             }
                         }
                     </ul>

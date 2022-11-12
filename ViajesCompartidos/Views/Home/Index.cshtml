@@ -30,7 +30,10 @@
             ¿Ya es un usuario? <br>
             Acceder a la pestaña de inicio de sesión.
         </p>
-        <p><a class="btn btn-default buttonOffset15" href="@Url.Action("Index", "Login")">Login &raquo;</a></p>
+        @if (@Session["Usuario"] == null)
+        {
+            <p><a class="btn btn-default buttonOffset15" href="@Url.Action("Index", "Login")">Login &raquo;</a></p>
+        }
     </div>
 </div>
 

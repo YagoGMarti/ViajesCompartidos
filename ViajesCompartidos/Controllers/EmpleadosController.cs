@@ -142,7 +142,7 @@ namespace ViajesCompartidos.Controllers
 
         public ActionResult RestablecerClave(Guid ID, Guid? EmpresaID, Guid? SucursalID)
         {
-            EmpleadoHandler.RestablecerClave(ID);
+            SesionHandler.RestablecerClave(ID);
             return this.Index(EmpresaID, SucursalID);
         }
 

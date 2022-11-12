@@ -26,16 +26,18 @@
         <div class="col-md-8">
             @if (!String.IsNullOrWhiteSpace(Model.NombreArchivoCarnetConducir))
             {
+            <label class="control-label" for="ComprobantePolizaValidado">
                 <span class="control-label">
                     @Model.NombreArchivoCarnetConducir
                     <button type="button" onclick="location.href='@Url.Action("AdjuntoCarnet", new { ID = Model.ID })'" style="border: 0;background: transparent;">
                         <img src="~/Content/Images/download.svg" alt="Bootstrap" width="16" height="16">
                     </button>
                 </span>
-            }
-            else
-            {<span class="control-label"> sin adjunto </span>}
-        </div>
+            </label>
+                    }
+                    else
+                    {<label class="control-label"> sin adjunto </label>}
+            </div>
     </div>
 
     <div class="form-group">
@@ -56,16 +58,18 @@
         <div class="col-md-8">
             @if (!String.IsNullOrWhiteSpace(Model.NombreArchivoComprobantePoliza))
             {
+            <label class="control-label" for="ComprobantePolizaValidado">
                 <span class="control-label">
                     @Model.NombreArchivoComprobantePoliza
                     <button type="button" onclick="location.href='@Url.Action("AdjuntoPoliza", new { ID = Model.ID })'" style="border: 0;background: transparent;">
                         <img src="~/Content/Images/download.svg" alt="Bootstrap" width="16" height="16">
                     </button>
                 </span>
-            }
-            else
-            {<span class="control-label"> sin adjunto </span>}
-        </div>
+            </label>
+                    }
+                    else
+                    {<label class="control-label"> sin adjunto </label>}
+            </div>
     </div>
 
     <div class="form-group">

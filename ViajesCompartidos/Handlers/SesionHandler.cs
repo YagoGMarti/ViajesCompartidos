@@ -29,6 +29,12 @@ namespace ViajesCompartidos.Handlers
             return ViajesCompartidosContext.GetRolEmpleado(empleadoID);
         }
 
+        internal static void RestablecerClave(Guid ID)
+        {
+            // TODO : usar HTML client y mandar una nueva clave
+            // TODO : actualizar clave del usuario con la nueva contraseña 
+        }
+
         internal static void EnviarClave(EmpresaModel empresaModel)
         {
             // TODO : generar una nueva clave aleatoria. 

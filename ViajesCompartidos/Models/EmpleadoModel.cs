@@ -52,25 +52,29 @@ namespace SistemaViajesCompartidos.Models
 
         public string Horario => HorarioIngreso.Hours.ToString() + "Hs - " + HorarioSalida.Hours.ToString() + "Hs";
 
-        public Guid Ubicacion_ID { get; set; }
         public UbicacionModel Ubicacion { get; set; }
 
+        [DisplayName("Empresa")]
         public Guid EmpresaModel_ID { get; set; }
 
         [DisplayName("Sucursal")]
-        [Required(ErrorMessage = "Es necesaria una sucursal")]
         public Guid SucursalModel_ID { get; set; }
+
+        [DisplayName("Recorrido")]
+        public RecorridoModel Recorrido { get; set; }
 
         [ForeignKey("SucursalModel_ID")]
         public virtual SucursalModel Sucursal { get; set; }
+        public double DistanciaSucursal { get; set; }
 
         public void Update(EmpleadoModel empleadoModel)
         {
             Nombre = empleadoModel.Nombre;
-            CorreoElectronicoEncriptado = empleadoModel.CorreoElectronicoEncriptado;
-            TelefonoEncriptado = empleadoModel.TelefonoEncriptado;
+            //CorreoElectronicoEncriptado = empleadoModel.CorreoElectronicoEncriptado;
+            //TelefonoEncriptado = empleadoModel.TelefonoEncriptado;
             Roles = empleadoModel.Roles;
             SucursalModel_ID = empleadoModel.SucursalModel_ID;
+            DistanciaSucursal = empleadoModel.DistanciaSucursal;
             HorarioIngreso = empleadoModel.HorarioIngreso;
             HorarioSalida = empleadoModel.HorarioSalida;
             Ubicacion.Update(empleadoModel.Ubicacion);

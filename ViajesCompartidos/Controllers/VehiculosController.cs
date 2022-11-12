@@ -115,8 +115,7 @@ namespace ViajesCompartidos.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Entry(vehiculoModel).State = EntityState.Modified;
-                _context.SaveChanges();
+                VehiculoHandler.ValidarVehiculo(vehiculoModel);
                 return RedirectToAction("Detalles", new { ID = vehiculoModel.ID });
             }
             return View(vehiculoModel);

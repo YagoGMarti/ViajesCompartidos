@@ -11,13 +11,16 @@
         <hr />
     </div>
     <div class="col-lg-1">
-        @if (Model.Vehiculo == null)
+        @if (@Session["Empleado_ID"] == Model.ID.ToString())
         {
-            <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("Crear", "Vehiculos" )">Vehiculo &raquo;</a>
-        }
-        else
-        {
-            <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("Editar", "Vehiculos", new { ID = Model.Vehiculo.ID } )">Vehiculo &raquo;</a>
+            if (Model.Vehiculo == null)
+            {
+                <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("Crear", "Vehiculos" )">Vehiculo &raquo;</a>
+            }
+            else
+            {
+                <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("Editar", "Vehiculos", new { ID = Model.Vehiculo.ID } )">Vehiculo &raquo;</a>
+            }
         }
         <hr />
     </div>
@@ -79,6 +82,16 @@
                 @Html.TextBoxFor(model => model.FechaAlta, new { disabled = "disabled", @type = "date", @Value = Model.FechaAlta.ToString("yyyy-MM-dd"), @class = "form-control text-center" })
             </div>
         </div>
+
+        <div class="form-group">
+
+            <div class="col-lg-2 col-lg-offset-4">
+                @if (Model.Vehiculo != null && Model.Vehiculo.ValidoRuta)
+                {
+                    <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("ObtenerRuta", "Rutas", new { Empleado_ID = Model.ID } )">Obtener nueva ruta &raquo;</a>
+                }
+            </div>
+        </div>
     </div>
 
     <div class="form-horizontal col-md-5">
@@ -87,28 +100,41 @@
 
             </div>
         </div>
+
+        @if (Model.Recorrido != null)
+        {
+            <hr />
+            <h3 class="text-center">Recorrido</h3>
+            <hr />
+            <div class="form-group">
+                <div class="recorrido mapa" id="recorrido">
+
+                </div>
+            </div>
+            <hr />
+        }
     </div>
 </div>
 
 @section Scripts {
-    <script type="text/javascript">
-        function initializeMap() {
-            const map = new google.maps.Map(document.getElementById("mapa"), {
-                zoom: 16,
-                center: new google.maps.LatLng('@ViewBag.Latitud', '@ViewBag.Longitud'),
-                mapTypeControl: false,
-                fullscreenControl: false,
-                zoomControl: true,
-                streetViewControl: false
-            });
+    @*<script type="text/javascript">
+            function initializeMap() {
+                const map = new google.maps.Map(document.getElementById("mapa"), {
+                    zoom: 16,
+                    center: new google.maps.LatLng('@ViewBag.Latitud', '@ViewBag.Longitud'),
+                    mapTypeControl: false,
+                    fullscreenControl: false,
+                    zoomControl: true,
+                    streetViewControl: false
+                });
 
-            const marker = new google.maps.Marker({ map: map, draggable: false });
-            marker.setPosition(new google.maps.LatLng('@ViewBag.Latitud', '@ViewBag.Longitud'));
-            marker.setVisible(true);
-    }
+                const marker = new google.maps.Marker({ map: map, draggable: false });
+                marker.setPosition(new google.maps.LatLng('@ViewBag.Latitud', '@ViewBag.Longitud'));
+                marker.setVisible(true);
+        }
 
 
-    </script>
+        </script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZrUINt7hq2Js-FUA_otyngMihK-VMRuY&libraries=places&callback=initializeMap&solution_channel=GMP_QB_addressselection_v1_cBC"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZrUINt7hq2Js-FUA_otyngMihK-VMRuY&libraries=places&callback=initializeMap&solution_channel=GMP_QB_addressselection_v1_cBC"></script>*@
 }
