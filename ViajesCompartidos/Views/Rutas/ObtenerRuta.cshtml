@@ -53,7 +53,7 @@
 
         <div class="form-horizontal col-md-5">
             <div class="form-group">
-                <div class="map mapa" id="mapa">
+                <div class="mapa" id="recorrido">
 
                 </div>
             </div>
@@ -97,27 +97,66 @@
 }
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
+    <script type="text/javascript">
+        function loadDirections() {
+                var origen = new google.maps.LatLng('@ViewBag.OrigenLatitud', '@ViewBag.OrigenLongitud');
+                var destino = new google.maps.LatLng('@ViewBag.DestinoLatitud', '@ViewBag.DestinoLongitud');
 
-    @*<script type="text/javascript">
-            function initializeMap() {
-                const map = new google.maps.Map(document.getElementById("mapa"), {
+                const mapOptions = {
                     zoom: 16,
-                    center: new google.maps.LatLng('@ViewBag.Latitud', '@ViewBag.Longitud'),
+                    center: new google.maps.LatLng('@ViewBag.CentroLatitud', '@ViewBag.CentroLongitud'),
                     mapTypeControl: false,
                     fullscreenControl: false,
                     zoomControl: true,
                     streetViewControl: false
+                }
+
+                const map = new google.maps.Map(document.getElementById("recorrido"), mapOptions),
+                    directionsService = new google.maps.DirectionsService,
+                    directionsDisplay = new google.maps.DirectionsRenderer({
+                        map: map
+                    });
+
+                calculateAndDisplayRoute(directionsService, directionsDisplay, origen, destino);
+
+        };
+
+        function calculateAndDisplayRoute(directionsService, directionsDisplay, origen, destino) {
+            let escalas = [];
+            var ubicaciones = @Html.Raw(Json.Encode(@ViewBag.Ubicaciones));
+            console.log(ubicaciones);
+            console.log(ubicaciones[0]);
+            console.log(ubicaciones[1]);
+
+            for (let i = 2; i < (ubicaciones.length - 2); i = i + 2) {
+                escalas.push({
+                    location: new google.maps.LatLng(ubicaciones[i], ubicaciones[i+1]),
+                    stopover: false
                 });
+            }
 
-                const marker = new google.maps.Marker({ map: map, draggable: false });
-                marker.setPosition(new google.maps.LatLng('@ViewBag.Latitud', '@ViewBag.Longitud'));
-                marker.setVisible(true);
-        }
+            console.log(escalas);
 
+            directionsService.route({
+                origin: origen,
+                destination: destino,
+                waypoints: escalas,
+                avoidTolls: true,
+                avoidHighways: false,
+                travelMode: google.maps.TravelMode.DRIVING
+            },
+                function(response, status) {
+                    if (status == google.maps.DirectionsStatus.OK) {
+                        directionsDisplay.setDirections(response);
+                    } else {
+                        window.alert('Directions request failed due to ' + status);
+                    }
+                });
+            };
 
-        </script>
+    </script>
 
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZrUINt7hq2Js-FUA_otyngMihK-VMRuY&libraries=places&callback=initializeMap&solution_channel=GMP_QB_addressselection_v1_cBC"></script>*@
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZrUINt7hq2Js-FUA_otyngMihK-VMRuY&libraries=places&callback=loadDirections&solution_channel=GMP_QB_addressselection_v1_cBC">
+
+    </script>
 }
-

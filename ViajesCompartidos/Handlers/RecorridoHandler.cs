@@ -76,7 +76,8 @@ namespace ViajesCompartidos.Handlers
             // TODO : primer búsqueda traer sólo aquellos a menor distancia que el conductor 
             // TODO : primer búsqueda, acotar a sólo aquellos en la región buscada, o al menos descartar más items. 
             var pasajeros = EmpleadoHandler.GetEmpleados(conductor.EmpresaModel_ID, conductor.SucursalModel_ID);
-            pasajeros = pasajeros.Where(x => x.Ubicacion != null && x.DistanciaSucursal > 0 && x.Activo).OrderByDescending(x => x.DistanciaSucursal);
+            pasajeros = pasajeros.Where(x => x.Ubicacion != null && x.DistanciaSucursal > 0 && x.Activo);
+            pasajeros = pasajeros.Where(x => x.Horario == conductor.Horario).OrderByDescending(x => x.DistanciaSucursal);
 
             // TODO : Ver de variar a polígonos más pequeños y acotados, la mitad del cuadrado buscado se desperdicia. 
             // TODO : sumar un primer ciclo de búsqueda a N cuadras a la redonda del conductor con prioridad "vecinos" 

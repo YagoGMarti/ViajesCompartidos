@@ -29,11 +29,40 @@ namespace ViajesCompartidos.Controllers
                     recorridosActivos.Add(recorrido.ID, recorrido);
                 }
 
+                CargarMapa(recorrido);
                 return View("ObtenerRuta", recorrido);
             }
 
             else
                 return this.SinPasajeros();
+        }
+
+        private void CargarMapa(RecorridoModel recorrido)
+        {
+            if (recorrido != null)
+            {
+                ViewBag.Ruta = true;
+                ViewBag.OrigenLatitud = recorrido.Ubicaciones.First().LatitudTexto;
+                ViewBag.OrigenLongitud = recorrido.Ubicaciones.First().LongitudTexto;
+                ViewBag.DestinoLatitud = recorrido.Ubicaciones.Last().LatitudTexto;
+                ViewBag.DestinoLongitud = recorrido.Ubicaciones.Last().LongitudTexto;
+                ViewBag.CentroLatitud = recorrido.LongitudCentroString;
+                ViewBag.CentroLongitud = recorrido.LongitudCentroString;
+
+                List<string> ubicaciones = new List<string>();
+
+                foreach (var ubicacion in recorrido.Ubicaciones)
+                {
+                    ubicaciones.Add(ubicacion.LatitudTexto);
+                    ubicaciones.Add(ubicacion.LongitudTexto);
+                }
+
+                ViewBag.Ubicaciones = ubicaciones.ToArray();
+            }
+            else
+            {
+                ViewBag.Ruta = false;
+            }
         }
 
         public ActionResult AceptarRuta(Guid recorrido_ID)

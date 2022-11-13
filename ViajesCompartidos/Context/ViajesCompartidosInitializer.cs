@@ -314,7 +314,7 @@ namespace ViajesCompartidos.Context
                 new EmpleadoModel()  {
                     Nombre = "Zara",
                     ClaveEncriptada = EncriptadoHandler.Encriptar("123123Aa!"),
-                    CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("empleado10@cerro.com")),
+                    CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("empleado11@cerro.com")),
                     Roles = RolesEmpleadoFlag.EMPLEADO,
                     EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID,
                     Sucursal = sucursales.FirstOrDefault(s => s.Nombre == "Casa Central"),
