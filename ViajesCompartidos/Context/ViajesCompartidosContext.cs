@@ -22,7 +22,7 @@ namespace SistemaViajesCompartidos.Context
             //Database.SetInitializer<ViajesCompartidosContext>(null); 
 
             // Inicializar con una firma propia y datos de prueba
-            if(Initialize)
+            if (Initialize)
             {
                 Database.SetInitializer<ViajesCompartidosContext>(new DropCreateDatabaseAlways<ViajesCompartidosContext>());
                 new ViajesCompartidosInitializer().CallSeed(this);
@@ -256,7 +256,7 @@ namespace SistemaViajesCompartidos.Context
             }
             return vehiculos;
         }
-        
+
 
         public static void CrearVehiculo(VehiculoModel vehiculoModel)
         {
@@ -289,7 +289,83 @@ namespace SistemaViajesCompartidos.Context
             }
         }
         #endregion
+        public DbSet<UbicacionModel> Ubicaciones { get; set; }
+        public static UbicacionModel GetUbicacion(Guid ubicacion_ID)
+        {
+            UbicacionModel ubicacion;
+            using (ViajesCompartidosContext context = new ViajesCompartidosContext())
+            {
+                ubicacion = context.Ubicaciones.Find(ubicacion_ID);
+            }
+            return ubicacion;
+        }
         public DbSet<RecorridoModel> Recorridos { get; set; }
+        #region recorridos
+        public static void GrabarRecorrido(RecorridoModel recorrido)
+        {
+            using (ViajesCompartidosContext context = new ViajesCompartidosContext())
+            {
+                //context.Entry(recorrido.Pasajeros).State = EntityState.Unchanged;
+                //recorrido.Ubicaciones.ForEach(u => context.Entry(u).State = EntityState.Unchanged);
+                //context.Entry(recorrido.Ubicaciones).State = EntityState.Unchanged;
+
+                //var pasajeros_ID = recorrido.Pasajeros.Select(p => p.ID);
+                //recorrido.Pasajeros = new List<EmpleadoModel>();
+                //foreach (var empleado_ID in pasajeros_ID)
+                //{
+                //    recorrido.Pasajeros.Add(GetEmpleado(empleado_ID));
+                //}
+
+                recorrido.Pasajeros = null;
+                recorrido.Ubicaciones = null;
+
+                context.Recorridos.Add(recorrido);
+                context.SaveChanges();
+            }
+        }
+
+        public static void GrabarRecorrido(Guid empleado_ID, Guid recorrido_ID)
+        {
+            EmpleadoModel empleado = GetEmpleado(empleado_ID);
+            using (ViajesCompartidosContext context = new ViajesCompartidosContext())
+            {
+                empleado.Recorrido_ID = recorrido_ID;
+                empleado.RecorridoActivo = true;
+                context.Entry(empleado).State = EntityState.Modified;
+                context.SaveChanges();
+            }
+        }
+
+        public static void BorrarRecorrido(Guid empleado_ID)
+        {
+            EmpleadoModel empleado = GetEmpleado(empleado_ID);
+            using (ViajesCompartidosContext context = new ViajesCompartidosContext())
+            {
+                empleado.RecorridoActivo = false;
+                context.Entry(empleado).State = EntityState.Modified;
+                context.SaveChanges();
+            }
+        }
+
+        public static RecorridoModel GetRecorrido(Guid recorrido_ID)
+        {
+            RecorridoModel recorrido;
+            using (ViajesCompartidosContext context = new ViajesCompartidosContext())
+            {
+                recorrido = context.Recorridos
+                    .Include(x => x.RecorridoEmpleado)
+                    .Include(x => x.Pasajeros)
+                    .Include(x => x.RecorridoUbicacion)
+                    .Include(x => x.Ubicaciones)
+                    .FirstOrDefault(x => x.ID == recorrido_ID);
+
+                recorrido.Pasajeros = recorrido.RecorridoEmpleado.OrderBy(x => x.Orden).Select(x => GetEmpleado(x.Empleado_ID)).ToList();
+                recorrido.Ubicaciones = recorrido.RecorridoUbicacion.OrderBy(x => x.Orden).Select(x => GetUbicacion(x.Ubicacion_ID)).ToList();
+
+            }
+            return recorrido;
+        }
+        #endregion
         public DbSet<CorreoElectrinicoRespaldoModel> CorreoElectrinicoRespaldos { get; set; }
 
         public DbSet<ContactoModel> Contactos { get; set; }

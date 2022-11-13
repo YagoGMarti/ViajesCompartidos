@@ -14,7 +14,7 @@ namespace SistemaViajesCompartidos.Models
         public string Patente { get; set; }
 
         [DisplayName("Asientos Disponibles")]
-        [Range(1, 7, ErrorMessage = "Los asientos se espera que sean entre 1 y 7")]
+        [Range(1, 6, ErrorMessage = "Los asientos se espera que sean entre 1 y 6")]
         public int AsientosLibres { get; set; }
 
         [NotMapped]

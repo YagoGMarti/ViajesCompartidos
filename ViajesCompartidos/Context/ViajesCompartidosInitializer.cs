@@ -333,7 +333,7 @@ namespace ViajesCompartidos.Context
             {
                 if (item.Vehiculo != null)
                     item.Vehiculo.Empleado_ID = item.ID;
-                item.DistanciaSucursal = RutaHandler.CalcularDistancia(item.Ubicacion, item.Sucursal.Ubicacion);
+                item.DistanciaSucursal = RecorridoHandler.CalcularDistancia(item.Ubicacion, item.Sucursal.Ubicacion);
             }
 
             empleados.ForEach(e => context.Empleados.Add(e));

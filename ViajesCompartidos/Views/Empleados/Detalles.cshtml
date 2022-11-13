@@ -11,7 +11,7 @@
         <hr />
     </div>
     <div class="col-lg-1">
-        @if (@Session["Empleado_ID"] == Model.ID.ToString())
+        @if (@Session["Empleado_ID"].ToString() == Model.ID.ToString())
         {
             if (Model.Vehiculo == null)
             {
@@ -83,41 +83,117 @@
             </div>
         </div>
 
-        <div class="form-group">
-
-            <div class="col-lg-2 col-lg-offset-4">
-                @if (Model.Vehiculo != null && Model.Vehiculo.ValidoRuta)
-                {
-                    <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("ObtenerRuta", "Rutas", new { Empleado_ID = Model.ID } )">Obtener nueva ruta &raquo;</a>
-                }
+        @if (Model.Vehiculo != null)
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.Vehiculo.Patente, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.Vehiculo.Patente, new { htmlAttributes = new { disabled = "disabled", @class = "form-control text-center" } })
+                </div>
             </div>
-        </div>
+            <div class="form-group">
+                @Html.LabelFor(model => model.Vehiculo.AsientosLibres, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.Vehiculo.AsientosLibres, new { htmlAttributes = new { disabled = "disabled", @class = "form-control text-center" } })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-2 col-lg-offset-4">
+                    @if (Model.Vehiculo.ValidoRuta)
+                    {
+                        <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("ObtenerRuta", "Rutas", new { Empleado_ID = Model.ID } )">Obtener nueva ruta &raquo;</a>
+                    }
+                </div>
+            </div>
+        }
     </div>
 
     <div class="form-horizontal col-md-5">
         <div class="form-group">
+            <h4>Dirección</h4>
             <div class="map mapa" id="mapa">
 
             </div>
         </div>
 
-        @if (Model.Recorrido != null)
+        @if (Model.Recorrido_ID != null && Model.RecorridoActivo)
         {
-            <hr />
-            <h3 class="text-center">Recorrido</h3>
-            <hr />
             <div class="form-group">
-                <div class="recorrido mapa" id="recorrido">
+                <h4>Recorrido</h4>
+
+                <div class="route mapa" id="recorrido">
 
                 </div>
             </div>
-            <hr />
         }
+
     </div>
 </div>
+@if (Model.Recorrido_ID != null && Model.RecorridoActivo)
+{
+    <div class="form-group">
+        <div class="col-lg-12">
+            <hr />
+        </div>
+        <div class="col-lg-11">
+            <h3>Recorrido</h3>
+        </div>
+
+        <div class="col-lg-1">
+            <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("CancelarRuta", "Rutas", new { Recorrido_ID = Model.Recorrido.ID } )">Cancelar &raquo;</a>
+        </div>
+        <div class="col-lg-12">
+            <hr />
+        </div>
+        <div class="col-lg-12">
+            <table class="table">
+                <tr>
+                    <th class="col-lg-1 text-center">
+                        Pasajero
+                    </th>
+                    <th class="col-lg-2 text-center">
+                        Email
+                    </th>
+                    <th class="col-lg-2 text-center">
+                        Teléfono
+                    </th>
+                    <th class="col-lg-4 text-center">
+                        Dirección
+                    </th>
+                    <th class="col-lg-1 text-center">
+
+                    </th>
+                </tr>
+                @foreach (var item in Model.Recorrido.Pasajeros)
+                {
+                    <tr>
+                        <td class="text-center">
+                            @Html.DisplayFor(modelItem => item.Nombre)
+                        </td>
+                        <td class="text-center">
+                            @Html.DisplayFor(modelItem => item.CorreoElectronico)
+                        </td>
+                        <td class="text-center">
+                            @Html.DisplayFor(modelItem => item.Telefono)
+                        </td>
+                        <td class="text-center">
+                            @Html.DisplayFor(modelItem => item.Ubicacion.UbicacionTexto)
+                        </td>
+                        <td class="text-center">
+                            @if ((@Session["Empleado_ID"]).ToString() == Model.Recorrido.Conductor_ID.ToString())
+                            {
+                                @Html.ActionLink("Remover", "RemoverPasajero", "Rutas", new { Recorrido_ID = Model.Recorrido.ID, Pasajero_ID = item.ID }, new { })
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+}
 
 @section Scripts {
-    @*<script type="text/javascript">
+    <script type="text/javascript">
             function initializeMap() {
                 const map = new google.maps.Map(document.getElementById("mapa"), {
                     zoom: 16,
@@ -131,10 +207,80 @@
                 const marker = new google.maps.Marker({ map: map, draggable: false });
                 marker.setPosition(new google.maps.LatLng('@ViewBag.Latitud', '@ViewBag.Longitud'));
                 marker.setVisible(true);
-        }
 
+                if ('@ViewBag.Ruta' == "True") {
+                    try {
+                        loadDirections();
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }
+        };
 
-        </script>
+        function loadDirections() {
+                var origen = new google.maps.LatLng('@ViewBag.OrigenLatitud', '@ViewBag.OrigenLongitud');
+                var destino = new google.maps.LatLng('@ViewBag.DestinoLatitud', '@ViewBag.DestinoLongitud');
 
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZrUINt7hq2Js-FUA_otyngMihK-VMRuY&libraries=places&callback=initializeMap&solution_channel=GMP_QB_addressselection_v1_cBC"></script>*@
+                const mapOptions = {
+                    zoom: 16,
+                    center: new google.maps.LatLng('@ViewBag.CentroLatitud', '@ViewBag.CentroLongitud'),
+                    mapTypeControl: false,
+                    fullscreenControl: false,
+                    zoomControl: true,
+                    streetViewControl: false
+                }
+
+                const map = new google.maps.Map(document.getElementById("recorrido"), mapOptions),
+                    directionsService = new google.maps.DirectionsService,
+                    directionsDisplay = new google.maps.DirectionsRenderer({
+                        map: map
+                    });
+
+                calculateAndDisplayRoute(directionsService, directionsDisplay, origen, destino);
+
+        };
+
+        function calculateAndDisplayRoute(directionsService, directionsDisplay, origen, destino) {
+            let escalas = [];
+            var ubicaciones = @Html.Raw(Json.Encode(@ViewBag.Ubicaciones));
+            console.log(ubicaciones);
+            console.log(ubicaciones[0]);
+            console.log(ubicaciones[1]);
+
+            for (let i = 2; i < (ubicaciones.length - 2); i = i + 2) {
+                escalas.push({
+                    location: new google.maps.LatLng(ubicaciones[i], ubicaciones[i+1]),
+                    stopover: false
+                });
+            }
+
+            console.log(escalas);
+
+            directionsService.route({
+                origin: origen,
+                destination: destino,
+                waypoints: escalas,
+                avoidTolls: true,
+                avoidHighways: false,
+                travelMode: google.maps.TravelMode.DRIVING
+            },
+                function(response, status) {
+                    if (status == google.maps.DirectionsStatus.OK) {
+                        directionsDisplay.setDirections(response);
+                    } else {
+                        window.alert('Directions request failed due to ' + status);
+                    }
+                });
+            };
+
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZrUINt7hq2Js-FUA_otyngMihK-VMRuY&libraries=places&callback=initializeMap&solution_channel=GMP_QB_addressselection_v1_cBC">
+
+    </script>
+
+    @*<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBg26D5uxhd3FvYuprNsAIfWh8i7Z7tBJM&callback=loadDirections&libraries=places,geometry&solution_channel=GMP_QB_commutes_v2_c">
+
+        </script>*@
+
 }

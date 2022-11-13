@@ -1,0 +1,123 @@
+﻿@model SistemaViajesCompartidos.Models.RecorridoModel
+
+@{
+    ViewBag.Title = "Recorrido";
+}
+
+<h3>Propuesta de recorrido</h3>
+<hr />
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-group" style="display:inline-flex">
+        <hr />
+        <div class="form-horizontal col-md-7">
+            @Html.HiddenFor(model => model.ID)
+            <div class="form-group">
+                <table class="table">
+                    <tr>
+                        <th class="col-lg-1 text-center">
+
+                        </th>
+                        <th class="col-lg-6 text-center">
+                            Direccion
+                        </th>
+                        <th class="col-lg-3 text-center"> Borrar </th>
+                    </tr>
+
+                    @foreach (var item in Model.Ubicaciones)
+                    {
+                        <tr>
+                            <td class="text-center">
+                                @item.TipoUbicacion
+                            </td>
+                            <td class="text-center">
+                                @item.UbicacionTexto
+                            </td>
+                            <th class="text-center">
+                                @if (item.TipoUbicacion == ViajesCompartidos.Enums.TipoUbicacionEnum.Pasajero)
+                                {
+                                    @Html.ActionLink("Quitar", "RemoverUbicacion", new { recorrido_ID = Model.ID, removerUbicacion_ID = item.ID }, new { onclick = "return confirm('¿Desea remover el punto de la ruta?');" })
+                                }
+                            </th>
+                        </tr>
+                    }
+                </table>
+            </div>
+
+            <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("ObtenerRuta", "Rutas", new { Empleado_ID = Model.ID } )">Rechazar ruta</a>
+            <a class="btn btn-default buttonOffset15 botonCentrado" style="float:right" href="@Url.Action("AceptarRuta", "Rutas", new { recorrido_ID = Model.ID } )">Aceptar ruta</a>
+
+        </div>
+
+        <div class="form-horizontal col-md-5">
+            <div class="form-group">
+                <div class="map mapa" id="mapa">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @*@helper MostrarUbicaciones(List<SistemaViajesCompartidos.Models.UbicacionModel> ubicaciones)
+        {
+            <table class="table">
+                <tr>
+                    <th class="col-lg-1 text-center">
+
+                    </th>
+                    <th class="col-lg-6 text-center">
+                        Direccion
+                    </th>
+                    <th class="col-lg-3 text-center"> Borrar </th>
+                </tr>
+
+                @foreach (var item in ubicaciones)
+                {
+                    <tr>
+                        <td class="text-center">
+                            @item.TipoUbicacion
+                        </td>
+                        <td class="text-center">
+                            @item.UbicacionTexto
+                        </td>
+                        <th class="text-center">
+                            @if (item.TipoUbicacion == ViajesCompartidos.Enums.TipoUbicacionEnum.Pasajero)
+                            {
+                                @Html.ActionLink("Quitar", "ObtenerRuta", new { recorrido = Model, removerUbicacion = item.ID }, new { onclick = "return confirm('¿Desea remover el punto de la ruta?');" })
+                            }
+                        </th>
+                    </tr>
+                }
+            </table>
+        }*@
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @*<script type="text/javascript">
+            function initializeMap() {
+                const map = new google.maps.Map(document.getElementById("mapa"), {
+                    zoom: 16,
+                    center: new google.maps.LatLng('@ViewBag.Latitud', '@ViewBag.Longitud'),
+                    mapTypeControl: false,
+                    fullscreenControl: false,
+                    zoomControl: true,
+                    streetViewControl: false
+                });
+
+                const marker = new google.maps.Marker({ map: map, draggable: false });
+                marker.setPosition(new google.maps.LatLng('@ViewBag.Latitud', '@ViewBag.Longitud'));
+                marker.setVisible(true);
+        }
+
+
+        </script>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZrUINt7hq2Js-FUA_otyngMihK-VMRuY&libraries=places&callback=initializeMap&solution_channel=GMP_QB_addressselection_v1_cBC"></script>*@
+}
+

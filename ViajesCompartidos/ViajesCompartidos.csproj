@@ -140,11 +140,12 @@
     <Compile Include="Controllers\RutasController.cs" />
     <Compile Include="Controllers\SucursalesController.cs" />
     <Compile Include="Controllers\VehiculosController.cs" />
+    <Compile Include="Enums\TipoUbicacionEnum.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Handlers\BaseHandler.cs" />
-    <Compile Include="Handlers\RutaHandler.cs" />
+    <Compile Include="Handlers\RecorridoHandler.cs" />
     <Compile Include="Handlers\VehiculoHandler.cs" />
     <Compile Include="Handlers\ContactoHandler.cs" />
     <Compile Include="Handlers\EmpresaHandler.cs" />
@@ -166,6 +167,8 @@
     <Compile Include="Models\RecorridoModel.cs" />
     <Compile Include="Models\CorreoElectrinicoRespaldoModel.cs" />
     <Compile Include="Models\Temporal\InicioSesion.cs" />
+    <Compile Include="Models\Transactional\RecorridoEmpleado.cs" />
+    <Compile Include="Models\Transactional\RecorridoUbicacion.cs" />
     <Compile Include="Models\VehiculoModel.cs" />
     <Compile Include="Models\SucursalModel.cs" />
     <Compile Include="Enums\TipoEmpresaEnum.cs" />
@@ -248,10 +251,11 @@
     <Content Include="Views\Contactos\Index.cshtml" />
     <Content Include="Views\Vehiculos\Index - Copy.cshtml" />
     <Content Include="Views\Vehiculos\Validar.cshtml" />
+    <Content Include="Views\Rutas\ObtenerRuta.cshtml" />
+    <Content Include="Views\Rutas\SinPasajeros.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Rutas\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -11,10 +11,24 @@ namespace ViajesCompartidos.Handlers
         public static EmpleadoModel GetEmpleado(Guid ID)
         {
             var empleado = ViajesCompartidosContext.GetEmpleado(ID);
+            empleado = DesencriptarDatos(empleado);
+            empleado.RRHH = empleado.Roles.HasFlag(RolesEmpleadoFlag.RRHH);
+            
+            if(empleado.Recorrido_ID != null && empleado.RecorridoActivo)
+            {
+                empleado.Recorrido = RecorridoHandler.GetRecorrido(empleado.Recorrido_ID);
+                empleado.Recorrido.Pasajeros.ForEach(x => DesencriptarDatos(x));
+            }
+            
+            return empleado;
+        }
+
+        public static EmpleadoModel DesencriptarDatos(EmpleadoModel empleado)
+        {
             empleado.CorreoElectronico = EncriptadoHandler.DesEncriptar(EncriptadoHandler.StringToBytes(empleado.CorreoElectronicoEncriptado));
             if (!string.IsNullOrWhiteSpace(empleado.TelefonoEncriptado))
                 empleado.Telefono = EncriptadoHandler.DesEncriptar(EncriptadoHandler.StringToBytes(empleado.TelefonoEncriptado));
-            empleado.RRHH = empleado.Roles.HasFlag(RolesEmpleadoFlag.RRHH);
+
             return empleado;
         }
 
@@ -58,7 +72,7 @@ namespace ViajesCompartidos.Handlers
             empleadoModel.ClaveEncriptada = EncriptadoHandler.Encriptar("123123Aa!");
 
             var sucursal = SucursalHandler.GetSucursal(empleadoModel.SucursalModel_ID);
-            empleadoModel.DistanciaSucursal = RutaHandler.CalcularDistancia(empleadoModel.Ubicacion, sucursal.Ubicacion);
+            empleadoModel.DistanciaSucursal = RecorridoHandler.CalcularDistancia(empleadoModel.Ubicacion, sucursal.Ubicacion);
 
             ViajesCompartidosContext.CrearEmpleado(empleadoModel);
         }
@@ -71,7 +85,7 @@ namespace ViajesCompartidos.Handlers
                 empleadoModel.TelefonoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar(empleadoModel.Telefono));
 
             var sucursal = SucursalHandler.GetSucursal(empleadoModel.SucursalModel_ID);
-            empleadoModel.DistanciaSucursal = RutaHandler.CalcularDistancia(empleadoModel.Ubicacion, sucursal.Ubicacion);
+            empleadoModel.DistanciaSucursal = RecorridoHandler.CalcularDistancia(empleadoModel.Ubicacion, sucursal.Ubicacion);
 
             ViajesCompartidosContext.EditarEmpleado(empleadoModel);
         }

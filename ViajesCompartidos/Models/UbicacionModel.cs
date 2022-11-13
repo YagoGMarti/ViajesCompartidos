@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ViajesCompartidos.Enums;
 
 namespace SistemaViajesCompartidos.Models
 {
@@ -11,14 +12,14 @@ namespace SistemaViajesCompartidos.Models
         [DisplayName("Latitud")]
         [Required(ErrorMessage = "Es necesaria una Latitud", AllowEmptyStrings = false)]
         public string LatitudTexto { get; set; }
-        public double Latitud { get; set; } = -31.41293;
+        public double Latitud { get; set; }
 
         [DisplayName("Longitud")]
         [Required(ErrorMessage = "Es necesaria una Longitud", AllowEmptyStrings = false)]
         public string LongitudTexto { get; set; }
-        public double Longitud { get; set; } = -64.18585;
+        public double Longitud { get; set; }
 
-        public string UbicacionTextoBusqueda { get; set; }
+        public TipoUbicacionEnum TipoUbicacion { get; set; } = TipoUbicacionEnum.Pasajero;
         
         [DisplayName("Dirección")]
         public string UbicacionTexto { get; set; }
@@ -29,7 +30,6 @@ namespace SistemaViajesCompartidos.Models
             Latitud = double.Parse(ubicacion.LatitudTexto.Replace('.',','));
             LongitudTexto = ubicacion.LongitudTexto;
             Longitud = double.Parse(ubicacion.LongitudTexto.Replace('.', ','));
-            UbicacionTextoBusqueda = ubicacion.UbicacionTextoBusqueda;
             UbicacionTexto = ubicacion.UbicacionTexto;
         }
 

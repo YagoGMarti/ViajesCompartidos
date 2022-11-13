@@ -1,5 +1,6 @@
 ﻿using SistemaViajesCompartidos.Context;
 using SistemaViajesCompartidos.Enums;
+using SistemaViajesCompartidos.Models;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
@@ -11,11 +12,15 @@ namespace ViajesCompartidos.Controllers
     {
         public static ViajesCompartidosContext _context = new ViajesCompartidosContext();
         public static Dictionary<Guid, UsuarioFlattened> sesionesActivas;
+        public static Dictionary<Guid, RecorridoModel> recorridosActivos;
 
         public BaseController()
         {
             if (sesionesActivas == null)
                 sesionesActivas = new Dictionary<Guid, UsuarioFlattened>();
+
+            if (recorridosActivos == null)
+                recorridosActivos = new Dictionary<Guid, RecorridoModel>();
         }
 
         public void ActualizarSesiones(Guid sessionGUID, Guid usuarioID, Guid empresaID)
