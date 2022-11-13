@@ -91,7 +91,6 @@ namespace ViajesCompartidos.Controllers
 
         protected ActionResult CancelarRuta(Guid recorrido_ID)
         {
-            RecorridoModel recorrido = recorridosActivos[recorrido_ID];
             RecorridoHandler.CancelarRuta(recorrido_ID);
 
             var usuario_ID = ObtenerUsuario((Guid)Session["SessionGUID"]);

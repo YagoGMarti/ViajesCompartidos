@@ -72,7 +72,7 @@ namespace SistemaViajesCompartidos.Models
         {
             Nombre = empleadoModel.Nombre;
             //CorreoElectronicoEncriptado = empleadoModel.CorreoElectronicoEncriptado;
-            //TelefonoEncriptado = empleadoModel.TelefonoEncriptado;
+            TelefonoEncriptado = empleadoModel.TelefonoEncriptado;
             Roles = empleadoModel.Roles;
             SucursalModel_ID = empleadoModel.SucursalModel_ID;
             DistanciaSucursal = empleadoModel.DistanciaSucursal;

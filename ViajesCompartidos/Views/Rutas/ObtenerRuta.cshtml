@@ -46,7 +46,7 @@
                 </table>
             </div>
 
-            <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("ObtenerRuta", "Rutas", new { Empleado_ID = Model.ID } )">Rechazar ruta</a>
+            <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("Detalles", "Empleados", new { ID = Model.ID } )">Rechazar ruta</a>
             <a class="btn btn-default buttonOffset15 botonCentrado" style="float:right" href="@Url.Action("AceptarRuta", "Rutas", new { recorrido_ID = Model.ID } )">Aceptar ruta</a>
 
         </div>
