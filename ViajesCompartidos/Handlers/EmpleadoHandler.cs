@@ -13,13 +13,16 @@ namespace ViajesCompartidos.Handlers
             var empleado = ViajesCompartidosContext.GetEmpleado(ID);
             empleado = DesencriptarDatos(empleado);
             empleado.RRHH = empleado.Roles.HasFlag(RolesEmpleadoFlag.RRHH);
-            
-            if(empleado.Recorrido_ID != null && empleado.RecorridoActivo)
+
+            if (empleado.Recorrido_ID != null && empleado.RecorridoActivo)
             {
                 empleado.Recorrido = RecorridoHandler.GetRecorrido(empleado.Recorrido_ID);
-                empleado.Recorrido.Pasajeros.ForEach(x => DesencriptarDatos(x));
+                if (empleado.Recorrido.Conductor_ID == ID)
+                    empleado.Recorrido.Pasajeros.ForEach(x => DesencriptarDatos(x));
+                else
+                    empleado.Recorrido.Pasajeros = new List<EmpleadoModel>() { GetEmpleado(empleado.Recorrido.Conductor_ID) };
             }
-            
+
             return empleado;
         }
 
@@ -81,7 +84,7 @@ namespace ViajesCompartidos.Handlers
         {
             empleadoModel.ActualizarRoles();
             //empleadoModel.CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar(empleadoModel.CorreoElectronico));
-            if (!string.IsNullOrWhiteSpace(empleadoModel.Telefono)) 
+            if (!string.IsNullOrWhiteSpace(empleadoModel.Telefono))
                 empleadoModel.TelefonoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar(empleadoModel.Telefono));
 
             var sucursal = SucursalHandler.GetSucursal(empleadoModel.SucursalModel_ID);

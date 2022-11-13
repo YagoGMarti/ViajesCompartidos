@@ -123,6 +123,17 @@ namespace ViajesCompartidos.Handlers
             return recorrido;
         }
 
+        internal static void CancelarRuta(Guid recorrido_ID)
+        {
+            ViajesCompartidosContext.CancelarRuta(recorrido_ID);
+        }
+
+        internal static void RemoverPasajero(Guid recorrido_ID, Guid pasajero_ID)
+        {
+            EmpleadoModel pasajero = EmpleadoHandler.GetEmpleado(pasajero_ID);
+            ViajesCompartidosContext.RemoverPasajero(recorrido_ID, pasajero_ID);
+        }
+
         internal static IEnumerable<EmpleadoModel> ReducirLista(IEnumerable<EmpleadoModel> pasajeros, UbicacionModel ultimoPuntoUbicacion, UbicacionModel sucursalUbicacion
             , int signoCordenadaX, int signoCordenadaY)
         {

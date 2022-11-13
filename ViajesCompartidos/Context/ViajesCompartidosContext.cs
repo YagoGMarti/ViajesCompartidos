@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ViajesCompartidos.Context;
 using ViajesCompartidos.Handlers;
+using ViajesCompartidos.Models.Transactional;
 using ViajesCompartidos.Temporal;
 
 namespace SistemaViajesCompartidos.Context
@@ -166,6 +167,54 @@ namespace SistemaViajesCompartidos.Context
                     .Include(x => x.Sucursal).ToList();
             }
             return empleados;
+        }
+
+        internal static void CancelarRuta(Guid recorrido_ID)
+        {
+            using (ViajesCompartidosContext context = new ViajesCompartidosContext())
+            {
+                RecorridoModel recorrido = GetRecorrido(recorrido_ID);
+
+                foreach (var pasajero in recorrido.RecorridoEmpleado)
+                {
+                    RemoverPasajero(recorrido_ID, pasajero.Empleado_ID);
+                }
+
+                RemoverPasajero(recorrido_ID, recorrido.Conductor_ID);
+            }
+        }
+
+        public DbSet<RecorridoEmpleado> RecorridoEmpleado { get; set; }
+        public DbSet<RecorridoUbicacion> RecorridoUbicacion { get; set; }
+
+
+        internal static void RemoverPasajero(Guid recorrido_ID, Guid pasajero_ID)
+        {
+            using (ViajesCompartidosContext context = new ViajesCompartidosContext())
+            {
+                EmpleadoModel empleado = GetEmpleado(pasajero_ID);
+                empleado.Recorrido = null;
+                empleado.RecorridoActivo = false;
+                empleado.Recorrido_ID = Guid.Empty;
+                context.Entry(empleado).State = EntityState.Modified;
+                context.SaveChanges();
+
+                var recorridosEmpleados = context.RecorridoEmpleado.Where(x => x.Empleado_ID == empleado.ID && x.Recorrido_ID == recorrido_ID);
+                foreach (var recorridoEmpleado in recorridosEmpleados)
+                {
+                    context.RecorridoEmpleado.Remove(recorridoEmpleado);
+                    context.Entry(recorridoEmpleado).State = EntityState.Deleted;
+                }
+
+                var recorridosUbicaciones = context.RecorridoUbicacion.Where(x => x.Ubicacion_ID == empleado.Ubicacion.ID && x.Recorrido_ID == recorrido_ID);
+                foreach (var recorridoUbicacion in recorridosUbicaciones)
+                {
+                    context.RecorridoUbicacion.Remove(recorridoUbicacion);
+                    context.Entry(recorridoUbicacion).State = EntityState.Deleted;
+                }
+
+                context.SaveChanges();
+            }
         }
 
         public static void CrearEmpleado(EmpleadoModel empleadoModel)

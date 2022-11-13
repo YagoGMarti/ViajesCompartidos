@@ -59,9 +59,33 @@ namespace ViajesCompartidos.Controllers
             return View("SinPasajeros");
         }
 
-    //        <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("CancelarRuta", "Rutas", new { Recorrido_ID = Model.Recorrido.ID } )">Cancelar &raquo;</a>
-    //                            @Html.ActionLink("Remover", "RemoverPasajero", "Rutas", new { Recorrido_ID = Model.Recorrido.ID, Pasajero_ID = item.ID
-    //}, new { })
+
+        protected ActionResult CancelarRuta(Guid recorrido_ID)
+        {
+            RecorridoModel recorrido = recorridosActivos[recorrido_ID];
+            RecorridoHandler.CancelarRuta(recorrido_ID);
+
+            var usuario_ID = ObtenerUsuario((Guid)Session["SessionGUID"]);
+            return RedirectToAction("Detalles", "Empleados", new { ID = usuario_ID });
+        }
+
+        public ActionResult RemoverPasajero(Guid recorrido_ID, Guid Pasajero_ID)
+        {
+            RecorridoModel recorrido = RecorridoHandler.GetRecorrido(recorrido_ID);
+
+            if (recorrido.Conductor_ID == Pasajero_ID)
+                return this.CancelarRuta(recorrido_ID);
+
+            if (recorrido.Pasajeros.All(x => x.ID == Pasajero_ID))
+            {
+                return this.CancelarRuta(recorrido_ID);
+            }
+
+            RecorridoHandler.RemoverPasajero(recorrido_ID, Pasajero_ID);
+
+            var usuario_ID = ObtenerUsuario((Guid)Session["SessionGUID"]);
+            return RedirectToAction("Detalles", "Empleados", new { ID = usuario_ID });
+        }
 
     }
 }

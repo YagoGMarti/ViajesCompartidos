@@ -140,7 +140,7 @@
         </div>
 
         <div class="col-lg-1">
-            <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("CancelarRuta", "Rutas", new { Recorrido_ID = Model.Recorrido.ID } )">Cancelar &raquo;</a>
+            <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("RemoverPasajero", "Rutas", new { Recorrido_ID = Model.Recorrido.ID, Pasajero_ID = @Session["Empleado_ID"].ToString() } )">Cancelar &raquo;</a>
         </div>
         <div class="col-lg-12">
             <hr />
@@ -148,9 +148,19 @@
         <div class="col-lg-12">
             <table class="table">
                 <tr>
-                    <th class="col-lg-1 text-center">
-                        Pasajero
-                    </th>
+                    @if ((@Session["Empleado_ID"]).ToString() == Model.Recorrido.Conductor_ID.ToString())
+                    {
+                        <th class="col-lg-1 text-center">
+                            Pasajeros
+                        </th>
+                    }
+                    else
+                    {
+                        <th class="col-lg-1 text-center">
+                            Conductor
+                        </th>
+                    }
+
                     <th class="col-lg-2 text-center">
                         Email
                     </th>
@@ -278,9 +288,4 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZrUINt7hq2Js-FUA_otyngMihK-VMRuY&libraries=places&callback=initializeMap&solution_channel=GMP_QB_addressselection_v1_cBC">
 
     </script>
-
-    @*<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBg26D5uxhd3FvYuprNsAIfWh8i7Z7tBJM&callback=loadDirections&libraries=places,geometry&solution_channel=GMP_QB_commutes_v2_c">
-
-        </script>*@
-
 }
