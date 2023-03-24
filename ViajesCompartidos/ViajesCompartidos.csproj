@@ -140,21 +140,23 @@
     <Compile Include="Controllers\RutasController.cs" />
     <Compile Include="Controllers\SucursalesController.cs" />
     <Compile Include="Controllers\VehiculosController.cs" />
+    <Compile Include="Enums\TipoCorreoEnum.cs" />
     <Compile Include="Enums\TipoUbicacionEnum.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Handlers\BaseHandler.cs" />
+    <Compile Include="Handlers\CorreoElectronicoHandler.cs" />
     <Compile Include="Handlers\RecorridoHandler.cs" />
     <Compile Include="Handlers\VehiculoHandler.cs" />
     <Compile Include="Handlers\ContactoHandler.cs" />
     <Compile Include="Handlers\EmpresaHandler.cs" />
     <Compile Include="Handlers\EncriptadoHandler.cs" />
-    <Compile Include="Handlers\Enumerable.cs" />
     <Compile Include="Handlers\SesionHandler.cs" />
     <Compile Include="Handlers\SucursalHandler.cs" />
     <Compile Include="Handlers\EmpleadoHandler.cs" />
     <Compile Include="Models\BaseModel.cs" />
+    <Compile Include="Models\CorreoElectronicoModel.cs" />
     <Compile Include="Models\ContactoModel.cs" />
     <Compile Include="Models\EmpleadoModel.cs" />
     <Compile Include="Models\EmpresaModel.cs" />

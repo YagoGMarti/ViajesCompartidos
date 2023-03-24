@@ -18,7 +18,6 @@ namespace ViajesCompartidos
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            new EncriptadoHandler();
             new ViajesCompartidosContext(true);
         }
     }

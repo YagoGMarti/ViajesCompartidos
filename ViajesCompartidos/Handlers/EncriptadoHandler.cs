@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Web;
 using System.Web.Configuration;
 
 namespace ViajesCompartidos.Handlers
@@ -16,6 +12,11 @@ namespace ViajesCompartidos.Handlers
         const string AESIV = "AxokAf6CYUeRMogrwQE5cQ==";
 
         public EncriptadoHandler()
+        {
+            Initialize();
+        }
+
+        public static void Initialize()
         {
             aesKey = Convert.FromBase64String(WebConfigurationManager.AppSettings["AESKEY"]);
             aesIV = Convert.FromBase64String(AESIV);
@@ -75,7 +76,13 @@ namespace ViajesCompartidos.Handlers
         private static void ValidarParametros()
         {
             if (aesKey == null || aesKey.Length <= 0)
+                Initialize();
+
+            if (aesKey == null || aesKey.Length <= 0)
                 throw new ArgumentNullException("Key");
+
+            if (aesIV == null || aesIV.Length <= 0)
+                Initialize();
 
             if (aesIV == null || aesIV.Length <= 0)
                 throw new ArgumentNullException("IV");

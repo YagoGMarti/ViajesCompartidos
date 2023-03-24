@@ -20,20 +20,20 @@ namespace SistemaViajesCompartidos.Context
             Configuration.ValidateOnSaveEnabled = false;
 
             // Desactivar inicializador
-            Database.SetInitializer<ViajesCompartidosContext>(null);
+            //Database.SetInitializer<ViajesCompartidosContext>(null);
 
             // Inicializar con una firma propia y datos de prueba
-            //if (Initialize)
-            //{
-            //    Database.SetInitializer<ViajesCompartidosContext>(new DropCreateDatabaseAlways<ViajesCompartidosContext>());
-            //    base.Database.CommandTimeout = 300;
-            //    new ViajesCompartidosInitializer().CallSeed(this);
-            //}
-            //else
-            //{
-            //    Database.SetInitializer(new ViajesCompartidosInitializer());
-            //    base.Database.Initialize(true);
-            //}
+            if (Initialize)
+            {
+                Database.SetInitializer<ViajesCompartidosContext>(new DropCreateDatabaseAlways<ViajesCompartidosContext>());
+                base.Database.CommandTimeout = 300;
+                new ViajesCompartidosInitializer().CallSeed(this);
+            }
+            else
+            {
+                Database.SetInitializer(new ViajesCompartidosInitializer());
+                base.Database.Initialize(true);
+            }
         }
 
         public DbSet<EmpresaModel> Empresas { get; set; }
@@ -446,6 +446,18 @@ namespace SistemaViajesCompartidos.Context
             using (ViajesCompartidosContext context = new ViajesCompartidosContext())
             {
                 context.Contactos.Add(contactoModel);
+                context.SaveChanges();
+            }
+        }
+        #endregion
+
+        public DbSet<CorreoElectronicoModel> CorreosElectronicos { get; set; }
+        #region ContactosCRUD
+        public static void GrabarCorreoElectronico(CorreoElectronicoModel correoElectronicoModel)
+        {
+            using (ViajesCompartidosContext context = new ViajesCompartidosContext())
+            {
+                context.CorreosElectronicos.Add(correoElectronicoModel);
                 context.SaveChanges();
             }
         }
