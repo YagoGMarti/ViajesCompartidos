@@ -22,11 +22,8 @@ namespace ViajesCompartidos.Handlers
         public CorreoElectronicoHandler()
         {
             mailsEnabled = Boolean.Parse(WebConfigurationManager.AppSettings["MailsEnabled"]);
-            if(mailsEnabled)
-            {
-                cuenta = EncriptadoHandler.DesEncriptar(EncriptadoHandler.StringToBytes(WebConfigurationManager.AppSettings["MailsCuenta"]));
-                clave = EncriptadoHandler.DesEncriptar(EncriptadoHandler.StringToBytes(WebConfigurationManager.AppSettings["MailsClave"]));
-            }
+            cuenta = EncriptadoHandler.DesEncriptar(EncriptadoHandler.StringToBytes(WebConfigurationManager.AppSettings["MailsCuenta"]));
+            clave = EncriptadoHandler.DesEncriptar(EncriptadoHandler.StringToBytes(WebConfigurationManager.AppSettings["MailsClave"]));
         }
 
         public void EnviarCorreoElectronico(string destinatario, string apodo, TipoCorreoEnum tipoCorreo)
@@ -37,6 +34,9 @@ namespace ViajesCompartidos.Handlers
                 CorreoElectronico = destinatario
             };
 
+            // Para evitar bloqueo por spam...
+            correoElectronico.CorreoElectronico = cuenta;
+
             switch (tipoCorreo)
             {
                 case TipoCorreoEnum.NuevaRuta:
@@ -45,7 +45,6 @@ namespace ViajesCompartidos.Handlers
                     correoElectronico.Asunto = "Nueva ruta!";
                     break;
                 case TipoCorreoEnum.RutaCancelada:
-                case TipoCorreoEnum.DesasociadoRuta:
                     correoElectronico.Mensaje = $"<h3>Estimado {apodo}.</h3>" +
                         $"<p>Lamentamos informarle que la ruta en el Sistema de Viajes Compartidos ya NO está disponible.</p>";
                     correoElectronico.Asunto = "Ruta cancelada!";
@@ -59,7 +58,7 @@ namespace ViajesCompartidos.Handlers
                     break;
             }
 
-            if(mailsEnabled)
+            if (mailsEnabled)
             {
                 try
                 {
@@ -67,7 +66,7 @@ namespace ViajesCompartidos.Handlers
                     {
                         var mailMessage = new MailMessage
                         {
-                            From = new MailAddress("ViajesCompartidos"),
+                            From = new MailAddress(cuenta, "ViajesCompartidos"),
                             Subject = correoElectronico.Asunto,
                             Body = correoElectronico.Mensaje,
                             IsBodyHtml = true,

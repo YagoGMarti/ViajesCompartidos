@@ -46,7 +46,7 @@
                 </table>
             </div>
 
-            <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("Detalles", "Empleados", new { ID = Model.ID } )">Rechazar ruta</a>
+            <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("AlternativaRuta", "Rutas" )">Ruta alternativa</a>
             <a class="btn btn-default buttonOffset15 botonCentrado" style="float:right" href="@Url.Action("AceptarRuta", "Rutas", new { recorrido_ID = Model.ID } )">Aceptar ruta</a>
 
         </div>
@@ -59,41 +59,6 @@
             </div>
         </div>
     </div>
-
-
-    @*@helper MostrarUbicaciones(List<SistemaViajesCompartidos.Models.UbicacionModel> ubicaciones)
-        {
-            <table class="table">
-                <tr>
-                    <th class="col-lg-1 text-center">
-
-                    </th>
-                    <th class="col-lg-6 text-center">
-                        Direccion
-                    </th>
-                    <th class="col-lg-3 text-center"> Borrar </th>
-                </tr>
-
-                @foreach (var item in ubicaciones)
-                {
-                    <tr>
-                        <td class="text-center">
-                            @item.TipoUbicacion
-                        </td>
-                        <td class="text-center">
-                            @item.UbicacionTexto
-                        </td>
-                        <th class="text-center">
-                            @if (item.TipoUbicacion == ViajesCompartidos.Enums.TipoUbicacionEnum.Pasajero)
-                            {
-                                @Html.ActionLink("Quitar", "ObtenerRuta", new { recorrido = Model, removerUbicacion = item.ID }, new { onclick = "return confirm('¿Desea remover el punto de la ruta?');" })
-                            }
-                        </th>
-                    </tr>
-                }
-            </table>
-        }*@
-
 }
 
 @section Scripts {
@@ -124,9 +89,9 @@
         function calculateAndDisplayRoute(directionsService, directionsDisplay, origen, destino) {
             let escalas = [];
             var ubicaciones = @Html.Raw(Json.Encode(@ViewBag.Ubicaciones));
-            console.log(ubicaciones);
-            console.log(ubicaciones[0]);
-            console.log(ubicaciones[1]);
+            //console.log(ubicaciones);
+            //console.log(ubicaciones[0]);
+            //console.log(ubicaciones[1]);
 
             for (let i = 2; i < (ubicaciones.length - 2); i = i + 2) {
                 escalas.push({
@@ -135,7 +100,7 @@
                 });
             }
 
-            console.log(escalas);
+            //console.log(escalas);
 
             directionsService.route({
                 origin: origen,

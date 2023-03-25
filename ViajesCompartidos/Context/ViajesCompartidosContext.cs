@@ -416,8 +416,6 @@ namespace SistemaViajesCompartidos.Context
             return recorrido;
         }
         #endregion
-        public DbSet<CorreoElectrinicoRespaldoModel> CorreoElectrinicoRespaldos { get; set; }
-
         public DbSet<ContactoModel> Contactos { get; set; }
         #region ContactosCRUD
         public static IEnumerable<ContactoModel> GetContactos(bool filtrarProcesados)

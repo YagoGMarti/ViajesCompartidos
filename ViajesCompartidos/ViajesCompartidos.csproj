@@ -140,6 +140,7 @@
     <Compile Include="Controllers\RutasController.cs" />
     <Compile Include="Controllers\SucursalesController.cs" />
     <Compile Include="Controllers\VehiculosController.cs" />
+    <Compile Include="Enums\EstrategiaRutaEnum.cs" />
     <Compile Include="Enums\TipoCorreoEnum.cs" />
     <Compile Include="Enums\TipoUbicacionEnum.cs" />
     <Compile Include="Global.asax.cs">
@@ -167,7 +168,6 @@
     <Compile Include="Models\Temporal\ErrorViewModel.cs" />
     <Compile Include="Models\JornadaTrabajoModel.cs" />
     <Compile Include="Models\RecorridoModel.cs" />
-    <Compile Include="Models\CorreoElectrinicoRespaldoModel.cs" />
     <Compile Include="Models\Temporal\InicioSesion.cs" />
     <Compile Include="Models\Transactional\RecorridoEmpleado.cs" />
     <Compile Include="Models\Transactional\RecorridoUbicacion.cs" />

@@ -10,7 +10,8 @@ namespace ViajesCompartidos.Tests.Controllers
         [TestCase("correo@prueba.com")]
         [TestCase("viajescompartidosmails@gmail.com")]
         [TestCase("Clave123123")]
-        public void Index(string texto)
+        [TestCase("rdqfnpuakmfiprtm")]
+        public void PruebaEncriptadoCiclico(string texto)
         {
             byte[] bytesEncriptado = EncriptadoHandler.Encriptar(texto);
             string textoEncriptado = EncriptadoHandler.BytesToString(bytesEncriptado);

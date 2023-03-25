@@ -104,7 +104,7 @@ namespace ViajesCompartidos.Context
                 {
                 new EmpleadoModel()  {
                     Nombre = "Yago",
-                    ClaveEncriptada = EncriptadoHandler.Encriptar("123123Aa!"),
+                    ClaveEncriptada = EncriptadoHandler.Encriptar("empleado1@cerro"),
                     CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("empleado1@cerro.com")),
                     Roles = RolesEmpleadoFlag.EMPLEADO,
                     Telefono = "123123123",
@@ -123,7 +123,7 @@ namespace ViajesCompartidos.Context
                 },
                 new EmpleadoModel()  {
                     Nombre = "Marti",
-                    ClaveEncriptada = EncriptadoHandler.Encriptar("123123Aa!"),
+                    ClaveEncriptada = EncriptadoHandler.Encriptar("empleado2@cerro"),
                     CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("empleado2@cerro.com")),
                     Roles = RolesEmpleadoFlag.RRHH | RolesEmpleadoFlag.CONDUCTOR,
                     Telefono = "234234234",
@@ -150,7 +150,7 @@ namespace ViajesCompartidos.Context
                 },
                 new EmpleadoModel()  {
                     Nombre = "Gonzalo",
-                    ClaveEncriptada = EncriptadoHandler.Encriptar("123123Aa!"),
+                    ClaveEncriptada = EncriptadoHandler.Encriptar("empleado3@cerro"),
                     CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("empleado3@cerro.com")),
                     Roles = RolesEmpleadoFlag.EMPLEADO,
                     Telefono = "1233456789",
@@ -169,7 +169,7 @@ namespace ViajesCompartidos.Context
                 }, // input para que el empleado 2 pueda llevar a 1 y 3 al trabajo . 
                 new EmpleadoModel()  {
                     Nombre = "Gustavo",
-                    ClaveEncriptada = EncriptadoHandler.Encriptar("123123Aa!"),
+                    ClaveEncriptada = EncriptadoHandler.Encriptar("empleado4@cerro"),
                     CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("empleado4@cerro.com")),
                     Roles = RolesEmpleadoFlag.EMPLEADO,
                     EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID,
@@ -195,7 +195,7 @@ namespace ViajesCompartidos.Context
                 },
                 new EmpleadoModel()  {
                     Nombre = "Lopez",
-                    ClaveEncriptada = EncriptadoHandler.Encriptar("123123Aa!"),
+                    ClaveEncriptada = EncriptadoHandler.Encriptar("empleado5@cerro"),
                     CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("empleado5@cerro.com")),
                     Roles = RolesEmpleadoFlag.EMPLEADO,
                     EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID,
@@ -213,7 +213,7 @@ namespace ViajesCompartidos.Context
                 },
                 new EmpleadoModel()  {
                     Nombre = "Topo",
-                    ClaveEncriptada = EncriptadoHandler.Encriptar("123123Aa!"),
+                    ClaveEncriptada = EncriptadoHandler.Encriptar("empleado6@cerro"),
                     CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("empleado6@cerro.com")),
                     Roles = RolesEmpleadoFlag.EMPLEADO,
                     EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID,
@@ -231,7 +231,7 @@ namespace ViajesCompartidos.Context
                 },
                 new EmpleadoModel()  {
                     Nombre = "Rios",
-                    ClaveEncriptada = EncriptadoHandler.Encriptar("123123Aa!"),
+                    ClaveEncriptada = EncriptadoHandler.Encriptar("empleado7@cerro"),
                     CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("empleado7@cerro.com")),
                     Roles = RolesEmpleadoFlag.EMPLEADO,
                     EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID,
@@ -249,7 +249,7 @@ namespace ViajesCompartidos.Context
                 }, // input para que el empleado 4 pueda llevar al 7, ignorando al 5 por horario, 6 por ubicación. 
                 new EmpleadoModel()  {
                     Nombre = "Lula",
-                    ClaveEncriptada = EncriptadoHandler.Encriptar("123123Aa!"),
+                    ClaveEncriptada = EncriptadoHandler.Encriptar("empleado8@centro"),
                     CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("empleado8@centro.com")),
                     Roles = RolesEmpleadoFlag.CONDUCTOR,
                     EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID,
@@ -275,7 +275,7 @@ namespace ViajesCompartidos.Context
                 },
                 new EmpleadoModel()  {
                     Nombre = "Mara",
-                    ClaveEncriptada = EncriptadoHandler.Encriptar("123123Aa!"),
+                    ClaveEncriptada = EncriptadoHandler.Encriptar("empleado9@centro"),
                     CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("empleado9@centro.com")),
                     Roles = RolesEmpleadoFlag.EMPLEADO,
                     EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID,
@@ -293,7 +293,7 @@ namespace ViajesCompartidos.Context
                 },
                 new EmpleadoModel()  {
                     Nombre = "Zara",
-                    ClaveEncriptada = EncriptadoHandler.Encriptar("123123Aa!"),
+                    ClaveEncriptada = EncriptadoHandler.Encriptar("empleado10@centro"),
                     CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("empleado10@centro.com")),
                     Roles = RolesEmpleadoFlag.EMPLEADO,
                     EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID,
@@ -311,7 +311,7 @@ namespace ViajesCompartidos.Context
                 },
                 new EmpleadoModel()  {
                     Nombre = "Zara",
-                    ClaveEncriptada = EncriptadoHandler.Encriptar("123123Aa!"),
+                    ClaveEncriptada = EncriptadoHandler.Encriptar("empleado11@centro"),
                     CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("empleado11@centro.com")),
                     Roles = RolesEmpleadoFlag.EMPLEADO,
                     EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID,
