@@ -91,6 +91,17 @@ namespace ViajesCompartidos.Context
                         Longitud = -0.0,
                         LongitudTexto = "0.0"
                     }
+                },
+                new SucursalModel () {
+                    Nombre = "Nueva Córdoba",
+                    EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID,
+                    Ubicacion = new UbicacionModel() {
+                        UbicacionTexto = "Ituzaingó 484, Córdoba, Argentina",
+                        Latitud = -31.422529,
+                        LatitudTexto = "-31.422529",
+                        Longitud = -64.183939,
+                        LongitudTexto = "-64.183939"
+                    }
                 }
             };
 
@@ -326,8 +337,149 @@ namespace ViajesCompartidos.Context
                         Longitud = -64.188344,
                         LongitudTexto = "-64.188344"
                     }
-                }
                 // input para que el 8 ignore al 9 y 10 por quedarle más lejos del destino que su lugar actual, ruta para casa central
+                },
+                new EmpleadoModel()  {
+                    Nombre = "ConductorNvaCba",
+                    ClaveEncriptada = EncriptadoHandler.Encriptar("empleado12@nuevacba"),
+                    CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("empleado12@nuevacba.com")),
+                    Roles = RolesEmpleadoFlag.EMPLEADO,
+                    EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID,
+                    Sucursal = sucursales.FirstOrDefault(s => s.Nombre == "Nueva Córdoba"),
+                    SucursalModel_ID = sucursales.FirstOrDefault(s => s.Nombre == "Nueva Córdoba").ID,
+                    HorarioIngreso = new TimeSpan(7,0,0),
+                    HorarioSalida = new TimeSpan(16,0,0),
+                    Vehiculo = new VehiculoModel() {
+                        Patente = "LOS 404",
+                        AsientosLibres = 3,
+                        FechaVencimientoCarnetConducir = DateTime.Today.AddDays(120),
+                        ComprobanteCarnetValidado = true,
+                        FechaVencimientoComprobantePoliza = DateTime.Today.AddDays(120),
+                        ComprobantePolizaValidado = true
+                    },Ubicacion = new UbicacionModel() {
+                        UbicacionTexto = "Camilo Isleño 4547, Córdoba, Argentina",
+                        Latitud = -31.430517,
+                        LatitudTexto = "-31.430517",
+                        Longitud = -64.246280,
+                        LongitudTexto = "-64.246280"
+                    }
+                },
+                new EmpleadoModel()  {
+                    Nombre = "CercanoHaciaNvaCba",
+                    ClaveEncriptada = EncriptadoHandler.Encriptar("empleado13@nuevacba"),
+                    CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("empleado13@nuevacba.com")),
+                    Roles = RolesEmpleadoFlag.EMPLEADO,
+                    EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID,
+                    Sucursal = sucursales.FirstOrDefault(s => s.Nombre == "Nueva Córdoba"),
+                    SucursalModel_ID = sucursales.FirstOrDefault(s => s.Nombre == "Nueva Córdoba").ID,
+                    HorarioIngreso = new TimeSpan(7,0,0),
+                    HorarioSalida = new TimeSpan(16,0,0),
+                    Ubicacion = new UbicacionModel() {
+                        UbicacionTexto = "Francisco de Arteaga 1629, Córdoba, Argentina",
+                        Latitud = -31.427212,
+                        LatitudTexto = "-31.427212",
+                        Longitud = -64.251562,
+                        LongitudTexto = "-64.251562"
+                    }
+                },
+                new EmpleadoModel()  {
+                    Nombre = "CercanoHaciaNvaCba2",
+                    ClaveEncriptada = EncriptadoHandler.Encriptar("empleado14@nuevacba"),
+                    CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("empleado14@nuevacba.com")),
+                    Roles = RolesEmpleadoFlag.EMPLEADO,
+                    EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID,
+                    Sucursal = sucursales.FirstOrDefault(s => s.Nombre == "Nueva Córdoba"),
+                    SucursalModel_ID = sucursales.FirstOrDefault(s => s.Nombre == "Nueva Córdoba").ID,
+                    HorarioIngreso = new TimeSpan(7,0,0),
+                    HorarioSalida = new TimeSpan(16,0,0),
+                    Ubicacion = new UbicacionModel() {
+                        UbicacionTexto = "Esmeralda 4631, Córdoba, Argentina",
+                        Latitud = -31.438949,
+                        LatitudTexto = "-31.438949",
+                        Longitud = -64.247357,
+                        LongitudTexto = "-64.247357"
+                    }
+                },
+                new EmpleadoModel()  {
+                    Nombre = "EstandarNvaCba1",
+                    ClaveEncriptada = EncriptadoHandler.Encriptar("empleado15@nuevacba"),
+                    CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("empleado15@nuevacba.com")),
+                    Roles = RolesEmpleadoFlag.EMPLEADO,
+                    EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID,
+                    Sucursal = sucursales.FirstOrDefault(s => s.Nombre == "Nueva Córdoba"),
+                    SucursalModel_ID = sucursales.FirstOrDefault(s => s.Nombre == "Nueva Córdoba").ID,
+                    HorarioIngreso = new TimeSpan(7,0,0),
+                    HorarioSalida = new TimeSpan(16,0,0),
+                    Ubicacion = new UbicacionModel() {
+                        UbicacionTexto = "Sol de Mayo 1468, Córdoba, Argentina",
+                        Latitud = -31.427871,
+                        LatitudTexto = "-31.427871",
+                        Longitud = -64.213450,
+                        LongitudTexto = "-64.213450"
+                    }
+                },
+                new EmpleadoModel()  {
+                    Nombre = "EstandarNvaCba3",
+                    ClaveEncriptada = EncriptadoHandler.Encriptar("empleado16@nuevacba"),
+                    CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("empleado16@nuevacba.com")),
+                    Roles = RolesEmpleadoFlag.EMPLEADO,
+                    EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID,
+                    Sucursal = sucursales.FirstOrDefault(s => s.Nombre == "Nueva Córdoba"),
+                    SucursalModel_ID = sucursales.FirstOrDefault(s => s.Nombre == "Nueva Córdoba").ID,
+                    HorarioIngreso = new TimeSpan(7,0,0),
+                    HorarioSalida = new TimeSpan(16,0,0),
+                    Ubicacion = new UbicacionModel() {
+                        UbicacionTexto = "Brasil 681, Córdoba, Argentina",
+                        Latitud = -31.426351,
+                        LatitudTexto = "-31.426351",
+                        Longitud = -64.198358,
+                        LongitudTexto = "-64.198358"
+                    }
+                },
+                new EmpleadoModel()  {
+                    Nombre = "EstandarNvaCba2ConAuto",
+                    ClaveEncriptada = EncriptadoHandler.Encriptar("empleado17@nuevacba"),
+                    CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("empleado17@nuevacba.com")),
+                    Roles = RolesEmpleadoFlag.EMPLEADO,
+                    EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID,
+                    Sucursal = sucursales.FirstOrDefault(s => s.Nombre == "Nueva Córdoba"),
+                    SucursalModel_ID = sucursales.FirstOrDefault(s => s.Nombre == "Nueva Córdoba").ID,
+                    HorarioIngreso = new TimeSpan(7,0,0),
+                    HorarioSalida = new TimeSpan(16,0,0),
+                    Vehiculo = new VehiculoModel() {
+                        Patente = "AE 477 IRR",
+                        AsientosLibres = 2,
+                        FechaVencimientoCarnetConducir = DateTime.Today.AddDays(120),
+                        ComprobanteCarnetValidado = true,
+                        FechaVencimientoComprobantePoliza = DateTime.Today.AddDays(120),
+                        ComprobantePolizaValidado = true
+                    },
+                    Ubicacion = new UbicacionModel() {
+                        UbicacionTexto = "Emilio Achával 1315, Córdoba, Argentina",
+                        Latitud = -31.427434,
+                        LatitudTexto = "-31.427434",
+                        Longitud = -64.206001,
+                        LongitudTexto = "-64.206001"
+                    }
+                },
+                new EmpleadoModel()  {
+                    Nombre = "CercanoNuevaCba",
+                    ClaveEncriptada = EncriptadoHandler.Encriptar("empleado18@nuevacba"),
+                    CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("empleado18@nuevacba.com")),
+                    Roles = RolesEmpleadoFlag.EMPLEADO,
+                    EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID,
+                    Sucursal = sucursales.FirstOrDefault(s => s.Nombre == "Nueva Córdoba"),
+                    SucursalModel_ID = sucursales.FirstOrDefault(s => s.Nombre == "Nueva Córdoba").ID,
+                    HorarioIngreso = new TimeSpan(7,0,0),
+                    HorarioSalida = new TimeSpan(16,0,0),
+                    Ubicacion = new UbicacionModel() {
+                        UbicacionTexto = "Fructuoso Rivera 181, Córdoba, Argentina",
+                        Latitud = -31.426014,
+                        LatitudTexto = "-31.426014",
+                        Longitud = -64.190848,
+                        LongitudTexto = "-64.190848"
+                    }
+                }
             };
 
             foreach (var item in empleados)

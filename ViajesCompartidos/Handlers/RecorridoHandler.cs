@@ -68,8 +68,9 @@ namespace ViajesCompartidos.Handlers
             var pasajeros = EmpleadoHandler.GetEmpleados(conductor.EmpresaModel_ID, conductor.SucursalModel_ID);
             pasajeros = pasajeros.Where(x => x.Ubicacion != null && x.DistanciaSucursal > 0 && x.Activo);
             pasajeros = pasajeros.Where(x => x.Horario == conductor.Horario).OrderByDescending(x => x.DistanciaSucursal);
+            pasajeros = pasajeros.Where(x => x.ID != Empleado_ID);
 
-            if(estrategiaRutaEnum == EstrategiaRutaEnum.SinConductores)
+            if (estrategiaRutaEnum == EstrategiaRutaEnum.SinConductores)
             {
                 // descarta a quienes tienen un vehículo. 
                 pasajeros = pasajeros.Where(x => !x.TieneVehiculo);
@@ -89,13 +90,16 @@ namespace ViajesCompartidos.Handlers
                 Conductor_ID = conductor.ID
             };
 
+            conductor.Ubicacion.TipoUbicacion = Enums.TipoUbicacionEnum.Inicio;
+            recorrido.Ubicaciones.Add(conductor.Ubicacion);
+
             if (estrategiaRutaEnum == EstrategiaRutaEnum.SoloCercanosDomicilio)
             {
                 // carga todos los cercanos, en proximidades, luego remueve por ID. 
                 double deltaDistancia = 0.01;
-                var cercanos = BuscarCercanos(pasajeros, conductor.Ubicacion, deltaDistancia).ToList();
-                cercanos.AddRange(BuscarCercanos(pasajeros, conductor.Ubicacion, deltaDistancia * 2).ToList());
-                cercanos.AddRange(BuscarCercanos(pasajeros, conductor.Ubicacion, deltaDistancia * 4).ToList());
+                var cercanos = BuscarCercanos(pasajeros, conductor.Ubicacion, deltaDistancia, signoCordenadaX, signoCordenadaY).ToList();
+                cercanos.AddRange(BuscarCercanos(pasajeros, conductor.Ubicacion, deltaDistancia * 2, signoCordenadaX, signoCordenadaY).ToList());
+                //cercanos.AddRange(BuscarCercanos(pasajeros, conductor.Ubicacion, deltaDistancia * 4, signoCordenadaX, signoCordenadaY).ToList());
 
                 while (asientos > 0 && cercanos.Any())
                 {
@@ -111,9 +115,6 @@ namespace ViajesCompartidos.Handlers
                 pasajeros = ReducirLista(pasajeros, conductor.Ubicacion, sucursal.Ubicacion, signoCordenadaX, signoCordenadaY);
                 if (pasajeros.Any())
                 {
-                    conductor.Ubicacion.TipoUbicacion = Enums.TipoUbicacionEnum.Inicio;
-                    recorrido.Ubicaciones.Add(conductor.Ubicacion);
-
                     var ultimoPasajero = pasajeros.FirstOrDefault();
 
                     if (estrategiaRutaEnum == EstrategiaRutaEnum.SoloMasCercano)
@@ -199,15 +200,16 @@ namespace ViajesCompartidos.Handlers
             return pasajeros;
         }
 
-        internal static IEnumerable<EmpleadoModel> BuscarCercanos(IEnumerable<EmpleadoModel> pasajeros, UbicacionModel ubicacionConductor, double deltaDistancia)
+        internal static IEnumerable<EmpleadoModel> BuscarCercanos(IEnumerable<EmpleadoModel> pasajeros, UbicacionModel ubicacionConductor, double deltaDistancia
+            , int signoCordenadaX, int signoCordenadaY)
         {
             // descarta todo en X fuera del rango aceptable por el conductor
-            pasajeros = pasajeros.Where(x => x.Ubicacion.Longitud > ubicacionConductor.Longitud + deltaDistancia).ToList();
-            pasajeros = pasajeros.Where(x => x.Ubicacion.Longitud < ubicacionConductor.Longitud - deltaDistancia).ToList();
+            pasajeros = pasajeros.Where(x => x.Ubicacion.Longitud > ubicacionConductor.Longitud + (signoCordenadaX * deltaDistancia)).ToList();
+            pasajeros = pasajeros.Where(x => x.Ubicacion.Longitud < ubicacionConductor.Longitud - (signoCordenadaX * deltaDistancia)).ToList();
 
             // descarta todo en Y fuera del rango aceptable por el conductor
-            pasajeros = pasajeros.Where(x => x.Ubicacion.Latitud > ubicacionConductor.Latitud + deltaDistancia).ToList();
-            pasajeros = pasajeros.Where(x => x.Ubicacion.Latitud < ubicacionConductor.Latitud - deltaDistancia).ToList();
+            pasajeros = pasajeros.Where(x => x.Ubicacion.Latitud > ubicacionConductor.Latitud + (signoCordenadaY * deltaDistancia)).ToList();
+            pasajeros = pasajeros.Where(x => x.Ubicacion.Latitud < ubicacionConductor.Latitud - (signoCordenadaY * deltaDistancia)).ToList();
             
             return pasajeros;
         }

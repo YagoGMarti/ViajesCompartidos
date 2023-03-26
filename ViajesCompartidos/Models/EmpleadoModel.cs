@@ -36,7 +36,9 @@ namespace SistemaViajesCompartidos.Models
         [NotMapped]
         public bool RRHH { get; set; }
 
-        public VehiculoModel Vehiculo { get; set; }
+        [DisplayName("Vehiculo")]
+        public Guid Vehiculo_ID { get; set; }
+        public virtual VehiculoModel Vehiculo { get; set; }
 
         [DisplayName("Vehiculo")]
         public bool TieneVehiculo => (Vehiculo != null);
@@ -88,6 +90,12 @@ namespace SistemaViajesCompartidos.Models
 
             if (!RRHH && Roles.HasFlag(RolesEmpleadoFlag.RRHH))
                 Roles &= ~RolesEmpleadoFlag.RRHH;
+
+            if (Vehiculo != null && Vehiculo.ValidoRuta && !Roles.HasFlag(RolesEmpleadoFlag.CONDUCTOR))
+                Roles = Roles | RolesEmpleadoFlag.CONDUCTOR;
+
+            if ((Vehiculo == null || Vehiculo.ValidoRuta) && Roles.HasFlag(RolesEmpleadoFlag.CONDUCTOR))
+                Roles &= ~RolesEmpleadoFlag.CONDUCTOR;
         }
     }
 }

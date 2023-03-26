@@ -20,7 +20,7 @@ namespace SistemaViajesCompartidos.Models
         [DisplayName("Alta")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
-        public DateTime FechaAlta { get; set; }
+        public DateTime FechaAlta { get; set; } = DateTime.Now;
 
         //[DisplayName("Baja")]
         //[DataType(DataType.Date)]

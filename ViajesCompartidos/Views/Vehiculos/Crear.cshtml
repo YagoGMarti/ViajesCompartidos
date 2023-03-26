@@ -7,7 +7,7 @@
 <h3>Registrar vehículo</h3>
 <hr />
 
-@using (Html.BeginForm("Editar", "Vehiculos", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Crear", "Vehiculos", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
 
@@ -31,7 +31,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+        @*<div class="form-group">
             @Html.LabelFor(model => model.ImagenCarnetConducir, htmlAttributes: new { @class = "control-label col-md-4" })
             <div class="col-md-8">
                 @Html.TextBoxFor(model => model.ImagenCarnetConducir, new { type = "file", name = "Imagen", accept = "image/*,.pdf", @class = "form-control" })
@@ -43,7 +43,7 @@
             <div class="col-md-8">
                 @Html.TextBoxFor(model => model.ImagenComprobantePoliza, new { type = "file", name = "Imagen", accept = "image/*,.pdf", @class = "form-control" })
             </div>
-        </div>
+        </div>*@
 
         <div class="form-group">
             <div class="col-md-offset-4 col-md-8">

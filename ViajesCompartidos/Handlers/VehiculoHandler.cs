@@ -18,6 +18,13 @@ namespace ViajesCompartidos.Handlers
             return ViajesCompartidosContext.GetVehiculos();
         }
 
+        internal static void CrearVehiculo(VehiculoModel vehiculoModel)
+        {
+            EmpleadoModel empleadoModel = EmpleadoHandler.GetEmpleado(vehiculoModel.Empleado_ID);
+            empleadoModel.Vehiculo = vehiculoModel;
+            EmpleadoHandler.AgregarVehiculo(empleadoModel);
+        }
+
         internal static void EditarVehiculo(VehiculoModel vehiculoModel)
         {
             if (vehiculoModel.ImagenCarnetConducir != null)

@@ -19,8 +19,8 @@ namespace ViajesCompartidos.Controllers
         public ActionResult AlternativaRuta(Guid Empleado_ID, RecorridoModel recorrido)
         {
             EstrategiaRutaEnum estrategia;
-            var asociados = recorridosActivos.Where(x => x.Value.Conductor_ID == Empleado_ID).Select(x => x.Value.ID);
-            switch (asociados.Count())
+            var intentos = recorridosActivos.Where(x => x.Value.Conductor_ID == Empleado_ID).Select(x => x.Value.ID);
+            switch (intentos.Count())
             {
                 case 1:
                     estrategia = EstrategiaRutaEnum.SoloCercanosDomicilio; break;
@@ -40,11 +40,11 @@ namespace ViajesCompartidos.Controllers
             if (recorrido.Pasajeros.Any())
             {
                 CargarMapa(recorrido);
-                return View("ObtenerRuta", recorrido);
+                return this.ObtenerRuta(Empleado_ID, recorrido);
             }
             else
             {
-                if (asociados.Count() > 3)
+                if (intentos.Count() > 3)
                     return this.SinPasajeros();
                 else
                     return this.AlternativaRuta(Empleado_ID, recorrido);
@@ -55,7 +55,7 @@ namespace ViajesCompartidos.Controllers
         {
             if (recorrido.LatitudCentro + recorrido.LongitudCentro == 0)
             {
-                var asociados = recorridosActivos.Where(x => x.Value.Conductor_ID == Empleado_ID).Select(x => x.Value.ID);
+                var asociados = recorridosActivos.Where(x => x.Value.Conductor_ID == Empleado_ID).Select(x => x.Value.ID).ToList();
                 foreach (Guid recID in asociados)
                 {
                     recorridosActivos.Remove(recID);

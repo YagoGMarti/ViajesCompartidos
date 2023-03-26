@@ -93,6 +93,12 @@ namespace ViajesCompartidos.Handlers
             ViajesCompartidosContext.EditarEmpleado(empleadoModel);
         }
 
+        public static void AgregarVehiculo(EmpleadoModel empleadoModel)
+        {
+            empleadoModel.ActualizarRoles();
+            ViajesCompartidosContext.AgregarVehiculo(empleadoModel);
+        }
+
         internal static void CambiarEstadoActivo(Guid ID, bool estado)
         {
             ViajesCompartidosContext.CambiarEstadoActivoEmpleado(ID, estado);

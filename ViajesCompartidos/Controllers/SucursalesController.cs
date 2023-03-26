@@ -32,7 +32,6 @@ namespace ViajesCompartidos.Controllers
 
         public ActionResult Detalles(Guid? ID)
         {
-            ID = ObtenerUsuario((Guid)Session["SessionGUID"]);
             if (ID == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

@@ -95,6 +95,7 @@
   <ItemGroup>
     <Compile Include="Handler\CorreoElectronicoHandlerTest.cs" />
     <Compile Include="Handler\EncriptadoHandlerTest.cs" />
+    <Compile Include="Handler\RecorridoHandlerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

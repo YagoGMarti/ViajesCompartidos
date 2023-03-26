@@ -26,9 +26,10 @@ namespace ViajesCompartidos.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            
             VehiculoModel vehiculoModel = VehiculoHandler.GetVehiculo(ID.Value);
-
             EmpleadoModel empleadoModel = EmpleadoHandler.GetEmpleado(vehiculoModel.Empleado_ID);
+
             ViewBag.empleado = $"{empleadoModel.Nombre} - {empleadoModel.CorreoElectronico}";
 
             if (vehiculoModel == null)
@@ -48,16 +49,17 @@ namespace ViajesCompartidos.Controllers
         public ActionResult Crear(VehiculoModel vehiculoModel)
         {
             var Empleado_ID = ObtenerUsuario((Guid)Session["SessionGUID"]);
+            vehiculoModel.Empleado_ID = Empleado_ID;
 
-            if (ModelState.IsValid)
+            try
             {
-                vehiculoModel.Empleado_ID = Empleado_ID;
-                _context.Vehiculos.Add(vehiculoModel);
-                _context.SaveChanges();
-                return RedirectToAction("Detalles", new { ID = vehiculoModel.ID });
+                VehiculoHandler.CrearVehiculo(vehiculoModel);
+                return RedirectToAction("Editar", new { ID = vehiculoModel.ID });
             }
-
-            return View(vehiculoModel);
+            catch (Exception)
+            {
+                return View(vehiculoModel);
+            }
         }
 
         public ActionResult Editar(Guid? ID)
@@ -67,8 +69,8 @@ namespace ViajesCompartidos.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             VehiculoModel vehiculoModel = VehiculoHandler.GetVehiculo(ID.Value);
-
             EmpleadoModel empleadoModel = EmpleadoHandler.GetEmpleado(vehiculoModel.Empleado_ID);
+
             ViewBag.empleado = $"{empleadoModel.Nombre} - {empleadoModel.CorreoElectronico}";
 
             if (vehiculoModel == null)
@@ -123,7 +125,7 @@ namespace ViajesCompartidos.Controllers
 
         public FileContentResult AdjuntoPoliza(Guid ID)
         {
-            VehiculoModel vehiculo = VehiculoHandler.GetVehiculo(ID);            
+            VehiculoModel vehiculo = VehiculoHandler.GetVehiculo(ID);
             return File(vehiculo.AdjuntoComprobantePoliza, vehiculo.TipoImagenComprobantePoliza, vehiculo.NombreArchivoComprobantePoliza);
         }
 

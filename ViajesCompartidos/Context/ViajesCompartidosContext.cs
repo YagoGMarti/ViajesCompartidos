@@ -239,6 +239,19 @@ namespace SistemaViajesCompartidos.Context
             }
         }
 
+        public static void AgregarVehiculo(EmpleadoModel empleadoModel)
+        {
+            using (ViajesCompartidosContext context = new ViajesCompartidosContext())
+            {
+                EmpleadoModel empleado = GetEmpleado(empleadoModel.ID);
+                empleado.Vehiculo = empleadoModel.Vehiculo;
+                empleado.Vehiculo_ID = empleadoModel.Vehiculo.ID;
+                context.Entry(empleado).State = EntityState.Modified; 
+                context.Entry(empleado.Vehiculo).State = EntityState.Added;
+                context.SaveChanges();
+            }
+        }
+
         public static void CambiarEstadoActivoEmpleado(Guid ID, bool estado)
         {
             using (ViajesCompartidosContext context = new ViajesCompartidosContext())
@@ -306,7 +319,6 @@ namespace SistemaViajesCompartidos.Context
             }
             return vehiculos;
         }
-
 
         public static void CrearVehiculo(VehiculoModel vehiculoModel)
         {
