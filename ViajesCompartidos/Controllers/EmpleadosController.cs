@@ -18,12 +18,27 @@ namespace ViajesCompartidos.Controllers
         {
             if (EmpresaID.HasValue || SucursalID.HasValue)
             {
-                ViewBag.EmpresaID = EmpresaID;
                 ViewBag.SucursalID = SucursalID;
-                return View("Index", EmpleadoHandler.GetEmpleados(EmpresaID, SucursalID));
+                var empleados = EmpleadoHandler.GetEmpleados(EmpresaID, SucursalID);
+                if (EmpresaID.HasValue)
+                {
+                    ViewBag.EmpresaID = EmpresaID;
+                }
+                else
+                {
+                    var empresa_ID = EmpresaHandler.GetEmpresaBySucursal(SucursalID.Value);
+                    ViewBag.EmpresaID = empresa_ID;
+                }
+                return View("Index", empleados);
+            }
+            else
+            {
+                var empresa_ID = ObtenerEmpresa((Guid)Session["SessionGUID"]);
+                ViewBag.EmpresaID = empresa_ID;
+                return View("Index", EmpleadoHandler.GetEmpleados(empresa_ID, SucursalID));
+
             }
 
-            return View("Index", EmpleadoHandler.GetEmpleados(ObtenerEmpresa((Guid)Session["SessionGUID"]), SucursalID));
         }
 
         public ActionResult Detalles(Guid? ID)
@@ -49,7 +64,7 @@ namespace ViajesCompartidos.Controllers
             ViewBag.Longitud = empleadoModel.Ubicacion.LongitudTexto;
 
             CargarMapa(empleadoModel.Recorrido);
-            
+
 
             return View(empleadoModel);
         }
@@ -82,10 +97,13 @@ namespace ViajesCompartidos.Controllers
             }
         }
 
-        public ActionResult Crear()
+        public ActionResult Crear(Guid EmpresaModel_ID)
         {
-            var empresaID = ObtenerEmpresa((Guid)Session["SessionGUID"]);
-            ViewBag.Sucursales = GetSucursales(empresaID, null);
+            if (EmpresaModel_ID == null)
+            {
+                EmpresaModel_ID = ObtenerEmpresa((Guid)Session["SessionGUID"]);
+            }
+            ViewBag.Sucursales = GetSucursales(EmpresaModel_ID, null);
             ViewBag.Ingreso = 7;
             ViewBag.Salida = 16;
             return View();
@@ -125,8 +143,8 @@ namespace ViajesCompartidos.Controllers
             }
 
             EmpleadoModel empleadoModel = EmpleadoHandler.GetEmpleado(ID.Value);
-            
-            
+
+
             ModelState.Clear();
 
             if (empleadoModel == null)
@@ -150,8 +168,8 @@ namespace ViajesCompartidos.Controllers
         {
             empleadoModel.HorarioIngreso = new TimeSpan(int.Parse(empleadoModel.HorarioIngresoTexto), 0, 0);
             empleadoModel.HorarioSalida = new TimeSpan(int.Parse(empleadoModel.HorarioSalidaTexto), 0, 0);
-            
-            if(empleadoModel.HorarioIngreso.Hours >= empleadoModel.HorarioSalida.Hours)
+
+            if (empleadoModel.HorarioIngreso.Hours >= empleadoModel.HorarioSalida.Hours)
             {
                 ViewBag.HorariosInvalidos = "El horario de ingreso debe ser anterior al de salida";
             }

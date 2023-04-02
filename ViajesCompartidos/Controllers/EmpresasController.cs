@@ -50,7 +50,6 @@ namespace ViajesCompartidos.Controllers
             if (ModelState.IsValid)
             {
                 EmpresaHandler.CrearEmpresa(empresaModel);
-                SesionHandler.EnviarClave(empresaModel);
                 return RedirectToAction("Detalles", new { ID = empresaModel.ID });
             }
 

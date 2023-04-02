@@ -15,6 +15,10 @@
 <div class="form-horizontal">
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.HiddenFor(model => model.ID)
+    @Html.HiddenFor(model => model.Empleado_ID)
+    @Html.HiddenFor(model => model.FechaVencimientoCarnetConducir)
+    @Html.HiddenFor(model => model.FechaVencimientoComprobantePoliza)
+
 
     <div class="form-group">
         @Html.LabelFor(model => model.Patente, htmlAttributes: new { @class = "control-label col-md-4" })
@@ -29,6 +33,10 @@
         <div class="col-md-8">
             @Html.EditorFor(model => model.AsientosLibres, new { htmlAttributes = new { @class = "form-control" } })
             @Html.ValidationMessageFor(model => model.AsientosLibres, "", new { @class = "text-danger" })
+            @if (ViewBag.asientosInsuficientes != null && ViewBag.asientosInsuficientes)
+            {
+                <span class="text-danger field-validation-error" data-valmsg-for="Asientos" data-valmsg-replace="true"><span id="Asientos-error" class="">No puede tener menos asientos que pasajeros</span></span>
+            }
         </div>
     </div>
 

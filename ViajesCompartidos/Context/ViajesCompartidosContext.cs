@@ -12,7 +12,7 @@ using ViajesCompartidos.Temporal;
 
 namespace SistemaViajesCompartidos.Context
 {
-    public class ViajesCompartidosContext : DbContext
+    public partial class ViajesCompartidosContext : DbContext
     {
         public ViajesCompartidosContext(bool Initialize = false) : base("SistemaViajesCompartidos")
         {
@@ -277,7 +277,7 @@ namespace SistemaViajesCompartidos.Context
             return empleado;
         }
 
-        public static EmpleadoModel GetEmpleadoByEmail(string emailEncriptado)
+        public static EmpleadoModel GetEmpleadoPorCorreoElectronico(string emailEncriptado)
         {
             EmpleadoModel empleado;
             using (ViajesCompartidosContext context = new ViajesCompartidosContext())
@@ -470,6 +470,30 @@ namespace SistemaViajesCompartidos.Context
                 context.CorreosElectronicos.Add(correoElectronicoModel);
                 context.SaveChanges();
             }
+        }
+
+        internal static Guid GetEmpresaBySucursal(Guid sucursalID)
+        {
+            Guid empresaID;
+            using (ViajesCompartidosContext context = new ViajesCompartidosContext())
+            {
+                empresaID = context.Sucursales.Find(sucursalID).EmpresaModel_ID;
+            }
+            return empresaID;
+        }
+
+        internal static string ReiniciarClave(Guid empladoID, byte[] claveEncriptada)
+        {
+            string email;
+            using (ViajesCompartidosContext context = new ViajesCompartidosContext())
+            {
+                var empleado = context.Empleados.Find(empladoID);
+                empleado.ClaveEncriptada = claveEncriptada;
+                context.SaveChanges();
+                email = empleado.CorreoElectronicoEncriptado;
+            }
+
+            return email;
         }
         #endregion
     }

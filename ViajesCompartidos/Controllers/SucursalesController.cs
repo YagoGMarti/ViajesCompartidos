@@ -22,10 +22,12 @@ namespace ViajesCompartidos.Controllers
             {
                 var empleadoID = ObtenerUsuario((Guid)Session["SessionGUID"]);
                 var empresaID = EmpleadoHandler.GetEmpleado(empleadoID).EmpresaModel_ID;
+                ViewBag.EmpresaModel_ID = empresaID;
                 return View("Index", SucursalHandler.GetSucursalesPorEmpresa(empresaID));
             }
             else
             {
+                ViewBag.EmpresaModel_ID = EmpresaID;
                 return View("Index", SucursalHandler.GetSucursalesPorEmpresa(EmpresaID.Value));
             }
         }
@@ -50,9 +52,9 @@ namespace ViajesCompartidos.Controllers
             return View(sucursalModel);
         }
 
-        public ActionResult Crear()
+        public ActionResult Crear(Guid EmpresaModel_ID)
         {
-            return View();
+            return View(new SucursalModel() { EmpresaModel_ID = EmpresaModel_ID });
         }
 
         [HttpPost]
@@ -61,9 +63,7 @@ namespace ViajesCompartidos.Controllers
         {
             if (ModelState.IsValid)
             {
-                var empleadoID = ObtenerUsuario((Guid)Session["SessionGUID"]);
-                var empresaID = EmpleadoHandler.GetEmpleado(empleadoID).EmpresaModel_ID;
-                SucursalHandler.CrearSucursal(sucursalModel, empresaID);
+                SucursalHandler.CrearSucursal(sucursalModel);
                 return RedirectToAction("Detalles", new { ID = sucursalModel.ID });
             }
 

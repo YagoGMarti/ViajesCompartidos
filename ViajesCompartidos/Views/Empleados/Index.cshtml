@@ -9,7 +9,10 @@
         <h2>Empleados</h2>
     </div>
     <div class="col-lg-1 col-lg-offset-8">
-        <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("Crear", "Empleados")">Crear &raquo;</a>
+        @if (ViewBag.EmpresaID != null || ViewBag.SucursalID != null)
+        {
+            <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("Crear", "Empleados", new { EmpresaModel_ID = ViewBag.EmpresaID })">Crear &raquo;</a>
+        }
     </div>
 </div>
 
@@ -21,9 +24,9 @@
         <th class="col-lg-2 text-center">
             @Html.DisplayNameFor(model => model.CorreoElectronico)
         </th>
-        <th class="col-lg-2 text-center">
+        @*<th class="col-lg-2 text-center">
             @Html.DisplayNameFor(model => model.Roles)
-        </th>
+        </th>*@
         <th class="col-lg-2 text-center">
             Sucursal
         </th>
@@ -45,9 +48,9 @@
             <td class="text-center">
                 @Html.DisplayFor(modelItem => item.CorreoElectronico)
             </td>
-            <td class="text-center">
+            @*<td class="text-center">
                 @Html.DisplayFor(modelItem => item.Roles)
-            </td>
+            </td>*@
 
             <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Sucursal.Nombre)

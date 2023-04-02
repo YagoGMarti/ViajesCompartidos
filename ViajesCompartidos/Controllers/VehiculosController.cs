@@ -84,12 +84,24 @@ namespace ViajesCompartidos.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Editar(VehiculoModel vehiculoModel)
         {
+            ViewBag.asientosInsuficientes = false;
+            EmpleadoModel empleadoModel = EmpleadoHandler.GetEmpleado(vehiculoModel.Empleado_ID);
+
+            if ( vehiculoModel.Empleado_ID == empleadoModel.Recorrido.Conductor_ID
+                && empleadoModel.Recorrido.Pasajeros.Count() > vehiculoModel.AsientosLibres)
+            {
+                ViewBag.asientosInsuficientes = true;
+                ViewBag.empleado = $"{empleadoModel.Nombre} - {empleadoModel.CorreoElectronico}";
+                return View(vehiculoModel);
+            }
+
             if (ModelState.IsValid)
             {
                 VehiculoHandler.EditarVehiculo(vehiculoModel);
                 return RedirectToAction("Detalles", new { ID = vehiculoModel.ID });
             }
 
+            ViewBag.empleado = $"{empleadoModel.Nombre} - {empleadoModel.CorreoElectronico}";
             return View(vehiculoModel);
         }
 
