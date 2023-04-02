@@ -26,16 +26,33 @@ namespace ViajesCompartidos.Handlers
             clave = EncriptadoHandler.DesEncriptar(EncriptadoHandler.StringToBytes(WebConfigurationManager.AppSettings["MailsClave"]));
         }
 
+        public void EnviarClave(string destinatario, string clave)
+        {
+            var correoElectronico = new CorreoElectronicoModel()
+            {
+                TipoCorreoEnum = TipoCorreoEnum.ReinicioClave,
+                Destinatario = destinatario
+            };
+
+            // Para evitar bloqueo por spam...
+            correoElectronico.Destinatario = cuenta;
+
+            correoElectronico.Mensaje = $"<p>Le informamos que su nueva clave es {clave}.</p>";
+
+            correoElectronico = Enviar(correoElectronico);
+            GrabarCorreoElectronico(correoElectronico);
+        }
+
         public void EnviarCorreoElectronico(string destinatario, string apodo, TipoCorreoEnum tipoCorreo)
         {
             var correoElectronico = new CorreoElectronicoModel()
             {
                 TipoCorreoEnum = tipoCorreo,
-                CorreoElectronico = destinatario
+                Destinatario = destinatario
             };
 
             // Para evitar bloqueo por spam...
-            correoElectronico.CorreoElectronico = cuenta;
+            correoElectronico.Destinatario = cuenta;
 
             switch (tipoCorreo)
             {
@@ -58,6 +75,12 @@ namespace ViajesCompartidos.Handlers
                     break;
             }
 
+            correoElectronico = Enviar(correoElectronico);
+            GrabarCorreoElectronico(correoElectronico);
+        }
+
+        private CorreoElectronicoModel Enviar(CorreoElectronicoModel correoElectronico)
+        {
             if (mailsEnabled)
             {
                 try
@@ -71,7 +94,7 @@ namespace ViajesCompartidos.Handlers
                             Body = correoElectronico.Mensaje,
                             IsBodyHtml = true,
                         };
-                        mailMessage.To.Add(destinatario);
+                        mailMessage.To.Add(correoElectronico.Destinatario);
 
                         smtpClient.Send(mailMessage);
                     };
@@ -85,14 +108,14 @@ namespace ViajesCompartidos.Handlers
                 }
             }
 
-            GrabarCorreoElectronico(correoElectronico);
+            return correoElectronico;
         }
 
         public bool GrabarCorreoElectronico(CorreoElectronicoModel correoElectrónicoModel)
         {
             try
             {
-                correoElectrónicoModel.CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar(correoElectrónicoModel.CorreoElectronico));
+                correoElectrónicoModel.CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar(correoElectrónicoModel.Destinatario));
                 ViajesCompartidosContext.GrabarCorreoElectronico(correoElectrónicoModel);
                 return true;
             }

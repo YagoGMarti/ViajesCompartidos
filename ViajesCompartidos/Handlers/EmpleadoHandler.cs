@@ -3,6 +3,7 @@ using SistemaViajesCompartidos.Enums;
 using SistemaViajesCompartidos.Models;
 using System;
 using System.Collections.Generic;
+using ViajesCompartidos.Temporal;
 
 namespace ViajesCompartidos.Handlers
 {
@@ -23,6 +24,13 @@ namespace ViajesCompartidos.Handlers
                     empleado.Recorrido.Pasajeros = new List<EmpleadoModel>() { GetEmpleado(empleado.Recorrido.Conductor_ID) };
             }
 
+            return empleado;
+        }
+
+        public static EmpleadoModel GetEmpleadoPorEmail(String email)
+        {
+            var mailEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar(email));
+            var empleado = ViajesCompartidosContext.GetEmpleadoPorCorreoElectronico(mailEncriptado);
             return empleado;
         }
 
@@ -66,7 +74,7 @@ namespace ViajesCompartidos.Handlers
             empleadoModel.ActualizarRoles();
             empleadoModel.CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar(empleadoModel.CorreoElectronico));
 
-            if (ViajesCompartidosContext.GetEmpleadoByEmail(empleadoModel.CorreoElectronicoEncriptado) != null)
+            if (ViajesCompartidosContext.GetEmpleadoPorCorreoElectronico(empleadoModel.CorreoElectronicoEncriptado) != null)
                 throw new ArgumentException(empleadoModel.CorreoElectronico);
 
             if (!string.IsNullOrWhiteSpace(empleadoModel.Telefono))
@@ -91,6 +99,14 @@ namespace ViajesCompartidos.Handlers
             empleadoModel.DistanciaSucursal = RecorridoHandler.CalcularDistancia(empleadoModel.Ubicacion, sucursal.Ubicacion);
 
             ViajesCompartidosContext.EditarEmpleado(empleadoModel);
+        }
+
+        public static Tuple<string, string> ReiniciarClave(Guid empladoID)
+        {
+            string clave = Guid.NewGuid().ToString();   
+            var claveEncriptada = EncriptadoHandler.Encriptar(clave);
+            var email = ViajesCompartidosContext.ReiniciarClave(empladoID, claveEncriptada);
+            return new Tuple<string, string>(email,clave);
         }
 
         public static void AgregarVehiculo(EmpleadoModel empleadoModel)

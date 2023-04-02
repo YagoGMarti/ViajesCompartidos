@@ -18,7 +18,7 @@ namespace SistemaViajesCompartidos.Models
         public bool Enviado { get; set; } = false;
         public TipoCorreoEnum TipoCorreoEnum { get; set; }
         [NotMapped]
-        public string CorreoElectronico { get; set; }
+        public string Destinatario { get; set; }
         [NotMapped]
         public string Asunto { get; set; }
         public string CorreoElectronicoEncriptado { get; set; }

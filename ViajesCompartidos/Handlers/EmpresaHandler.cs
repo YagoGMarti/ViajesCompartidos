@@ -33,5 +33,10 @@ namespace ViajesCompartidos.Handlers
         {
             ViajesCompartidosContext.CambiarEstadoActivoEmpresa(ID, estado);
         }
+
+        internal static Guid GetEmpresaBySucursal(Guid sucursalID)
+        {
+            return ViajesCompartidosContext.GetEmpresaBySucursal(sucursalID);
+        }
     }
 }

@@ -30,9 +30,8 @@ namespace ViajesCompartidos.Handlers
             ViajesCompartidosContext.EditarSucursal(sucursalModel);
         }
 
-        public static void CrearSucursal(SucursalModel sucursalModel, Guid empresaID)
+        public static void CrearSucursal(SucursalModel sucursalModel)
         {
-            sucursalModel.EmpresaModel_ID = empresaID;
             ViajesCompartidosContext.CrearSucursal(sucursalModel);
         }
     }

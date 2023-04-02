@@ -15,7 +15,7 @@ namespace ViajesCompartidos.Tests.Controllers
         }
 
         [Test]
-        [TestCase("viajescompartidosmails@gmail.com", "Clave123123")]
+        [TestCase("viajescompartidosmails@gmail.com", "rdqfnpuakmfiprtm")]
         public void PruebaConfiguracion(string cuenta, string clave)
         {
             Assert.AreEqual(handler.GetMailsEnabled, true);

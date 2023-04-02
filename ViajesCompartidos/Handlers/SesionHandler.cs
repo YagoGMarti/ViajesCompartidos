@@ -12,7 +12,7 @@ namespace ViajesCompartidos.Handlers
         public static EmpleadoModel IniciarSesion(InicioSesion inicioSesion)
         {
             inicioSesion.EmailEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar(inicioSesion.Email));
-            EmpleadoModel empleado = ViajesCompartidosContext.GetEmpleadoByEmail(inicioSesion.EmailEncriptado);
+            EmpleadoModel empleado = ViajesCompartidosContext.GetEmpleadoPorCorreoElectronico(inicioSesion.EmailEncriptado);
 
             if (empleado == null)
                 return null;
@@ -29,20 +29,11 @@ namespace ViajesCompartidos.Handlers
             return ViajesCompartidosContext.GetRolEmpleado(empleadoID);
         }
 
-        internal static void RestablecerClave(Guid ID)
+        internal static void RestablecerClave(Guid empleadoID)
         {
-            // TODO : usar HTML client y mandar una nueva clave
-            // TODO : actualizar clave del usuario con la nueva contraseña 
-        }
-
-        internal static void EnviarClave(EmpresaModel empresaModel)
-        {
-            // TODO : generar una nueva clave aleatoria. 
-            // TODO : revisar si la combinación email y empresa existe, caso contrario crear empleado rol CORREOINSTITUCIONAL. 
-            // TODO : guardar la nueva clave encriptada a nivel empleado. 
-            // TODO : enviar por email nueva clave. 
-            //EmailHandler.EnviarClave();
-            //throw new NotImplementedException();
+            var ReinicioClave = EmpleadoHandler.ReiniciarClave(empleadoID);
+            var mailsHandler = new CorreoElectronicoHandler();
+            mailsHandler.EnviarClave(ReinicioClave.Item1, ReinicioClave.Item2);
         }
     }
 }
