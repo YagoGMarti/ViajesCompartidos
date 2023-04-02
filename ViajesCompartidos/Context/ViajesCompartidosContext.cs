@@ -427,6 +427,19 @@ namespace SistemaViajesCompartidos.Context
             }
             return recorrido;
         }
+
+        public static IEnumerable<RecorridoModel> GetRecorridosPorSucursal(Guid sucursal_ID)
+        {
+            IEnumerable<RecorridoModel> recorridos;
+            using (ViajesCompartidosContext context = new ViajesCompartidosContext())
+            {
+                recorridos = context.Recorridos
+                    .Where(x => x.Sucursal_ID == sucursal_ID).ToList();
+
+            }
+            return recorridos;
+        }
+        
         #endregion
         public DbSet<ContactoModel> Contactos { get; set; }
         #region ContactosCRUD

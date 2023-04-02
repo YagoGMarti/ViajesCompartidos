@@ -29,7 +29,7 @@
                         }
                         else
                         {
-                            <li>@Html.ActionLink("Home", "Detalles", "Empleados")</li>
+                            <li>@Html.ActionLink("Home", $"Detalles/{Session["Empleado_ID"]}", "Empleados")</li>
 
                             if ((int)@Session["Roles"] % 2 == 1)
                             {
@@ -40,7 +40,7 @@
                         }
                     </ul>
                     <span class="navbar-right navhead" style="margin-top: 1em; color:white !important;">
-                        Bienvenido: @Session["UsuarioLogueado"] @Session["Usuario"] - @Html.ActionLink("Cerrar sesión", "Logout", "Login", new { area = "" }, new { @style = "color:white !important;" })
+                        Bienvenido: @Session["Usuario"] - @Html.ActionLink("Cerrar sesión", "Logout", "Login", new { area = "" }, new { @style = "color:white !important;" })
                     </span>
                 </div>
             }

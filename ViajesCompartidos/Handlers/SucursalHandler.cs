@@ -25,8 +25,17 @@ namespace ViajesCompartidos.Handlers
             return ViajesCompartidosContext.GetSucursal(ID);
         }
 
-            public static void EditarSucursal(SucursalModel sucursalModel)
+        public static void EditarSucursal(SucursalModel sucursalModel)
         {
+            SucursalModel sucursal = GetSucursal(sucursalModel.ID);
+            if (sucursalModel.Ubicacion.UbicacionTexto != sucursal.Ubicacion.UbicacionTexto)
+            {
+                foreach (var recorrido in RecorridoHandler.GetRecorridosPorSucursal(sucursalModel.ID))
+                {
+                    RecorridoHandler.CancelarRuta(recorrido.ID);
+                }
+            }
+
             ViajesCompartidosContext.EditarSucursal(sucursalModel);
         }
 

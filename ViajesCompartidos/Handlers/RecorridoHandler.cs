@@ -35,6 +35,12 @@ namespace ViajesCompartidos.Handlers
             return recorrido;
         }
 
+        public static IEnumerable<RecorridoModel>  GetRecorridosPorSucursal(Guid sucursal_ID)
+        {
+            var recorridos = ViajesCompartidosContext.GetRecorridosPorSucursal(sucursal_ID);
+            return recorridos;
+        }
+
         public static void RechazarRecorrido(Guid recorrido_ID, Guid empleado_ID)
         {
             RecorridoModel recorrido = GetRecorrido(recorrido_ID);
@@ -160,9 +166,18 @@ namespace ViajesCompartidos.Handlers
 
         internal static void RemoverPasajero(Guid recorrido_ID, Guid pasajero_ID)
         {
-            EmpleadoModel pasajero = EmpleadoHandler.GetEmpleado(pasajero_ID);
-            _mails.EnviarCorreoElectronico(pasajero.CorreoElectronico, pasajero.Nombre, SistemaViajesCompartidos.Enums.TipoCorreoEnum.DesasociadoRuta);
-            ViajesCompartidosContext.RemoverPasajero(recorrido_ID, pasajero_ID);
+            RecorridoModel recorrido = GetRecorrido(recorrido_ID);
+            if (recorrido.Conductor_ID == pasajero_ID
+                || recorrido.Pasajeros.All(x => x.ID == pasajero_ID))
+            {
+                CancelarRuta(recorrido_ID);
+            }
+            else
+            {
+                EmpleadoModel pasajero = EmpleadoHandler.GetEmpleado(pasajero_ID);
+                _mails.EnviarCorreoElectronico(pasajero.CorreoElectronico, pasajero.Nombre, SistemaViajesCompartidos.Enums.TipoCorreoEnum.DesasociadoRuta);
+                ViajesCompartidosContext.RemoverPasajero(recorrido_ID, pasajero_ID);
+            }
         }
 
         internal static IEnumerable<EmpleadoModel> ReducirLista(IEnumerable<EmpleadoModel> pasajeros, UbicacionModel ultimoPuntoUbicacion, UbicacionModel sucursalUbicacion

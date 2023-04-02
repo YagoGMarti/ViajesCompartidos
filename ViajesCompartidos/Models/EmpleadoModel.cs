@@ -61,6 +61,7 @@ namespace SistemaViajesCompartidos.Models
 
         [DisplayName("Recorrido")]
         public Guid Recorrido_ID { get; set; }
+        [DisplayName("Recorrido")]
         public bool RecorridoActivo { get; set; } = false;
         public virtual RecorridoModel Recorrido { get; set; }
 

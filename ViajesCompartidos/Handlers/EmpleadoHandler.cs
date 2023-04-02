@@ -3,6 +3,7 @@ using SistemaViajesCompartidos.Enums;
 using SistemaViajesCompartidos.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ViajesCompartidos.Temporal;
 
 namespace ViajesCompartidos.Handlers
@@ -65,7 +66,7 @@ namespace ViajesCompartidos.Handlers
                 empleado.CorreoElectronico = EncriptadoHandler.DesEncriptar(EncriptadoHandler.StringToBytes(empleado.CorreoElectronicoEncriptado));
             }
 
-            return empleados;
+            return empleados.OrderBy(x => x.CorreoElectronico);
         }
 
         public static void CrearEmpleado(EmpleadoModel empleadoModel, Guid empresaID)
@@ -91,7 +92,14 @@ namespace ViajesCompartidos.Handlers
         public static void EditarEmpleado(EmpleadoModel empleadoModel)
         {
             empleadoModel.ActualizarRoles();
-            //empleadoModel.CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar(empleadoModel.CorreoElectronico));
+            
+            {
+                EmpleadoModel empleado = GetEmpleado(empleadoModel.ID);
+                if(empleadoModel.Ubicacion.UbicacionTexto != empleado.Ubicacion.UbicacionTexto
+                    && empleado.RecorridoActivo)
+                    RecorridoHandler.RemoverPasajero(empleado.Recorrido_ID, empleadoModel.ID);
+            }
+
             if (!string.IsNullOrWhiteSpace(empleadoModel.Telefono))
                 empleadoModel.TelefonoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar(empleadoModel.Telefono));
 
@@ -103,10 +111,10 @@ namespace ViajesCompartidos.Handlers
 
         public static Tuple<string, string> ReiniciarClave(Guid empladoID)
         {
-            string clave = Guid.NewGuid().ToString();   
+            string clave = Guid.NewGuid().ToString();
             var claveEncriptada = EncriptadoHandler.Encriptar(clave);
             var email = ViajesCompartidosContext.ReiniciarClave(empladoID, claveEncriptada);
-            return new Tuple<string, string>(email,clave);
+            return new Tuple<string, string>(email, clave);
         }
 
         public static void AgregarVehiculo(EmpleadoModel empleadoModel)
@@ -117,6 +125,11 @@ namespace ViajesCompartidos.Handlers
 
         internal static void CambiarEstadoActivo(Guid ID, bool estado)
         {
+            var empleado = ViajesCompartidosContext.GetEmpleado(ID);
+            if (!estado && empleado.RecorridoActivo)
+            {
+                RecorridoHandler.RemoverPasajero(empleado.Recorrido_ID, ID);
+            }
             ViajesCompartidosContext.CambiarEstadoActivoEmpleado(ID, estado);
         }
     }

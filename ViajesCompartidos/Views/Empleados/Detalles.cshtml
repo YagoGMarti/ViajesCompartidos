@@ -7,23 +7,23 @@
 
 <div class="form-group">
     <div class="col-lg-11">
-        <h3>Empleado</h3>
+        <h3> Empleado </h3>
         <hr />
-    </div>
-    <div class="col-lg-1">
-        @if (@Session["Empleado_ID"].ToString() == Model.ID.ToString())
+</div>
+<div class="col-lg-1">
+    @if (@Session["Empleado_ID"].ToString() == Model.ID.ToString())
+    {
+        if (Model.Vehiculo == null)
         {
-            if (Model.Vehiculo == null)
-            {
-                <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("Crear", "Vehiculos" )">Vehiculo &raquo;</a>
-            }
-            else
-            {
-                <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("Editar", "Vehiculos", new { ID = Model.Vehiculo.ID } )">Ver Vehiculo &raquo;</a>
-            }
+            <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("Crear", "Vehiculos" )">Vehiculo &raquo;</a>
         }
-        <hr />
-    </div>
+        else
+        {
+            <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("Editar", "Vehiculos", new { ID = Model.Vehiculo.ID } )">Ver Vehiculo &raquo;</a>
+        }
+    }
+    <hr />
+</div>
 </div>
 
 <div class="form-group" style="display:inline-flex">

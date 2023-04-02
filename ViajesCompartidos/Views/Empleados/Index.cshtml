@@ -36,7 +36,10 @@
         <th class="col-lg-1 text-center">
             @Html.DisplayNameFor(model => model.Activo)
         </th>
-        <th class="col-lg-3 text-center"></th>
+        <th class="col-lg-1 text-center">
+            @Html.DisplayNameFor(model => model.RecorridoActivo)
+        </th>
+        <th class="col-lg-4 text-center"></th>
     </tr>
 
     @foreach (var item in Model)
@@ -49,8 +52,8 @@
                 @Html.DisplayFor(modelItem => item.CorreoElectronico)
             </td>
             @*<td class="text-center">
-                @Html.DisplayFor(modelItem => item.Roles)
-            </td>*@
+            @Html.DisplayFor(modelItem => item.Roles)
+        </td>*@
 
             <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Sucursal.Nombre)
@@ -60,6 +63,9 @@
             </td>
             <td class="text-center">
                 @Html.DisplayFor(modelItem => item.Activo)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.RecorridoActivo)
             </td>
             <th class="text-center">
                 @Html.ActionLink("Editar", "Editar", new { ID = item.ID }) |
