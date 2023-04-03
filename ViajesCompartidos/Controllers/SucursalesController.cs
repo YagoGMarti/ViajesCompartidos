@@ -13,12 +13,13 @@ using ViajesCompartidos.Handlers;
 
 namespace ViajesCompartidos.Controllers
 {
+    [RevisarUsuarioLogueado]
+    [RevisarRoles(RolesEmpleadoFlag.ADMINISTRADOR | RolesEmpleadoFlag.RRHH)]
     public class SucursalesController : BaseController
     {
-        [RevisarRoles(RolesEmpleadoFlag.ADMINISTRADOR | RolesEmpleadoFlag.RRHH)]
         public ActionResult Index(Guid? EmpresaID)
         {
-            if(EmpresaID == null)
+            if (EmpresaID == null)
             {
                 var empleadoID = ObtenerUsuario((Guid)Session["SessionGUID"]);
                 var empresaID = EmpleadoHandler.GetEmpleado(empleadoID).EmpresaModel_ID;
@@ -38,9 +39,9 @@ namespace ViajesCompartidos.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            
+
             SucursalModel sucursalModel = SucursalHandler.GetSucursal(ID.Value);
-            
+
             if (sucursalModel == null)
             {
                 return HttpNotFound();
@@ -76,9 +77,9 @@ namespace ViajesCompartidos.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            
+
             SucursalModel sucursalModel = SucursalHandler.GetSucursal(ID.Value);
-            
+
             if (sucursalModel == null)
             {
                 return HttpNotFound();

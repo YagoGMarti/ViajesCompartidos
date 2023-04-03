@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
-using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using SistemaViajesCompartidos.Context;
 using SistemaViajesCompartidos.Enums;
 using SistemaViajesCompartidos.Models;
 using ViajesCompartidos.Handlers;
 
 namespace ViajesCompartidos.Controllers
 {
+    [RevisarUsuarioLogueado]
     [RevisarRoles(RolesEmpleadoFlag.ADMINISTRADOR)]
     public class EmpresasController : BaseController
     {

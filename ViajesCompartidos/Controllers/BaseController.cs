@@ -5,10 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using ViajesCompartidos.Handlers;
+using ViajesCompartidos.Models.Temporal;
 
 namespace ViajesCompartidos.Controllers
 {
-    public class BaseController : Controller
+    public partial class BaseController : Controller
     {
         public static ViajesCompartidosContext _context = new ViajesCompartidosContext();
         public static Dictionary<Guid, UsuarioFlattened> sesionesActivas;
@@ -35,7 +36,7 @@ namespace ViajesCompartidos.Controllers
             }
         }
 
-        public Guid ObtenerUsuario(Guid sessionGUID)
+        public static Guid ObtenerUsuario(Guid sessionGUID)
         {
             if (sesionesActivas.ContainsKey(sessionGUID))
             {
@@ -55,28 +56,14 @@ namespace ViajesCompartidos.Controllers
             return new Guid();
         }
 
+        public Guid ObtenerSesionID()
+        {
+            return (Guid)Session["SessionGUID"];
+        }
+
         public void CerrarSesion(Guid sessionGUID)
         {
             sesionesActivas.Remove(sessionGUID);
-        }
-
-        internal class RevisarRolesAttribute : Attribute
-        {
-            public RevisarRolesAttribute(RolesEmpleadoFlag rolesAutorizados)
-            {
-                var asd = rolesAutorizados;
-            }
-        }
-
-        public class UsuarioFlattened {
-            public UsuarioFlattened(Guid usuarioID, Guid empresaID)
-            {
-                UsuarioID = usuarioID;
-                EmpresaID = empresaID;
-            }
-            
-            public Guid UsuarioID { get; set; }
-            public Guid EmpresaID { get; set; }
         }
     }
 }

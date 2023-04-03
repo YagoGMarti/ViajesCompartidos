@@ -12,6 +12,7 @@ using ViajesCompartidos.Handlers;
 
 namespace ViajesCompartidos.Controllers
 {
+    [RevisarUsuarioLogueado]
     public class EmpleadosController : BaseController
     {
         public ActionResult Index(Guid? EmpresaID, Guid? SucursalID)

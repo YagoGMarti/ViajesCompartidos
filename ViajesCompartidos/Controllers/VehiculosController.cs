@@ -8,13 +8,16 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using SistemaViajesCompartidos.Context;
+using SistemaViajesCompartidos.Enums;
 using SistemaViajesCompartidos.Models;
 using ViajesCompartidos.Handlers;
 
 namespace ViajesCompartidos.Controllers
 {
+    [RevisarUsuarioLogueado]
     public class VehiculosController : BaseController
     {
+        [RevisarRoles(RolesEmpleadoFlag.RRHH)]
         public ActionResult Index()
         {
             return View("Index", VehiculoHandler.GetVehiculos());
@@ -105,6 +108,7 @@ namespace ViajesCompartidos.Controllers
             return View(vehiculoModel);
         }
 
+        [RevisarRoles(RolesEmpleadoFlag.RRHH)]
         public ActionResult Validar(Guid? ID)
         {
             if (ID == null)
@@ -125,6 +129,7 @@ namespace ViajesCompartidos.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [RevisarRoles(RolesEmpleadoFlag.RRHH)]
         public ActionResult Validar(VehiculoModel vehiculoModel)
         {
             if (ModelState.IsValid)

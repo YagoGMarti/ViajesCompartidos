@@ -131,6 +131,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Context\ViajesCompartidosContext.cs" />
     <Compile Include="Context\ViajesCompartidosInitializer.cs" />
+    <Compile Include="Controllers\Authorization.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\ContactosController.cs" />
     <Compile Include="Controllers\EmpleadosController.cs" />
@@ -169,6 +170,7 @@
     <Compile Include="Models\JornadaTrabajoModel.cs" />
     <Compile Include="Models\RecorridoModel.cs" />
     <Compile Include="Models\Temporal\InicioSesion.cs" />
+    <Compile Include="Models\Temporal\UsuarioFlattened.cs" />
     <Compile Include="Models\Transactional\RecorridoEmpleado.cs" />
     <Compile Include="Models\Transactional\RecorridoUbicacion.cs" />
     <Compile Include="Models\VehiculoModel.cs" />

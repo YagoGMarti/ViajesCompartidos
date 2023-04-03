@@ -9,6 +9,7 @@ using ViajesCompartidos.Handlers;
 
 namespace ViajesCompartidos.Controllers
 {
+    [RevisarUsuarioLogueado]
     public class RutasController : BaseController
     {
         public ActionResult Index()
