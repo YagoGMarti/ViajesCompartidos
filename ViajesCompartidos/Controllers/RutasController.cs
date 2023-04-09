@@ -20,7 +20,7 @@ namespace ViajesCompartidos.Controllers
         public ActionResult AlternativaRuta(Guid Empleado_ID, RecorridoModel recorrido)
         {
             EstrategiaRutaEnum estrategia;
-            var intentos = recorridosActivos.Where(x => x.Value.Conductor_ID == Empleado_ID).Select(x => x.Value.ID);
+            var intentos = recorridosActivos.Where(x => x.Value.Conductor_ID == Empleado_ID);
             switch (intentos.Count())
             {
                 case 1:
@@ -38,8 +38,19 @@ namespace ViajesCompartidos.Controllers
                 recorridosActivos.Add(recorrido.ID, recorrido);
             }
 
-            if (recorrido.Pasajeros.Any())
+            if (recorrido.Pasajeros.Any() && intentos.Count() < 5)
             {
+                if (intentos != null)
+                    foreach (var item in intentos)
+                    {
+                        if (recorrido.ID != item.Key
+                            && recorrido.Pasajeros.Select(x => x.ID).SequenceEqual(item.Value.Pasajeros.Select(x => x.ID)))
+                        {
+                            // ya mostramos la misma opción. 
+                            return this.AlternativaRuta(Empleado_ID, recorrido);
+                        }
+                    }
+
                 CargarMapa(recorrido);
                 return this.ObtenerRuta(Empleado_ID, recorrido);
             }

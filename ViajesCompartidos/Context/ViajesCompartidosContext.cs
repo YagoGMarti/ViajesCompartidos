@@ -191,6 +191,15 @@ namespace SistemaViajesCompartidos.Context
                 }
 
                 RemoverPasajero(recorrido_ID, recorrido.Conductor_ID);
+                context.SaveChanges();
+            }
+
+            using (ViajesCompartidosContext context = new ViajesCompartidosContext())
+            {
+                RecorridoModel recorrido = GetRecorrido(recorrido_ID);
+                recorrido.Activo = false;
+                context.Entry(recorrido).State = EntityState.Modified;
+                context.SaveChanges();
             }
         }
 
@@ -443,7 +452,7 @@ namespace SistemaViajesCompartidos.Context
             using (ViajesCompartidosContext context = new ViajesCompartidosContext())
             {
                 recorridos = context.Recorridos
-                    .Where(x => x.Sucursal_ID == sucursal_ID)
+                    .Where(x => x.Sucursal_ID == sucursal_ID && x.Activo)
                     .Include(x => x.RecorridoEmpleado)
                     .ToList();
             }
@@ -456,7 +465,7 @@ namespace SistemaViajesCompartidos.Context
             using (ViajesCompartidosContext context = new ViajesCompartidosContext())
             {
                 recorridos = context.Recorridos
-                    .Where(x => x.Empresa_ID == empresa_ID)
+                    .Where(x => x.Empresa_ID == empresa_ID && x.Activo)
                     .Include(x => x.RecorridoEmpleado)
                     .ToList();
             }
