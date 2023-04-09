@@ -15,7 +15,7 @@ namespace ViajesCompartidos.Handlers
         public static void RecorridoAceptado(RecorridoModel recorrido)
         {
             recorrido.EstadoRecorrido = EstadoRecorridoEnum.ACEPTADO;
-            recorrido.RecorridoEmpleado = recorrido.Pasajeros.Select((x,index) => new RecorridoEmpleado(recorrido.ID, x.ID, index)).ToList();
+            recorrido.RecorridoEmpleado = recorrido.Pasajeros.Select((x, index) => new RecorridoEmpleado(recorrido.ID, x.ID, index)).ToList();
             recorrido.RecorridoUbicacion = recorrido.Ubicaciones.Select((x, index) => new RecorridoUbicacion(recorrido.ID, x.ID, index)).ToList();
 
             // sacarlo de otro recorrido, si tiene recorrido. 
@@ -36,16 +36,16 @@ namespace ViajesCompartidos.Handlers
 
         public static RecorridoModel GetRecorrido(Guid? recorrido_ID)
         {
-            if(recorrido_ID.HasValue)
+            if (recorrido_ID.HasValue)
             {
                 var recorrido = ViajesCompartidosContext.GetRecorrido(recorrido_ID.Value);
                 return recorrido;
             }
-            
+
             return null;
         }
 
-        public static IEnumerable<RecorridoModel>  GetRecorridosPorSucursal(Guid sucursal_ID)
+        public static IEnumerable<RecorridoModel> GetRecorridosPorSucursal(Guid sucursal_ID)
         {
             var recorridos = ViajesCompartidosContext.GetRecorridosPorSucursal(sucursal_ID);
             return recorridos;
@@ -89,9 +89,10 @@ namespace ViajesCompartidos.Handlers
             var sucursal = SucursalHandler.GetSucursal(conductor.SucursalModel_ID);
             var pasajeros = EmpleadoHandler.GetEmpleados(null, conductor.SucursalModel_ID);
             pasajeros = pasajeros.Where(x => x.Ubicacion != null && x.DistanciaSucursal > 0 && x.Activo);
-            pasajeros = pasajeros.Where(x =>
-                x.Recorrido == null
-                || (x.Recorrido != null && x.Recorrido.Conductor_ID == Empleado_ID));
+
+            pasajeros = pasajeros.Where(x => x.Recorrido == null || !x.Recorrido.Activo);
+            pasajeros = pasajeros.Where(x => x.Recorrido == null || x.Recorrido.Conductor_ID == Empleado_ID);
+
             pasajeros = pasajeros.Where(x => x.Horario == conductor.Horario).OrderByDescending(x => x.DistanciaSucursal);
             pasajeros = pasajeros.Where(x => x.ID != Empleado_ID);
 
@@ -244,7 +245,7 @@ namespace ViajesCompartidos.Handlers
             // descarta todo en Y fuera del rango aceptable por el conductor
             pasajeros = pasajeros.Where(x => x.Ubicacion.Latitud > ubicacionConductor.Latitud + (signoCordenadaY * deltaDistancia)).ToList();
             pasajeros = pasajeros.Where(x => x.Ubicacion.Latitud < ubicacionConductor.Latitud - (signoCordenadaY * deltaDistancia)).ToList();
-            
+
             return pasajeros;
         }
 
