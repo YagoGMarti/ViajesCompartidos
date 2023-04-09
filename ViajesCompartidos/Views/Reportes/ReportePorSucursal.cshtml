@@ -5,32 +5,80 @@
 }
 
 <div class="form-group">
-    <div class="col-lg-3">
+    <div class="col-lg-11">
         <h2>Visualizar recorridos de la sucursal.</h2>
-    </div>
-    <div class="col-lg-1 col-lg-offset-8">
     </div>
 </div>
 
 <table class="table">
     <tr>
-        @*<th class="col-lg-2 text-center">
-            @Html.DisplayNameFor(model => model.Sucursal)
-        </th>*@
-        @*<th></th>*@
+        <th class="col-lg-1 text-center">
+            @Html.DisplayNameFor(model => model.Rol)
+        </th>
+        <th class="col-lg-3 text-center">
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th class="col-lg-2 text-center">
+            @Html.DisplayNameFor(model => model.Nombre)
+        </th>
+        <th class="col-lg-4 text-center">
+            @Html.DisplayNameFor(model => model.Dirección)
+        </th>
+        <th class="col-lg-1 text-center">
+            @Html.DisplayNameFor(model => model.Vencimiento)
+        </th>
+
+        <th class="col-lg-1 text-center"></th>
     </tr>
 
     @foreach (var item in Model)
     {
-        <tr>
-            @*<td class="text-center">
-                @Html.DisplayFor(modelItem => item.Sucursal)
-            </td>*@
-            @*<td class="text-center">
-                @Html.ActionLink("Ver reporte", "ReportePorSucursal", new { ID = item.SucursalID })
-            </td>*@
-        </tr>
-    }
+        @*<thead class="thead-light">
 
+            </thead>*@
+        <tr class="bg-info">
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Rol)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Nombre)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Dirección)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Vencimiento)
+            </td>
+            <td class="text-center">
+                @Html.ActionLink("Recorrido", "GetRecorrido", "Recorridos", new { RecorridoID = item.RecorridoID })
+            </td>
+        </tr>
+        foreach (var pax in item.Pasajeros)
+        {
+            <tr>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => pax.Rol)
+                </td>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => pax.Email)
+                </td>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => pax.Nombre)
+                </td>
+                <td class="text-center">
+                    @Html.DisplayFor(modelItem => pax.Dirección)
+                </td>
+                <td class="text-center">
+                    -
+                </td>
+                <td class="text-center">
+                    -
+                </td>
+            </tr>
+        }
+    }
 </table>
 

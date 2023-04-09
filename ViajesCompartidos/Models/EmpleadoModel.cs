@@ -60,9 +60,10 @@ namespace SistemaViajesCompartidos.Models
         public Guid EmpresaModel_ID { get; set; }
 
         [DisplayName("Recorrido")]
-        public Guid Recorrido_ID { get; set; }
+        public Guid? RecorridoModel_ID { get; set; }
         [DisplayName("Recorrido")]
         public bool RecorridoActivo { get; set; } = false;
+        [ForeignKey("RecorridoModel_ID")]
         public virtual RecorridoModel Recorrido { get; set; }
 
         [DisplayName("Sucursal")]

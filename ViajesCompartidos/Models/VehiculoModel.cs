@@ -119,5 +119,18 @@ namespace SistemaViajesCompartidos.Models
             ComprobanteCarnetValidado = vehiculoModel.ComprobanteCarnetValidado;
             FechaVencimientoCarnetConducir = vehiculoModel.FechaVencimientoCarnetConducir;
         }
+
+        internal string FechaVencimientoDocumentos()
+        {
+            if (CalcularValidoRuta())
+            {
+                return (FechaVencimientoComprobantePoliza.Value > FechaVencimientoCarnetConducir.Value
+                    ? FechaVencimientoComprobantePoliza.Value.ToShortDateString()
+                    : FechaVencimientoCarnetConducir.Value.ToShortDateString());
+            }
+            else
+                return "-";
+            throw new NotImplementedException();
+        }
     }
 }

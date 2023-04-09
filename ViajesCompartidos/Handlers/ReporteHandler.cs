@@ -6,6 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using SistemaViajesCompartidos.Models.Temporal;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
+using System.Web.Helpers;
+using ViajesCompartidos.Controllers;
 
 namespace ViajesCompartidos.Handlers
 {
@@ -67,10 +70,30 @@ namespace ViajesCompartidos.Handlers
 
             foreach (var recorrido in recorridos)
             {
-                recorridosReporte.Add(new ReporteSucursalModel()
+                var conductor = EmpleadoHandler.GetEmpleado(recorrido.Conductor_ID);
+                var reporte = new ReporteSucursalModel()
                 {
-                    
-                });
+                    Rol = "Conductor",
+                    Email = conductor.CorreoElectronico,
+                    Nombre = conductor.Nombre,
+                    Dirección = conductor.Ubicacion.UbicacionTexto,
+                    Vencimiento = conductor.Vehiculo.FechaVencimientoDocumentos(),
+                };
+
+                foreach (var item in recorrido.RecorridoEmpleado.OrderBy(x => x.Orden))
+                {
+                    var pasajero = EmpleadoHandler.GetEmpleado(item.Empleado_ID);
+                    reporte.Pasajeros.Add(new ReporteSucursalModel()
+                    {
+                        Rol = "Pasajero",
+                        Email = pasajero.CorreoElectronico,
+                        Nombre = pasajero.Nombre,
+                        Dirección = pasajero.Ubicacion.UbicacionTexto,
+                        Vencimiento = "-",
+                    });
+                }
+
+                recorridosReporte.Add(reporte);
             }
 
             return recorridosReporte;

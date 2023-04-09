@@ -17,9 +17,9 @@ namespace ViajesCompartidos.Handlers
             empleado = DesencriptarDatos(empleado);
             empleado.RRHH = empleado.Roles.HasFlag(RolesEmpleadoFlag.RRHH);
 
-            if (empleado.Recorrido_ID != null && empleado.RecorridoActivo)
+            if (empleado.RecorridoModel_ID.HasValue && empleado.RecorridoActivo)
             {
-                empleado.Recorrido = RecorridoHandler.GetRecorrido(empleado.Recorrido_ID);
+                empleado.Recorrido = RecorridoHandler.GetRecorrido(empleado.RecorridoModel_ID.Value);
                 if (empleado.Recorrido.Conductor_ID == ID)
                     empleado.Recorrido.Pasajeros.ForEach(x => DesencriptarDatos(x));
                 else
@@ -98,7 +98,7 @@ namespace ViajesCompartidos.Handlers
                 EmpleadoModel empleado = GetEmpleado(empleadoModel.ID);
                 if(empleadoModel.Ubicacion.UbicacionTexto != empleado.Ubicacion.UbicacionTexto
                     && empleado.RecorridoActivo)
-                    RecorridoHandler.RemoverPasajero(empleado.Recorrido_ID, empleadoModel.ID);
+                    RecorridoHandler.RemoverPasajero(empleado.RecorridoModel_ID, empleadoModel.ID);
             }
 
             if (!string.IsNullOrWhiteSpace(empleadoModel.Telefono))
@@ -134,7 +134,7 @@ namespace ViajesCompartidos.Handlers
             var empleado = ViajesCompartidosContext.GetEmpleado(ID);
             if (!estado && empleado.RecorridoActivo)
             {
-                RecorridoHandler.RemoverPasajero(empleado.Recorrido_ID, ID);
+                RecorridoHandler.RemoverPasajero(empleado.RecorridoModel_ID, ID);
             }
             ViajesCompartidosContext.CambiarEstadoActivoEmpleado(ID, estado);
         }

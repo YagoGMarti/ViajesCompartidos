@@ -1,5 +1,6 @@
 ﻿using SistemaViajesCompartidos.Enums;
 using System;
+using System.Linq;
 using System.Web.Mvc;
 using System.Web.Mvc.Filters;
 using ViajesCompartidos.Handlers;
@@ -32,9 +33,18 @@ namespace ViajesCompartidos.Controllers
             {
                 var sessionID = (Guid)filterContext.HttpContext.Session["SessionGUID"];
                 var usuarioID = ObtenerUsuario(sessionID);
-                var roles = EmpleadoHandler.GetEmpleado(usuarioID).Roles;
+                var rolesUsuario = EmpleadoHandler.GetEmpleado(usuarioID).Roles.ToString()
+                    .Split(new[] { ", " }, StringSplitOptions.None);
 
-                if (!rolesRequeridos.HasFlag(roles))
+                var enabled = false;
+                foreach (var rol in rolesRequeridos.ToString().Split(new[] { ", " }, StringSplitOptions.None))
+                {
+                    if(rolesUsuario.Any(x => x.Equals(rol)))
+                        enabled = true;
+                }
+               
+                //if (!rolesRequeridos.HasFlag(roles))
+                if (!enabled)
                     throw new UnauthorizedAccessException("No tiene permisos para acceder a esta sección");
             }
         }

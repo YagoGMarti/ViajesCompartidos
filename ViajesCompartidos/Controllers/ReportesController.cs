@@ -16,9 +16,15 @@ namespace ViajesCompartidos.Controllers
         }
 
         [RevisarRoles(RolesEmpleadoFlag.ADMINISTRADOR | RolesEmpleadoFlag.RRHH)]
-        public ActionResult ReportePorEmpresa(Guid EmpresaID)
+        public ActionResult ReportePorEmpresa(Guid? EmpresaID)
         {
-            return View("ReportePorEmpresa", ReporteHandler.GetReportePorEmpresa(EmpresaID));
+            if (EmpresaID == null)
+            {
+                var empleadoID = ObtenerUsuario((Guid)Session["SessionGUID"]);
+                EmpresaID = EmpleadoHandler.GetEmpleado(empleadoID).EmpresaModel_ID;
+            }
+
+            return View("ReportePorEmpresa", ReporteHandler.GetReportePorEmpresa(EmpresaID.Value));
         }
 
         [RevisarRoles(RolesEmpleadoFlag.ADMINISTRADOR | RolesEmpleadoFlag.RRHH)]

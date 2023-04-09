@@ -205,7 +205,7 @@ namespace SistemaViajesCompartidos.Context
                 EmpleadoModel empleado = GetEmpleado(pasajero_ID);
                 empleado.Recorrido = null;
                 empleado.RecorridoActivo = false;
-                empleado.Recorrido_ID = Guid.Empty;
+                empleado.RecorridoModel_ID = null;
                 context.Entry(empleado).State = EntityState.Modified;
                 context.SaveChanges();
 
@@ -400,7 +400,7 @@ namespace SistemaViajesCompartidos.Context
             EmpleadoModel empleado = GetEmpleado(empleado_ID);
             using (ViajesCompartidosContext context = new ViajesCompartidosContext())
             {
-                empleado.Recorrido_ID = recorrido_ID;
+                empleado.RecorridoModel_ID = recorrido_ID;
                 empleado.RecorridoActivo = true;
                 context.Entry(empleado).State = EntityState.Modified;
                 context.SaveChanges();

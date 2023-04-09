@@ -116,7 +116,7 @@
             </div>
         </div>
 
-        @if (Model.Recorrido_ID != null && Model.RecorridoActivo)
+        @if (Model.RecorridoModel_ID.HasValue && Model.RecorridoActivo)
         {
             <div class="form-group">
                 <h4>Recorrido</h4>
@@ -129,7 +129,7 @@
 
     </div>
 </div>
-@if (Model.Recorrido_ID != null && Model.RecorridoActivo)
+@if (Model.RecorridoModel_ID.HasValue && Model.RecorridoActivo)
 {
     <div class="form-group">
         <div class="col-lg-12">
