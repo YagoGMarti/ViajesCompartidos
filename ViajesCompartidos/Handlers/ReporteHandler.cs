@@ -73,6 +73,7 @@ namespace ViajesCompartidos.Handlers
                 var conductor = EmpleadoHandler.GetEmpleado(recorrido.Conductor_ID);
                 var reporte = new ReporteSucursalModel()
                 {
+                    ConductorID = conductor.ID,
                     Rol = "Conductor",
                     Email = conductor.CorreoElectronico,
                     Nombre = conductor.Nombre,

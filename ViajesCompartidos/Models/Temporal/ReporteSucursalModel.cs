@@ -9,7 +9,7 @@ namespace SistemaViajesCompartidos.Models.Temporal
 {
     public class ReporteSucursalModel
     {
-        public Guid RecorridoID { get; set; }
+        public Guid ConductorID { get; set; }
 
         public string Rol { get; set; }
         public string Email { get; set; }
