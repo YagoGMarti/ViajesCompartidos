@@ -20,8 +20,8 @@ namespace ViajesCompartidos.Handlers
 
             // sacarlo de otro recorrido, si tiene recorrido. 
             var conductor = EmpleadoHandler.GetEmpleado(recorrido.Conductor_ID);
-            if (conductor.Recorrido_ID != null && conductor.Recorrido != null)
-                RemoverPasajero(conductor.Recorrido_ID, recorrido.Conductor_ID);
+            if (conductor.RecorridoModel_ID.HasValue && conductor.Recorrido != null)
+                RemoverPasajero(conductor.RecorridoModel_ID, recorrido.Conductor_ID);
 
             ViajesCompartidosContext.GrabarRecorrido(recorrido);
             ViajesCompartidosContext.GrabarRecorrido(recorrido.Conductor_ID, recorrido.ID);
@@ -34,10 +34,15 @@ namespace ViajesCompartidos.Handlers
             }
         }
 
-        public static RecorridoModel GetRecorrido(Guid recorrido_ID)
+        public static RecorridoModel GetRecorrido(Guid? recorrido_ID)
         {
-            var recorrido = ViajesCompartidosContext.GetRecorrido(recorrido_ID);
-            return recorrido;
+            if(recorrido_ID.HasValue)
+            {
+                var recorrido = ViajesCompartidosContext.GetRecorrido(recorrido_ID.Value);
+                return recorrido;
+            }
+            
+            return null;
         }
 
         public static IEnumerable<RecorridoModel>  GetRecorridosPorSucursal(Guid sucursal_ID)
@@ -82,8 +87,11 @@ namespace ViajesCompartidos.Handlers
             int asientos = conductor.Vehiculo.AsientosLibres;
 
             var sucursal = SucursalHandler.GetSucursal(conductor.SucursalModel_ID);
-            var pasajeros = EmpleadoHandler.GetEmpleados(conductor.EmpresaModel_ID, conductor.SucursalModel_ID);
+            var pasajeros = EmpleadoHandler.GetEmpleados(null, conductor.SucursalModel_ID);
             pasajeros = pasajeros.Where(x => x.Ubicacion != null && x.DistanciaSucursal > 0 && x.Activo);
+            pasajeros = pasajeros.Where(x =>
+                x.Recorrido == null
+                || (x.Recorrido != null && x.Recorrido.Conductor_ID == Empleado_ID));
             pasajeros = pasajeros.Where(x => x.Horario == conductor.Horario).OrderByDescending(x => x.DistanciaSucursal);
             pasajeros = pasajeros.Where(x => x.ID != Empleado_ID);
 
@@ -165,17 +173,17 @@ namespace ViajesCompartidos.Handlers
             return recorrido;
         }
 
-        internal static void CancelarRuta(Guid recorrido_ID)
+        internal static void CancelarRuta(Guid? recorrido_ID)
         {
             RecorridoModel recorrido = GetRecorrido(recorrido_ID);
             foreach (var pasajero in recorrido.Pasajeros)
             {
                 _mails.EnviarCorreoElectronico(pasajero.CorreoElectronico, pasajero.Nombre, SistemaViajesCompartidos.Enums.TipoCorreoEnum.RutaCancelada);
             }
-            ViajesCompartidosContext.CancelarRuta(recorrido_ID);
+            ViajesCompartidosContext.CancelarRuta(recorrido_ID.Value);
         }
 
-        internal static void RemoverPasajero(Guid recorrido_ID, Guid pasajero_ID)
+        internal static void RemoverPasajero(Guid? recorrido_ID, Guid pasajero_ID)
         {
             RecorridoModel recorrido = GetRecorrido(recorrido_ID);
             if (recorrido.Conductor_ID == pasajero_ID
@@ -187,7 +195,7 @@ namespace ViajesCompartidos.Handlers
             {
                 EmpleadoModel pasajero = EmpleadoHandler.GetEmpleado(pasajero_ID);
                 _mails.EnviarCorreoElectronico(pasajero.CorreoElectronico, pasajero.Nombre, SistemaViajesCompartidos.Enums.TipoCorreoEnum.DesasociadoRuta);
-                ViajesCompartidosContext.RemoverPasajero(recorrido_ID, pasajero_ID);
+                ViajesCompartidosContext.RemoverPasajero(recorrido_ID.Value, pasajero_ID);
             }
         }
 
