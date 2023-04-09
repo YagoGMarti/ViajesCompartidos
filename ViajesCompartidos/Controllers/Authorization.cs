@@ -34,7 +34,7 @@ namespace ViajesCompartidos.Controllers
                 var usuarioID = ObtenerUsuario(sessionID);
                 var roles = EmpleadoHandler.GetEmpleado(usuarioID).Roles;
 
-                if (!roles.HasFlag(rolesRequeridos))
+                if (!rolesRequeridos.HasFlag(roles))
                     throw new UnauthorizedAccessException("No tiene permisos para acceder a esta sección");
             }
         }

@@ -16,7 +16,7 @@ namespace SistemaViajesCompartidos.Models
 
         public Guid EmpresaModel_ID { get; set; }
 
-        public List<EmpleadoModel> Empleados { get; set; }
+        public IEnumerable<EmpleadoModel> Empleados { get; set; }
 
         internal void Update(SucursalModel sucursalModel)
         {

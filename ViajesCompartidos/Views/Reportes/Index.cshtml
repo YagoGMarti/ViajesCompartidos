@@ -1,0 +1,58 @@
+﻿@model IEnumerable<SistemaViajesCompartidos.Models.Temporal.ReporteAdminModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="form-group">
+    <div class="col-lg-11">
+        <h2>Reportes de uso - Admin</h2>
+    </div>
+</div>
+
+<table class="table">
+    <tr>
+        <th class="col-lg-2 text-center">
+            @Html.DisplayNameFor(model => model.Empresa)
+        </th>
+        <th class="col-lg-2 text-center" data-placement="left" data-toggle="tooltip" title="Cantidad ( Inactivas )">
+            @Html.DisplayNameFor(model => model.Sucursales)
+        </th>
+        <th class="col-lg-2 text-center" data-placement="left" data-toggle="tooltip" title="Cantidad ( Inactivos )">
+            @Html.DisplayNameFor(model => model.Empleados)
+        </th>
+        <th class="col-lg-2 text-center" data-placement="left" data-toggle="tooltip">
+            @Html.DisplayNameFor(model => model.Recorridos)
+        </th>
+        <th class="col-lg-2 text-center" data-placement="left" data-toggle="tooltip" title="Cantidad de usuarios asociados a un recorrido">
+            @Html.DisplayNameFor(model => model.EmpleadosRecorrido)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Empresa)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Sucursales)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Empleados)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Recorridos)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.EmpleadosRecorrido)
+            </td>
+            <td class="text-center">
+                @Html.ActionLink("Ver empresa", "ReportePorEmpresa", new { EmpresaID = item.EmpresaID })
+            </td>
+        </tr>
+    }
+
+</table>
+

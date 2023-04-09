@@ -1,0 +1,45 @@
+﻿@model SistemaViajesCompartidos.Temporal.InicioSesion
+
+@{
+    ViewBag.Title = "Cambiar Clave";
+}
+
+<h2>Cambiar contraseña</h2>
+
+
+@if (Session["Usuario"] != null)
+{
+    using (Html.BeginForm("CambiarClave", "Login", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="form-horizontal">
+            <hr />
+            <div class="form-group">
+                @Html.LabelFor(model => model.Clave, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.Clave, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Clave, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ClaveNueva, htmlAttributes: new { @class = "control-label col-md-4" })
+                <div class="col-md-8">
+                    @Html.EditorFor(model => model.ClaveNueva, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ClaveNueva, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-4 col-md-8">
+                    <input type="submit" value="Iniciar sesión" class="btn btn-default" />
+                </div>
+            </div>
+            @if (@ViewBag.ClavesNoCoinciden != null)
+            {
+                <div class="has-error col-md-offset-5">
+                    <span class="text-danger" style="margin-top:50px">@ViewBag.ClavesNoCoinciden</span>
+                </div>
+            }
+        </div>
+    }
+}

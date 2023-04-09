@@ -1,0 +1,36 @@
+﻿@model IEnumerable<SistemaViajesCompartidos.Models.Temporal.ReporteSucursalModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="form-group">
+    <div class="col-lg-3">
+        <h2>Visualizar recorridos de la sucursal.</h2>
+    </div>
+    <div class="col-lg-1 col-lg-offset-8">
+    </div>
+</div>
+
+<table class="table">
+    <tr>
+        @*<th class="col-lg-2 text-center">
+            @Html.DisplayNameFor(model => model.Sucursal)
+        </th>*@
+        @*<th></th>*@
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            @*<td class="text-center">
+                @Html.DisplayFor(modelItem => item.Sucursal)
+            </td>*@
+            @*<td class="text-center">
+                @Html.ActionLink("Ver reporte", "ReportePorSucursal", new { ID = item.SucursalID })
+            </td>*@
+        </tr>
+    }
+
+</table>
+

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace ViajesCompartidos.Temporal
+namespace SistemaViajesCompartidos.Temporal
 {
     public class InicioSesion
     {
@@ -15,6 +15,10 @@ namespace ViajesCompartidos.Temporal
         [Required(ErrorMessage = "Debe ingresar una clave")]
         [DisplayName("Contraseña")]
         public string Clave { get; set; }
+        [DataType(DataType.Password)]
+        [Required(ErrorMessage = "Debe ingresar una clave")]
+        [DisplayName("Confirmar contraseña")] 
+        public string ClaveNueva { get; set; }
         public byte[] ClaveEncriptada { get; set; }
     }
 }

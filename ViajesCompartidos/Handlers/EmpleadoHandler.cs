@@ -1,10 +1,11 @@
-﻿using SistemaViajesCompartidos.Context;
+﻿using Microsoft.Ajax.Utilities;
+using SistemaViajesCompartidos.Context;
 using SistemaViajesCompartidos.Enums;
 using SistemaViajesCompartidos.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ViajesCompartidos.Temporal;
+using SistemaViajesCompartidos.Temporal;
 
 namespace ViajesCompartidos.Handlers
 {
@@ -80,13 +81,13 @@ namespace ViajesCompartidos.Handlers
 
             if (!string.IsNullOrWhiteSpace(empleadoModel.Telefono))
                 empleadoModel.TelefonoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar(empleadoModel.Telefono));
-            // TODO : Cambiar a envio de clave automático cuando esté el cliente HTTP ( probablemente usar el restablecer clave y no redefinir )             
-            empleadoModel.ClaveEncriptada = EncriptadoHandler.Encriptar("123123Aa!");
 
             var sucursal = SucursalHandler.GetSucursal(empleadoModel.SucursalModel_ID);
             empleadoModel.DistanciaSucursal = RecorridoHandler.CalcularDistancia(empleadoModel.Ubicacion, sucursal.Ubicacion);
 
             ViajesCompartidosContext.CrearEmpleado(empleadoModel);
+
+            SesionHandler.RestablecerClave(empleadoModel.ID);
         }
 
         public static void EditarEmpleado(EmpleadoModel empleadoModel)
@@ -109,9 +110,14 @@ namespace ViajesCompartidos.Handlers
             ViajesCompartidosContext.EditarEmpleado(empleadoModel);
         }
 
-        public static Tuple<string, string> ReiniciarClave(Guid empladoID)
+        public static Tuple<string, string> ReiniciarClave(Guid empleadoID)
         {
             string clave = Guid.NewGuid().ToString();
+            return ReiniciarClave(empleadoID, clave);
+        }
+
+        public static Tuple<string, string> ReiniciarClave(Guid empladoID, string clave)
+        {
             var claveEncriptada = EncriptadoHandler.Encriptar(clave);
             var email = ViajesCompartidosContext.ReiniciarClave(empladoID, claveEncriptada);
             return new Tuple<string, string>(email, clave);
@@ -131,6 +137,11 @@ namespace ViajesCompartidos.Handlers
                 RecorridoHandler.RemoverPasajero(empleado.Recorrido_ID, ID);
             }
             ViajesCompartidosContext.CambiarEstadoActivoEmpleado(ID, estado);
+        }
+
+        internal static IEnumerable<EmpleadoModel> GetEmpleadoPorEmpresa(Guid iD)
+        {
+            throw new NotImplementedException();
         }
     }
 }

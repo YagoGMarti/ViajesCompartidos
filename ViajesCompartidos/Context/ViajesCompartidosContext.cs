@@ -7,8 +7,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using ViajesCompartidos.Context;
 using ViajesCompartidos.Handlers;
-using ViajesCompartidos.Models.Transactional;
-using ViajesCompartidos.Temporal;
+using SistemaViajesCompartidos.Models.Transactional;
+using SistemaViajesCompartidos.Temporal;
 
 namespace SistemaViajesCompartidos.Context
 {
@@ -96,7 +96,10 @@ namespace SistemaViajesCompartidos.Context
             IEnumerable<SucursalModel> sucursales;
             using (ViajesCompartidosContext context = new ViajesCompartidosContext())
             {
-                sucursales = context.Sucursales.Where(x => x.EmpresaModel_ID == empresaID).Include(x => x.Ubicacion).ToList();
+                sucursales = context.Sucursales
+                    .Where(x => x.EmpresaModel_ID == empresaID)
+                    .Include(x => x.Ubicacion)
+                    .ToList();
             }
             return sucursales;
         }
@@ -106,7 +109,9 @@ namespace SistemaViajesCompartidos.Context
             SucursalModel sucursal;
             using (ViajesCompartidosContext context = new ViajesCompartidosContext())
             {
-                sucursal = context.Sucursales.Include(x => x.Ubicacion).FirstOrDefault(x => x.ID == ID);
+                sucursal = context.Sucursales
+                    .Include(x => x.Ubicacion)
+                    .FirstOrDefault(x => x.ID == ID);
             }
             return sucursal;
         }
@@ -152,7 +157,9 @@ namespace SistemaViajesCompartidos.Context
                 empleados = context.Empleados.Where(x => x.EmpresaModel_ID == empresaID)
                     .Include(x => x.Ubicacion)
                     .Include(x => x.Vehiculo)
-                    .Include(x => x.Sucursal).ToList();
+                    .Include(x => x.Sucursal)
+                    .Include(x => x.Recorrido)
+                    .ToList();
             }
             return empleados;
         }
@@ -165,7 +172,9 @@ namespace SistemaViajesCompartidos.Context
                 empleados = context.Empleados.Where(x => x.SucursalModel_ID == sucursalID)
                     .Include(x => x.Ubicacion)
                     .Include(x => x.Vehiculo)
-                    .Include(x => x.Sucursal).ToList();
+                    .Include(x => x.Sucursal)
+                    .Include(x => x.Recorrido)
+                    .ToList();
             }
             return empleados;
         }
@@ -434,12 +443,27 @@ namespace SistemaViajesCompartidos.Context
             using (ViajesCompartidosContext context = new ViajesCompartidosContext())
             {
                 recorridos = context.Recorridos
-                    .Where(x => x.Sucursal_ID == sucursal_ID).ToList();
+                    .Where(x => x.Sucursal_ID == sucursal_ID)
+                    .Include(x => x.RecorridoEmpleado)
+                    .ToList();
+            }
+            return recorridos;
+        }
 
+        public static IEnumerable<RecorridoModel> GetRecorridosPorEmpresa(Guid empresa_ID)
+        {
+            IEnumerable<RecorridoModel> recorridos;
+            using (ViajesCompartidosContext context = new ViajesCompartidosContext())
+            {
+                recorridos = context.Recorridos
+                    .Where(x => x.Empresa_ID == empresa_ID)
+                    .Include(x => x.RecorridoEmpleado)
+                    .ToList();
             }
             return recorridos;
         }
         
+
         #endregion
         public DbSet<ContactoModel> Contactos { get; set; }
         #region ContactosCRUD
@@ -448,7 +472,7 @@ namespace SistemaViajesCompartidos.Context
             IEnumerable<ContactoModel> contactos;
             using (ViajesCompartidosContext context = new ViajesCompartidosContext())
             {
-                contactos = context.Contactos.ToList();
+                contactos = context.Contactos.OrderByDescending(x => x.Fecha).ToList();
             }
             return contactos;
         }
@@ -475,6 +499,37 @@ namespace SistemaViajesCompartidos.Context
         #endregion
 
         public DbSet<CorreoElectronicoModel> CorreosElectronicos { get; set; }
+
+        internal static IEnumerable<CorreoElectronicoModel> GetCorreos()
+        {
+            IEnumerable<CorreoElectronicoModel> correos;
+            using (ViajesCompartidosContext context = new ViajesCompartidosContext())
+            {
+                correos = context.CorreosElectronicos.OrderByDescending(x => x.Fecha).ToList();
+            }
+            return correos;
+        }
+
+        internal static CorreoElectronicoModel GetCorreo(Guid ID)
+        {
+            CorreoElectronicoModel correo;
+            using (ViajesCompartidosContext context = new ViajesCompartidosContext())
+            {
+                correo = context.CorreosElectronicos.Find(ID);
+            }
+            return correo;
+        }
+
+        internal static void MarcarCorreoEnviado(Guid ID)
+        {
+            CorreoElectronicoModel correo;
+            using (ViajesCompartidosContext context = new ViajesCompartidosContext())
+            {
+                correo = context.CorreosElectronicos.Find(ID);
+                correo.Enviado = true;
+                context.SaveChanges();
+            }
+        }
         #region ContactosCRUD
         public static void GrabarCorreoElectronico(CorreoElectronicoModel correoElectronicoModel)
         {

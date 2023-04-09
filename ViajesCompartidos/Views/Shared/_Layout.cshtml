@@ -26,6 +26,8 @@
                         {
                             <li>@Html.ActionLink("Empresas", "Index", "Empresas")</li>
                             <li>@Html.ActionLink("Contactos", "Index", "Contactos")</li>
+                            <li>@Html.ActionLink("Emails", "Index", "Emails")</li>
+                            <li>@Html.ActionLink("Reporte", "Index", "Reportes")</li>
                         }
                         else
                         {
@@ -40,7 +42,9 @@
                         }
                     </ul>
                     <span class="navbar-right navhead" style="margin-top: 1em; color:white !important;">
-                        Bienvenido: @Session["Usuario"] - @Html.ActionLink("Cerrar sesión", "Logout", "Login", new { area = "" }, new { @style = "color:white !important;" })
+                        Bienvenido: @Session["Usuario"]
+                        - @Html.ActionLink("Cambiar clave", "CambiarClave", "Login", new { area = "" }, new { @style = "color:white !important;" })
+                        - @Html.ActionLink("Cerrar sesión", "Logout", "Login", new { area = "" }, new { @style = "color:white !important;" })
                     </span>
                 </div>
             }

@@ -4,7 +4,7 @@ using SistemaViajesCompartidos.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ViajesCompartidos.Models.Transactional;
+using SistemaViajesCompartidos.Models.Transactional;
 
 namespace ViajesCompartidos.Handlers
 {
@@ -14,9 +14,14 @@ namespace ViajesCompartidos.Handlers
 
         public static void RecorridoAceptado(RecorridoModel recorrido)
         {
-            recorrido.EstadoRecorrido = SistemaViajesCompartidos.Enums.EstadoRecorridoEnum.ACEPTADO;
+            recorrido.EstadoRecorrido = EstadoRecorridoEnum.ACEPTADO;
             recorrido.RecorridoEmpleado = recorrido.Pasajeros.Select((x,index) => new RecorridoEmpleado(recorrido.ID, x.ID, index)).ToList();
             recorrido.RecorridoUbicacion = recorrido.Ubicaciones.Select((x, index) => new RecorridoUbicacion(recorrido.ID, x.ID, index)).ToList();
+
+            // sacarlo de otro recorrido, si tiene recorrido. 
+            var conductor = EmpleadoHandler.GetEmpleado(recorrido.Conductor_ID);
+            if (conductor.Recorrido_ID != null && conductor.Recorrido != null)
+                RemoverPasajero(conductor.Recorrido_ID, recorrido.Conductor_ID);
 
             ViajesCompartidosContext.GrabarRecorrido(recorrido);
             ViajesCompartidosContext.GrabarRecorrido(recorrido.Conductor_ID, recorrido.ID);
@@ -38,6 +43,12 @@ namespace ViajesCompartidos.Handlers
         public static IEnumerable<RecorridoModel>  GetRecorridosPorSucursal(Guid sucursal_ID)
         {
             var recorridos = ViajesCompartidosContext.GetRecorridosPorSucursal(sucursal_ID);
+            return recorridos;
+        }
+
+        public static IEnumerable<RecorridoModel> GetRecorridosPorEmpresa(Guid empresa_ID)
+        {
+            var recorridos = ViajesCompartidosContext.GetRecorridosPorEmpresa(empresa_ID);
             return recorridos;
         }
 

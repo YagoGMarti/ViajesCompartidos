@@ -5,6 +5,8 @@ using System;
 using System.Net.Mail;
 using System.Net;
 using System.Web.Configuration;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace ViajesCompartidos.Handlers
 {
@@ -34,13 +36,40 @@ namespace ViajesCompartidos.Handlers
                 Destinatario = destinatario
             };
 
-            // Para evitar bloqueo por spam...
-            correoElectronico.Destinatario = cuenta;
-
             correoElectronico.Mensaje = $"<p>Le informamos que su nueva clave es {clave}.</p>";
+            correoElectronico.Asunto = "Clave restablecida.";
 
             correoElectronico = Enviar(correoElectronico);
             GrabarCorreoElectronico(correoElectronico);
+        }
+
+        public void EnviarCorreo(Guid ID)
+        {
+            var correo = GetCorreo(ID);
+            correo.Destinatario = EncriptadoHandler.DesEncriptar(EncriptadoHandler.StringToBytes(correo.CorreoElectronicoEncriptado));
+
+            Enviar(correo, true);
+            ViajesCompartidosContext.MarcarCorreoEnviado(ID);
+        }
+
+        public static CorreoElectronicoModel GetCorreo(Guid ID)
+        {
+            CorreoElectronicoModel correo = ViajesCompartidosContext.GetCorreo(ID);
+            correo.Destinatario = EncriptadoHandler.DesEncriptar(EncriptadoHandler.StringToBytes(correo.CorreoElectronicoEncriptado));
+
+            return correo;
+        }
+
+        public static IEnumerable<CorreoElectronicoModel> GetCorreos()
+        {
+            IEnumerable<CorreoElectronicoModel> correos = ViajesCompartidosContext.GetCorreos();
+
+            foreach (var correo in correos)
+            {
+                correo.Destinatario = EncriptadoHandler.DesEncriptar(EncriptadoHandler.StringToBytes(correo.CorreoElectronicoEncriptado));
+            }
+
+            return correos;
         }
 
         public void EnviarCorreoElectronico(string destinatario, string apodo, TipoCorreoEnum tipoCorreo)
@@ -51,9 +80,6 @@ namespace ViajesCompartidos.Handlers
                 Destinatario = destinatario
             };
 
-            // Para evitar bloqueo por spam...
-            correoElectronico.Destinatario = cuenta;
-
             switch (tipoCorreo)
             {
                 case TipoCorreoEnum.NuevaRuta:
@@ -61,6 +87,7 @@ namespace ViajesCompartidos.Handlers
                         $"<p>Le informamos que tiene una nueva ruta asociada en el Sistema de Viajes Compartidos.</p>";
                     correoElectronico.Asunto = "Nueva ruta!";
                     break;
+                case TipoCorreoEnum.DesasociadoRuta:
                 case TipoCorreoEnum.RutaCancelada:
                     correoElectronico.Mensaje = $"<h3>Estimado {apodo}.</h3>" +
                         $"<p>Lamentamos informarle que la ruta en el Sistema de Viajes Compartidos ya NO está disponible.</p>";
@@ -79,9 +106,9 @@ namespace ViajesCompartidos.Handlers
             GrabarCorreoElectronico(correoElectronico);
         }
 
-        private CorreoElectronicoModel Enviar(CorreoElectronicoModel correoElectronico)
+        private CorreoElectronicoModel Enviar(CorreoElectronicoModel correoElectronico, bool forzarEnvio = false)
         {
-            if (mailsEnabled)
+            if (mailsEnabled || forzarEnvio)
             {
                 try
                 {

@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using ViajesCompartidos.Handlers;
-using ViajesCompartidos.Models.Temporal;
+using SistemaViajesCompartidos.Models.Temporal;
 
 namespace ViajesCompartidos.Controllers
 {

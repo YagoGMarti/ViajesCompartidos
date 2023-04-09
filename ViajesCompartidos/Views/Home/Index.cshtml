@@ -10,31 +10,33 @@
 </div>
 
 <div class="row">
-    <div class="col-md-4">
-        <h2>Solicitar acceso</h2>
-        <p class="minHeight50">
-            Realizar un primer contacto para obtener acceso al sistema.
-        </p>
-        <p><a class="btn btn-default buttonOffset15" href="@Url.Action("Contacto", "Home")">Contacto &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Ventajas</h2>
-        <p class="minHeight50">
-            Conocer los benefios que brindan los viajes compartidos.
-        </p>
-        <p><a class="btn btn-default buttonOffset15" href="@Url.Action("Acerca", "Home")">Información &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Iniciar sesión</h2>
-        <p class="minHeight50">
-            ¿Ya es un usuario? <br>
-            Acceder a la pestaña de inicio de sesión.
-        </p>
-        @if (@Session["Usuario"] == null)
-        {
+    @if (@Session["Usuario"] == null)
+    {
+        <div class="col-md-4">
+            <h2>Solicitar acceso</h2>
+            <p class="minHeight50">
+                Realizar un primer contacto para obtener acceso al sistema.
+            </p>
+            <p><a class="btn btn-default buttonOffset15" href="@Url.Action("Contacto", "Home")">Contacto &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Ventajas</h2>
+            <p class="minHeight50">
+                Conocer los benefios que brindan los viajes compartidos.
+            </p>
+            <p><a class="btn btn-default buttonOffset15" href="@Url.Action("Acerca", "Home")">Información &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h2>Iniciar sesión</h2>
+            <p class="minHeight50">
+                ¿Ya es un usuario? <br>
+                Acceder a la pestaña de inicio de sesión.
+            </p>
+
             <p><a class="btn btn-default buttonOffset15" href="@Url.Action("Index", "Login")">Login &raquo;</a></p>
-        }
-    </div>
+
+        </div>
+    }
 </div>
 
 @Html.Raw(TempData["contacto"])

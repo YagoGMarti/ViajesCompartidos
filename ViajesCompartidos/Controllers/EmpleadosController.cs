@@ -144,8 +144,6 @@ namespace ViajesCompartidos.Controllers
             }
 
             EmpleadoModel empleadoModel = EmpleadoHandler.GetEmpleado(ID.Value);
-
-
             ModelState.Clear();
 
             if (empleadoModel == null)

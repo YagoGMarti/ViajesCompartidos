@@ -3,7 +3,7 @@ using SistemaViajesCompartidos.Enums;
 using SistemaViajesCompartidos.Models;
 using System;
 using System.Linq;
-using ViajesCompartidos.Temporal;
+using SistemaViajesCompartidos.Temporal;
 
 namespace ViajesCompartidos.Handlers
 {
@@ -33,7 +33,13 @@ namespace ViajesCompartidos.Handlers
         {
             var ReinicioClave = EmpleadoHandler.ReiniciarClave(empleadoID);
             var mailsHandler = new CorreoElectronicoHandler();
-            mailsHandler.EnviarClave(ReinicioClave.Item1, ReinicioClave.Item2);
+            var destinatario = EncriptadoHandler.DesEncriptar(EncriptadoHandler.StringToBytes(ReinicioClave.Item1));
+            mailsHandler.EnviarClave(destinatario, ReinicioClave.Item2); // email - clave
+        }
+
+        internal static void CambiarClave(Guid empleadoID, string nuevaClave)
+        {
+            EmpleadoHandler.ReiniciarClave(empleadoID, nuevaClave);
         }
     }
 }

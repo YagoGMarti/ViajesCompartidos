@@ -133,6 +133,8 @@
     <Compile Include="Context\ViajesCompartidosInitializer.cs" />
     <Compile Include="Controllers\Authorization.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\ReportesController.cs" />
+    <Compile Include="Controllers\EmailsController.cs" />
     <Compile Include="Controllers\ContactosController.cs" />
     <Compile Include="Controllers\EmpleadosController.cs" />
     <Compile Include="Controllers\EmpresasController.cs" />
@@ -150,6 +152,7 @@
     <Compile Include="Handlers\BaseHandler.cs" />
     <Compile Include="Handlers\CorreoElectronicoHandler.cs" />
     <Compile Include="Handlers\RecorridoHandler.cs" />
+    <Compile Include="Handlers\ReporteHandler.cs" />
     <Compile Include="Handlers\VehiculoHandler.cs" />
     <Compile Include="Handlers\ContactoHandler.cs" />
     <Compile Include="Handlers\EmpresaHandler.cs" />
@@ -170,6 +173,10 @@
     <Compile Include="Models\JornadaTrabajoModel.cs" />
     <Compile Include="Models\RecorridoModel.cs" />
     <Compile Include="Models\Temporal\InicioSesion.cs" />
+    <Compile Include="Models\Temporal\ReporteBaseModel.cs" />
+    <Compile Include="Models\Temporal\ReporteSucursalModel.cs" />
+    <Compile Include="Models\Temporal\ReporteEmpresaModel.cs" />
+    <Compile Include="Models\Temporal\ReporteAdminModel.cs" />
     <Compile Include="Models\Temporal\UsuarioFlattened.cs" />
     <Compile Include="Models\Transactional\RecorridoEmpleado.cs" />
     <Compile Include="Models\Transactional\RecorridoUbicacion.cs" />
@@ -261,6 +268,11 @@
     <Content Include="Views\Vehiculos\Validar.cshtml" />
     <Content Include="Views\Rutas\ObtenerRuta.cshtml" />
     <Content Include="Views\Rutas\SinPasajeros.cshtml" />
+    <Content Include="Views\Emails\Index.cshtml" />
+    <Content Include="Views\Login\CambiarClave.cshtml" />
+    <Content Include="Views\Reportes\Index.cshtml" />
+    <Content Include="Views\Reportes\ReportePorEmpresa.cshtml" />
+    <Content Include="Views\Reportes\ReportePorSucursal.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

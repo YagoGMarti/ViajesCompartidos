@@ -6,7 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ViajesCompartidos.Handlers;
-using ViajesCompartidos.Temporal;
+using SistemaViajesCompartidos.Temporal;
 
 namespace ViajesCompartidos.Controllers
 {
@@ -21,7 +21,7 @@ namespace ViajesCompartidos.Controllers
         public ActionResult Index(InicioSesion inicioSesion)
         {
             EmpleadoModel empleado = SesionHandler.IniciarSesion(inicioSesion);
-            
+
             if (empleado != null)
             {
                 var SessionGUID = Guid.NewGuid();
@@ -51,8 +51,8 @@ namespace ViajesCompartidos.Controllers
         {
             var usuarioID = ObtenerUsuario((Guid)Session["SessionGUID"]);
             RolesEmpleadoFlag rolesEmpleado = SesionHandler.GetRolEmpleado(usuarioID);
-            
-            switch(rolesEmpleado)
+
+            switch (rolesEmpleado)
             {
                 case RolesEmpleadoFlag.ADMINISTRADOR: return RedirectToAction("Index", "Home");
                 case RolesEmpleadoFlag.RRHH: return RedirectToAction("Index", "Home");
@@ -61,15 +61,39 @@ namespace ViajesCompartidos.Controllers
             }
         }
 
+        public ActionResult CambiarClave()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult CambiarClave(InicioSesion inicioSesion)
+        {
+            ViewBag.ClavesNoCoinciden = null;
+            var empleadoID = ObtenerUsuario((Guid)Session["SessionGUID"]);
+
+            if (inicioSesion.Clave == inicioSesion.ClaveNueva)
+            {
+                SesionHandler.CambiarClave(empleadoID, inicioSesion.Clave);
+                return RedireccionarPorRol();
+            }
+            else
+            {
+                ViewBag.ClavesNoCoinciden = "Las claves no coinciden";
+            }
+
+            return View();
+        }
+
         public ActionResult Logout()
         {
             Session.Remove("Usuario");
-            if(Session["SessionGUID"] != null)
+            if (Session["SessionGUID"] != null)
             {
                 CerrarSesion((Guid)Session["SessionGUID"]);
                 Session.Remove("SessionGUID");
             }
-                
+
             return RedirectToAction("Index");
         }
     }

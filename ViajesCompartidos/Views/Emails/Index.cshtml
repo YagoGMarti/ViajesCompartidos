@@ -1,0 +1,68 @@
+﻿@model IEnumerable<SistemaViajesCompartidos.Models.CorreoElectronicoModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="form-group">
+    <div class="col-lg-3">
+        <h2>Contactos</h2>
+    </div>
+    <div class="col-lg-1 col-lg-offset-8">
+    </div>
+</div>
+
+<table class="table">
+    <tr>
+        <th class="col-lg-2 text-center">
+            @Html.DisplayNameFor(model => model.Fecha)
+        </th>
+        <th class="col-lg-3 text-center">
+            @Html.DisplayNameFor(model => model.Destinatario)
+        </th>
+        <th class="col-lg-3 text-center">
+            @Html.DisplayNameFor(model => model.Asunto)
+        </th>
+        <th class="col-lg-1 text-center">
+            @Html.DisplayNameFor(model => model.Enviado)
+        </th>
+        <th class="col-lg-3 text-center">Mensaje</th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Fecha)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Destinatario)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Asunto)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Enviado)
+            </td>
+            <td class="text-center">
+                @Html.TextBoxFor(modelItem => item.MensajeFlattened)
+            </td>
+
+            @*<td class="text-center">
+                <button type="button" class="d-inline-block" data-placement="left" data-toggle="tooltip" disabled title=@Html.TextAreaFor(modelItem => item.MensajeFlattened)>
+                    Mensaje
+                </button>
+            </td>*@
+            
+            <td class="text-center">
+                @if (item.Enviado == false)
+                {
+                    @Html.ActionLink("Enviar", "ForzarEnvio", new { ID = item.ID }, new { onclick = "return confirm('¿Forzar el envio?');" })
+                }
+            </td>
+        </tr>
+    }
+
+</table>
+

@@ -1,0 +1,58 @@
+﻿@model IEnumerable<SistemaViajesCompartidos.Models.Temporal.ReporteEmpresaModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="form-group">
+    <div class="col-lg-11">
+        <h2>Indicadores de uso por sucursal.</h2>
+    </div>
+</div>
+
+<table class="table">
+    <tr>
+        <th class="col-lg-2 text-center">
+            @Html.DisplayNameFor(model => model.Sucursal)
+        </th>
+        <th class="col-lg-5 text-center">
+            @Html.DisplayNameFor(model => model.SucursalDireccion)
+        </th>
+        <th class="col-lg-1 text-center" data-placement="left" data-toggle="tooltip" title="Cantidad ( Inactivos )">
+            @Html.DisplayNameFor(model => model.Empleados)
+        </th>
+        <th class="col-lg-1 text-center" data-placement="left" data-toggle="tooltip">
+            @Html.DisplayNameFor(model => model.Recorridos)
+        </th>
+        <th class="col-lg-1 text-center" data-placement="left" data-toggle="tooltip" title="Cantidad de usuarios asociados a un recorrido">
+            @Html.DisplayNameFor(model => model.EmpleadosRecorrido)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Sucursal)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.SucursalDireccion)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Empleados)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Recorridos)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.EmpleadosRecorrido)
+            </td>
+            <td class="text-center">
+                @Html.ActionLink("Ver recorridos", "ReportePorSucursal", new { SucursalID = item.SucursalID })
+            </td>
+        </tr>
+    }
+
+</table>
+

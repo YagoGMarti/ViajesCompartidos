@@ -17,6 +17,15 @@ namespace ViajesCompartidos.Handlers
 
         internal static void CambiarEstadoActivo(Guid ID, bool estado)
         {
+            if(!estado)
+            {
+                //var recorridos = RecorridoHandler.GetRecorridosPorSucursal(ID);
+                //foreach (var recorrido in recorridos)
+                //{
+                //    RecorridoHandler.CancelarRuta(recorrido.ID);
+                //}
+            }
+
             ViajesCompartidosContext.CambiarEstadoActivoSucursal(ID, estado);
         }
 

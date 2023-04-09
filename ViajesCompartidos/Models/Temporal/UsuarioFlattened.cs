@@ -1,7 +1,7 @@
 ﻿using SistemaViajesCompartidos.Enums;
 using System;
 
-namespace ViajesCompartidos.Models.Temporal
+namespace SistemaViajesCompartidos.Models.Temporal
 {
     public class UsuarioFlattened
     {
