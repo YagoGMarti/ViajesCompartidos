@@ -13,15 +13,20 @@ namespace ViajesCompartidos.Controllers
         {
             public void OnAuthorization(AuthorizationContext filterContext)
             {
-                var sessionID = (Guid)filterContext.HttpContext.Session["SessionGUID"];
-                var usuarioID = ObtenerUsuario(sessionID);
+                if (filterContext.HttpContext.Session["SessionGUID"] != null) 
+                {
+                    var sessionID = (Guid)filterContext.HttpContext.Session["SessionGUID"];
+                    var usuarioID = ObtenerUsuario(sessionID);
 
-                if (sessionID == null || usuarioID == null)
+                    if (sessionID == null || usuarioID == null)
+                    {
+                        filterContext.Result = new RedirectResult("/Login");
+                    }
+                }
+                else
                 {
                     filterContext.Result = new RedirectResult("/Login");
                 }
-                
-                
             }
         }
 
