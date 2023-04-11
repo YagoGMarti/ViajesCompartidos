@@ -179,6 +179,7 @@ namespace ViajesCompartidos.Handlers
             RecorridoModel recorrido = GetRecorrido(recorrido_ID);
             foreach (var pasajero in recorrido.Pasajeros)
             {
+                pasajero.CorreoElectronico = EncriptadoHandler.DesEncriptar(EncriptadoHandler.StringToBytes(pasajero.CorreoElectronicoEncriptado));
                 _mails.EnviarCorreoElectronico(pasajero.CorreoElectronico, pasajero.Nombre, SistemaViajesCompartidos.Enums.TipoCorreoEnum.RutaCancelada);
             }
             ViajesCompartidosContext.CancelarRuta(recorrido_ID.Value);

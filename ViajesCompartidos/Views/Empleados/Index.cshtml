@@ -69,14 +69,18 @@
             </td>
             <th class="text-center">
                 @Html.ActionLink("Editar", "Editar", new { ID = item.ID }) |
-                @Html.ActionLink("Restablecer Clave", "RestablecerClave", new { ID = item.ID, EmpresaID = ViewBag.EmpresaID, SucursalID = ViewBag.SucursalID }, new { onclick = "return confirm('¿Enviar nueva clave por correo electrónico?');" }) |
+                @Html.ActionLink("Restablecer Clave", "RestablecerClave", new { ID = item.ID, EmpresaID = ViewBag.EmpresaID, SucursalID = ViewBag.SucursalID }, new { onclick = "return confirm('¿Enviar nueva clave por correo electrónico?');" }) 
                 @if (item.Activo == true)
                 {
-                    @Html.ActionLink("Desactivar", "Desactivar", new { ID = item.ID, EmpresaID = ViewBag.EmpresaID, SucursalID = ViewBag.SucursalID }, new { onclick = "return confirm('¿Desea marcar la empresa como INACTIVA?');" })
+                    if (@Session["Empleado_ID"].ToString() != item.ID.ToString())
+                    {
+
+                        @Html.ActionLink(" | Desactivar", "Desactivar", new { ID = item.ID, EmpresaID = ViewBag.EmpresaID, SucursalID = ViewBag.SucursalID }, new { onclick = "return confirm('¿Desea marcar la empresa como INACTIVA?');" })
+                    }
                 }
                 else
                 {
-                    @Html.ActionLink("Activar", "Activar", new { ID = item.ID, EmpresaID = ViewBag.EmpresaID, SucursalID = ViewBag.SucursalID }, new { onclick = "return confirm('¿Desea marcar la empresa como ACTIVA?');" })
+                    @Html.ActionLink(" | Activar", "Activar", new { ID = item.ID, EmpresaID = ViewBag.EmpresaID, SucursalID = ViewBag.SucursalID }, new { onclick = "return confirm('¿Desea marcar la empresa como ACTIVA?');" })
                 }
             </th>
         </tr>

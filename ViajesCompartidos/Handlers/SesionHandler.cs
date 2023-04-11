@@ -17,6 +17,9 @@ namespace ViajesCompartidos.Handlers
             if (empleado == null)
                 return null;
 
+            if (! empleado.Activo)
+                return null;
+
             inicioSesion.ClaveEncriptada = EncriptadoHandler.Encriptar(inicioSesion.Clave);
             if (inicioSesion.ClaveEncriptada.SequenceEqual(empleado.ClaveEncriptada))
                 return empleado;
