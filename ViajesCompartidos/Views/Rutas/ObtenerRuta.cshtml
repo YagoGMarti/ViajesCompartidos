@@ -6,60 +6,77 @@
 
 <h3>Propuesta de recorrido</h3>
 <hr />
+<div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav">
+        <li>@Html.ActionLink("Estandar", "AlternativaRuta", new { Empleado_ID = Model.Conductor_ID, Estrategia = (int)SistemaViajesCompartidos.Enums.EstrategiaRutaEnum.Estandar })</li>
+        <li>@Html.ActionLink("Solo cercanos domicilio", "AlternativaRuta", new { Empleado_ID = Model.Conductor_ID, Estrategia = (int)SistemaViajesCompartidos.Enums.EstrategiaRutaEnum.SoloCercanosDomicilio })</li>
+        <li>@Html.ActionLink("Sin conductores", "AlternativaRuta", new { Empleado_ID = Model.Conductor_ID, Estrategia = (int)SistemaViajesCompartidos.Enums.EstrategiaRutaEnum.SinConductores })</li>
+        <li>@Html.ActionLink("Sólo más cercano a la sucursal", "AlternativaRuta", new { Empleado_ID = Model.Conductor_ID, Estrategia = (int)SistemaViajesCompartidos.Enums.EstrategiaRutaEnum.SoloMasCercano })</li>
+    </ul>
+</div>
 
-@using (Html.BeginForm())
+<h4>Estrategia : @ViewBag.Estrategia </h4>
+
+
+@if (ViewBag.SinPasajeros == null)
 {
-    @Html.AntiForgeryToken()
-    <div class="form-group" style="display:inline-flex">
-        <hr />
-        <div class="form-horizontal col-md-7">
-            @Html.HiddenFor(model => model.ID)
-            <div class="form-group">
-                <table class="table">
-                    <tr>
-                        <th class="col-lg-1 text-center">
-
-                        </th>
-                        <th class="col-lg-6 text-center">
-                            Direccion
-                        </th>
-                        <th class="col-lg-3 text-center"> Borrar </th>
-                    </tr>
-
-                    @foreach (var item in Model.Ubicaciones)
-                    {
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group" style="display:inline-flex">
+            <hr />
+            <div class="form-horizontal col-md-7">
+                @Html.HiddenFor(model => model.ID)
+                <div class="form-group">
+                    <table class="table">
                         <tr>
-                            <td class="text-center">
-                                @item.TipoUbicacion
-                            </td>
-                            <td class="text-center">
-                                @item.UbicacionTexto
-                            </td>
-                            <th class="text-center">
-                                @if (item.TipoUbicacion == ViajesCompartidos.Enums.TipoUbicacionEnum.Pasajero)
-                                {
-                                    @Html.ActionLink("Quitar", "RemoverUbicacion", new { recorrido_ID = Model.ID, removerUbicacion_ID = item.ID }, new { onclick = "return confirm('¿Desea remover el punto de la ruta?');" })
-                                }
+                            <th class="col-lg-1 text-center">
+
                             </th>
+                            <th class="col-lg-6 text-center">
+                                Direccion
+                            </th>
+                            <th class="col-lg-3 text-center"> Borrar </th>
                         </tr>
-                    }
-                </table>
+
+                        @foreach (var item in Model.Ubicaciones)
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    @item.TipoUbicacion
+                                </td>
+                                <td class="text-center">
+                                    @item.UbicacionTexto
+                                </td>
+                                <th class="text-center">
+                                    @if (item.TipoUbicacion == ViajesCompartidos.Enums.TipoUbicacionEnum.Pasajero)
+                                    {
+                                        @Html.ActionLink("Quitar", "RemoverUbicacion", new { recorrido_ID = Model.ID, removerUbicacion_ID = item.ID }, new { onclick = "return confirm('¿Desea remover el punto de la ruta?');" })
+                                    }
+                                </th>
+                            </tr>
+                        }
+                    </table>
+                </div>
+
+                <a class="btn btn-default buttonOffset15 botonCentrado" style="float:right" href="@Url.Action("AceptarRuta", "Rutas", new { recorrido_ID = Model.ID } )">Aceptar ruta</a>
             </div>
 
-            <a class="btn btn-default buttonOffset15 botonCentrado" href="@Url.Action("AlternativaRuta", "Rutas", new { Empleado_ID = Model.Conductor_ID } )">Ruta alternativa</a>
-            <a class="btn btn-default buttonOffset15 botonCentrado" style="float:right" href="@Url.Action("AceptarRuta", "Rutas", new { recorrido_ID = Model.ID } )">Aceptar ruta</a>
+            <div class="form-horizontal col-md-5">
+                <div class="form-group">
+                    <div class="mapa" id="recorrido">
 
-        </div>
-
-        <div class="form-horizontal col-md-5">
-            <div class="form-group">
-                <div class="mapa" id="recorrido">
-
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
 }
+else
+{
+    <h3>No se encontraron posibles pasajeros</h3>
+}
+
 
 @section Scripts {
     <script type="text/javascript">

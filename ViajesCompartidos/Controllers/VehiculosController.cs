@@ -90,7 +90,8 @@ namespace ViajesCompartidos.Controllers
             ViewBag.asientosInsuficientes = false;
             EmpleadoModel empleadoModel = EmpleadoHandler.GetEmpleado(vehiculoModel.Empleado_ID);
 
-            if ( vehiculoModel.Empleado_ID == empleadoModel.Recorrido.Conductor_ID
+            if (empleadoModel.Recorrido != null 
+                && vehiculoModel.Empleado_ID == empleadoModel.Recorrido.Conductor_ID
                 && empleadoModel.Recorrido.Pasajeros.Count() > vehiculoModel.AsientosLibres)
             {
                 ViewBag.asientosInsuficientes = true;

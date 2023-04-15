@@ -102,7 +102,7 @@ namespace ViajesCompartidos.Handlers
                 pasajeros = pasajeros.Where(x => !x.TieneVehiculo);
             }
 
-            // TODO : Ver de variar a polígonos más pequeños y acotados, la mitad del cuadrado buscado se desperdicia. 
+            // TODO : Ver de variar a polígonos más pequeños y acotados. 
             // TODO : sumar un primer ciclo de búsqueda a N cuadras a la redonda del conductor con prioridad "vecinos" 
 
             int signoCordenadaX = (conductor.Ubicacion.Longitud - sucursal.Ubicacion.Longitud) > 0 ? 1 : -1;
@@ -122,7 +122,7 @@ namespace ViajesCompartidos.Handlers
             if (estrategiaRutaEnum == EstrategiaRutaEnum.SoloCercanosDomicilio)
             {
                 // carga todos los cercanos, en proximidades, luego remueve por ID. 
-                double deltaDistancia = 0.01;
+                double deltaDistancia = 0.0075;
                 var cercanos = BuscarCercanos(pasajeros, conductor.Ubicacion, deltaDistancia, signoCordenadaX, signoCordenadaY).ToList();
                 cercanos.AddRange(BuscarCercanos(pasajeros, conductor.Ubicacion, deltaDistancia * 2, signoCordenadaX, signoCordenadaY).ToList());
                 //cercanos.AddRange(BuscarCercanos(pasajeros, conductor.Ubicacion, deltaDistancia * 4, signoCordenadaX, signoCordenadaY).ToList());
@@ -146,7 +146,7 @@ namespace ViajesCompartidos.Handlers
                     if (estrategiaRutaEnum == EstrategiaRutaEnum.SoloMasCercano)
                     {
                         // sólo obtener al mas cercano a la sucursal compatible. 
-                        ultimoPasajero = pasajeros.LastOrDefault();
+                        ultimoPasajero = pasajeros.OrderByDescending(x => x.DistanciaSucursal).LastOrDefault();
                         asientos = 1;
                     }
 
@@ -170,6 +170,7 @@ namespace ViajesCompartidos.Handlers
             recorrido.Ubicaciones.Add(sucursal.Ubicacion);
             recorrido.LatitudCentro = (conductor.Ubicacion.Latitud - sucursal.Ubicacion.Latitud) / 2;
             recorrido.LongitudCentro = (conductor.Ubicacion.Longitud - sucursal.Ubicacion.Longitud) / 2;
+            recorrido.EstrategiaRecorrido = estrategiaRutaEnum;
 
             return recorrido;
         }

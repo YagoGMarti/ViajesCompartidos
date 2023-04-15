@@ -49,7 +49,10 @@
                 @Html.DisplayFor(modelItem => item.EmpleadosRecorrido)
             </td>
             <td class="text-center">
-                @Html.ActionLink("Ver recorridos", "ReportePorSucursal", new { SucursalID = item.SucursalID })
+                @if (item.Recorridos != "0")
+                {
+                    @Html.ActionLink("Ver recorridos", "ReportePorSucursal", new { SucursalID = item.SucursalID })
+                }
             </td>
         </tr>
     }

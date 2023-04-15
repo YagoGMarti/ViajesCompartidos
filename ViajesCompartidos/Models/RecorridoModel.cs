@@ -33,6 +33,7 @@ namespace SistemaViajesCompartidos.Models
         public virtual List<UbicacionModel> Ubicaciones { get; set; }
 
         public EstadoRecorridoEnum EstadoRecorrido { get; set; }
+        public EstrategiaRutaEnum EstrategiaRecorrido { get; set; }
 
         public double LatitudCentro { get; set; }
         public string LatitudCentroString => LatitudCentro.ToString().Replace(',', '.');

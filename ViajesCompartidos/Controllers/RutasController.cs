@@ -17,50 +17,26 @@ namespace ViajesCompartidos.Controllers
             return View();
         }
 
-        public ActionResult AlternativaRuta(Guid Empleado_ID, RecorridoModel recorrido)
+        public ActionResult AlternativaRuta(Guid Empleado_ID, int Estrategia, RecorridoModel recorrido)
         {
-            EstrategiaRutaEnum estrategia;
+            EstrategiaRutaEnum estrategia = (EstrategiaRutaEnum)Estrategia;
+
             var intentos = recorridosActivos.Where(x => x.Value.Conductor_ID == Empleado_ID);
-            switch (intentos.Count())
+            if (intentos.Any(x => x.Value.EstrategiaRecorrido == estrategia))
             {
-                case 1:
-                    estrategia = EstrategiaRutaEnum.SoloCercanosDomicilio; break;
-                case 2:
-                    estrategia = EstrategiaRutaEnum.SoloMasCercano; break;
-                case 3:
-                    estrategia = EstrategiaRutaEnum.SinConductores; break;
-                default: return this.SinPasajeros();
-            }
-
-            recorrido = RecorridoHandler.ObtenerRecorrido(Empleado_ID, estrategia);
-            if (!recorridosActivos.ContainsKey(recorrido.ID))
-            {
-                recorridosActivos.Add(recorrido.ID, recorrido);
-            }
-
-            if (recorrido.Pasajeros.Any() && intentos.Count() < 5)
-            {
-                if (intentos != null)
-                    foreach (var item in intentos)
-                    {
-                        if (recorrido.ID != item.Key
-                            && recorrido.Pasajeros.Select(x => x.ID).SequenceEqual(item.Value.Pasajeros.Select(x => x.ID)))
-                        {
-                            // ya mostramos la misma opción. 
-                            return this.AlternativaRuta(Empleado_ID, recorrido);
-                        }
-                    }
-
-                CargarMapa(recorrido);
-                return this.ObtenerRuta(Empleado_ID, recorrido);
+                recorrido = intentos.First(x => x.Value.EstrategiaRecorrido == estrategia).Value;
             }
             else
             {
-                if (intentos.Count() > 3)
-                    return this.SinPasajeros();
-                else
-                    return this.AlternativaRuta(Empleado_ID, recorrido);
+                recorrido = RecorridoHandler.ObtenerRecorrido(Empleado_ID, estrategia);
+                if (!recorridosActivos.ContainsKey(recorrido.ID))
+                {
+                    recorridosActivos.Add(recorrido.ID, recorrido);
+                }
             }
+
+            CargarMapa(recorrido);
+            return this.ObtenerRuta(Empleado_ID, recorrido);
         }
 
         public ActionResult ObtenerRuta(Guid Empleado_ID, RecorridoModel recorrido)
@@ -76,19 +52,43 @@ namespace ViajesCompartidos.Controllers
                 recorrido = RecorridoHandler.ObtenerRecorrido(Empleado_ID, EstrategiaRutaEnum.Estandar);
             }
 
-            if (recorrido.Pasajeros.Any())
+            if (!recorridosActivos.ContainsKey(recorrido.ID))
             {
-                if (!recorridosActivos.ContainsKey(recorrido.ID))
-                {
-                    recorridosActivos.Add(recorrido.ID, recorrido);
-                }
-
-                CargarMapa(recorrido);
-                return View("ObtenerRuta", recorrido);
+                recorridosActivos.Add(recorrido.ID, recorrido);
             }
 
+            if (recorrido.Pasajeros.Any())
+            {
+                CargarMapa(recorrido);
+                ViewBag.SinPasajeros = null;
+            }
             else
-                return this.SinPasajeros();
+            {
+                ViewBag.SinPasajeros = "No se encontraron pasajeros";
+            }
+
+            ViewBag.Estrategia = GetEstrategia(recorrido.EstrategiaRecorrido);
+
+            return View("ObtenerRuta", recorrido);
+        }
+
+        private string GetEstrategia(EstrategiaRutaEnum estrategiaRecorrido)
+        {
+            string estrategia = string.Empty;
+            switch (estrategiaRecorrido)
+            {
+                case EstrategiaRutaEnum.Estandar:
+                    estrategia = "Estandar"; break;
+                case EstrategiaRutaEnum.SoloCercanosDomicilio:
+                    estrategia = "Cercanos al domicilio"; break;
+                case EstrategiaRutaEnum.SinConductores:
+                    estrategia = "Ignorar aquellos con auto"; break;
+                case EstrategiaRutaEnum.SoloMasCercano:
+                    estrategia = "Buscar por cercanía a la sucursal"; break;
+                default: break;
+            }
+
+            return estrategia;
         }
 
         private void CargarMapa(RecorridoModel recorrido)

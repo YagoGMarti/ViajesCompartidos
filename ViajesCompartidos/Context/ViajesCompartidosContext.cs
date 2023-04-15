@@ -25,8 +25,8 @@ namespace SistemaViajesCompartidos.Context
             // Inicializar con una firma propia y datos de prueba
             if (Initialize)
             {
-                Database.SetInitializer<ViajesCompartidosContext>(new DropCreateDatabaseAlways<ViajesCompartidosContext>());
-                base.Database.CommandTimeout = 300;
+                Database.SetInitializer<ViajesCompartidosContext>(new DropCreateDatabaseIfModelChanges<ViajesCompartidosContext>());
+                base.Database.CommandTimeout = 3000;
                 new ViajesCompartidosInitializer().CallSeed(this);
             }
             else
