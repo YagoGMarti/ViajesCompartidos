@@ -62,7 +62,7 @@ namespace ViajesCompartidos.Context
                 new SucursalModel () {
                     Nombre = "Casa Central",
                     EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID,
-                    Ubicacion = new UbicacionModel() { 
+                    Ubicacion = new UbicacionModel() {
                         UbicacionTexto = "Buenos Aires 106, Córdoba, Argentina",
                         Latitud = -31.417520,
                         LatitudTexto = "-31.417520",
@@ -73,7 +73,7 @@ namespace ViajesCompartidos.Context
                 new SucursalModel () {
                     Nombre = "Cerro",
                     EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID,
-                    Ubicacion = new UbicacionModel() { 
+                    Ubicacion = new UbicacionModel() {
                         UbicacionTexto = "Avenida Recta Martinolli 5243, Córdoba, Argentina",
                         Latitud = -31.352805,
                         LatitudTexto = "-31.352805",
@@ -128,11 +128,12 @@ namespace ViajesCompartidos.Context
                         FechaVencimientoCarnetConducir = DateTime.Today.AddDays(120),
                         ComprobanteCarnetValidado = true,
                         FechaVencimientoComprobantePoliza = DateTime.Today.AddDays(120),
-                        ComprobantePolizaValidado = true
+                        ComprobantePolizaValidado = true,
+                        EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID
                     },
                     HorarioIngreso = new TimeSpan(9,0,0),
                     HorarioSalida = new TimeSpan(17,0,0),
-                    Ubicacion = new UbicacionModel() { 
+                    Ubicacion = new UbicacionModel() {
                         UbicacionTexto = "Ernesto Piotti 6378, Córdoba, Argentina",
                         Latitud = -31.3435028,
                         LatitudTexto = "-31.3435028",
@@ -155,17 +156,18 @@ namespace ViajesCompartidos.Context
                         FechaVencimientoCarnetConducir = DateTime.Today.AddDays(120),
                         ComprobanteCarnetValidado = true,
                         FechaVencimientoComprobantePoliza = DateTime.Today.AddDays(120),
-                        ComprobantePolizaValidado = true
+                        ComprobantePolizaValidado = true,
+                        EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID
                     },
                     HorarioIngreso = new TimeSpan(9,0,0),
                     HorarioSalida = new TimeSpan(17,0,0),
-                    Ubicacion = new UbicacionModel() { 
+                    Ubicacion = new UbicacionModel() {
                         UbicacionTexto = "Tte. Gral. Donato Alvarez 9135",
                         Latitud = -31.3194174,
                         LatitudTexto = "-31.3194174",
                         Longitud = -64.2726915,
                         LongitudTexto = "-64.2726915"
-                    } 
+                    }
                 },
                 new EmpleadoModel()  {
                     Nombre = "Gonzalo",
@@ -178,7 +180,7 @@ namespace ViajesCompartidos.Context
                     SucursalModel_ID = sucursales.FirstOrDefault(s => s.Nombre == "Cerro").ID,
                     HorarioIngreso = new TimeSpan(9,0,0),
                     HorarioSalida = new TimeSpan(17,0,0),
-                    Ubicacion = new UbicacionModel() { 
+                    Ubicacion = new UbicacionModel() {
                         UbicacionTexto = "Heriberto Martínez 7311, Córdoba, Argentina",
                         Latitud = -31.33715,
                         LatitudTexto = "-31.33715",
@@ -201,7 +203,8 @@ namespace ViajesCompartidos.Context
                         FechaVencimientoCarnetConducir = DateTime.Today.AddDays(120),
                         ComprobanteCarnetValidado = true,
                         FechaVencimientoComprobantePoliza = DateTime.Today.AddDays(120),
-                        ComprobantePolizaValidado = true
+                        ComprobantePolizaValidado = true,
+                        EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID
                     },
                     HorarioIngreso = new TimeSpan(9,0,0),
                     HorarioSalida = new TimeSpan(17,0,0),
@@ -246,7 +249,7 @@ namespace ViajesCompartidos.Context
                     Ubicacion = new UbicacionModel() {
                         UbicacionTexto = "Bv. Los Granaderos 1468, Córdoba, Argentina",
                         Latitud = -31.385831,
-                        LatitudTexto = "-31.385831", 
+                        LatitudTexto = "-31.385831",
                         Longitud = -64.193818,
                         LongitudTexto = "-64.193818"
                     }
@@ -285,7 +288,8 @@ namespace ViajesCompartidos.Context
                         FechaVencimientoCarnetConducir = DateTime.Today.AddDays(120),
                         ComprobanteCarnetValidado = true,
                         FechaVencimientoComprobantePoliza = DateTime.Today.AddDays(120),
-                        ComprobantePolizaValidado = true
+                        ComprobantePolizaValidado = true,
+                        EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID
                     },
                     HorarioIngreso = new TimeSpan(10,0,0),
                     HorarioSalida = new TimeSpan(18,0,0),
@@ -372,7 +376,8 @@ namespace ViajesCompartidos.Context
                         FechaVencimientoCarnetConducir = DateTime.Today.AddDays(120),
                         ComprobanteCarnetValidado = true,
                         FechaVencimientoComprobantePoliza = DateTime.Today.AddDays(120),
-                        ComprobantePolizaValidado = true
+                        ComprobantePolizaValidado = true,
+                        EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID
                     },Ubicacion = new UbicacionModel() {
                         UbicacionTexto = "Camilo Isleño 4547, Córdoba, Argentina",
                         Latitud = -31.430517,
@@ -474,7 +479,8 @@ namespace ViajesCompartidos.Context
                         FechaVencimientoCarnetConducir = DateTime.Today.AddDays(120),
                         ComprobanteCarnetValidado = true,
                         FechaVencimientoComprobantePoliza = DateTime.Today.AddDays(120),
-                        ComprobantePolizaValidado = true
+                        ComprobantePolizaValidado = true,
+                        EmpresaModel_ID = empresas.FirstOrDefault(e => e.Nombre == "Demo").ID
                     },
                     Ubicacion = new UbicacionModel() {
                         UbicacionTexto = "Emilio Achával 1315, Córdoba, Argentina",

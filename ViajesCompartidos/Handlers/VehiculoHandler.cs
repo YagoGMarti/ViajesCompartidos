@@ -18,6 +18,11 @@ namespace ViajesCompartidos.Handlers
             return ViajesCompartidosContext.GetVehiculos();
         }
 
+        internal static IEnumerable<VehiculoModel> GetVehiculosPorEmpresa(Guid empresaModel_ID)
+        {
+            return ViajesCompartidosContext.GetVehiculosPorEmpresa(empresaModel_ID);
+        }
+
         internal static void CrearVehiculo(VehiculoModel vehiculoModel)
         {
             EmpleadoModel empleadoModel = EmpleadoHandler.GetEmpleado(vehiculoModel.Empleado_ID);

@@ -70,9 +70,8 @@ namespace ViajesCompartidos.Handlers
             return empleados.OrderBy(x => x.CorreoElectronico);
         }
 
-        public static void CrearEmpleado(EmpleadoModel empleadoModel, Guid empresaID)
+        public static void CrearEmpleado(EmpleadoModel empleadoModel)
         {
-            empleadoModel.EmpresaModel_ID = empresaID;
             empleadoModel.ActualizarRoles();
             empleadoModel.CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar(empleadoModel.CorreoElectronico));
 

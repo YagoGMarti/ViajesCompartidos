@@ -338,6 +338,18 @@ namespace SistemaViajesCompartidos.Context
             return vehiculos;
         }
 
+        public static IEnumerable<VehiculoModel> GetVehiculosPorEmpresa(Guid empresaModel_ID)
+        {
+            IEnumerable<VehiculoModel> vehiculos;
+            using (ViajesCompartidosContext context = new ViajesCompartidosContext())
+            {
+                vehiculos = context.Vehiculos
+                    .Where(x => x.EmpresaModel_ID == empresaModel_ID).ToList();
+            }
+            return vehiculos;
+        }
+        
+
         public static void CrearVehiculo(VehiculoModel vehiculoModel)
         {
             using (ViajesCompartidosContext context = new ViajesCompartidosContext())

@@ -34,6 +34,7 @@ namespace SistemaViajesCompartidos.Models
         public string NombreArchivoCarnetConducir { get; set; }
 
         public Guid Empleado_ID { get; set; }
+        public Guid EmpresaModel_ID { get; set; }
 
         public void Update(VehiculoModel vehiculoModel)
         {

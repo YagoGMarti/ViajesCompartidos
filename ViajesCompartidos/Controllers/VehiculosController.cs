@@ -20,7 +20,8 @@ namespace ViajesCompartidos.Controllers
         [RevisarRoles(RolesEmpleadoFlag.RRHH)]
         public ActionResult Index()
         {
-            return View("Index", VehiculoHandler.GetVehiculos());
+            var EmpresaModel_ID = ObtenerEmpresa((Guid)Session["SessionGUID"]);
+            return View("Index", VehiculoHandler.GetVehiculosPorEmpresa(EmpresaModel_ID));
         }
 
         public ActionResult Detalles(Guid? ID)
@@ -29,7 +30,7 @@ namespace ViajesCompartidos.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            
+
             VehiculoModel vehiculoModel = VehiculoHandler.GetVehiculo(ID.Value);
             EmpleadoModel empleadoModel = EmpleadoHandler.GetEmpleado(vehiculoModel.Empleado_ID);
 
@@ -53,6 +54,8 @@ namespace ViajesCompartidos.Controllers
         {
             var Empleado_ID = ObtenerUsuario((Guid)Session["SessionGUID"]);
             vehiculoModel.Empleado_ID = Empleado_ID;
+            var Empresa_ID = EmpleadoHandler.GetEmpleado(Empleado_ID).EmpresaModel_ID;
+            vehiculoModel.EmpresaModel_ID = Empresa_ID;
 
             try
             {
@@ -90,7 +93,7 @@ namespace ViajesCompartidos.Controllers
             ViewBag.asientosInsuficientes = false;
             EmpleadoModel empleadoModel = EmpleadoHandler.GetEmpleado(vehiculoModel.Empleado_ID);
 
-            if (empleadoModel.Recorrido != null 
+            if (empleadoModel.Recorrido != null
                 && vehiculoModel.Empleado_ID == empleadoModel.Recorrido.Conductor_ID
                 && empleadoModel.Recorrido.Pasajeros.Count() > vehiculoModel.AsientosLibres)
             {
@@ -116,8 +119,8 @@ namespace ViajesCompartidos.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            
             VehiculoModel vehiculoModel = VehiculoHandler.GetVehiculo(ID.Value);
-
             EmpleadoModel empleadoModel = EmpleadoHandler.GetEmpleado(vehiculoModel.Empleado_ID);
             ViewBag.empleado = $"{empleadoModel.Nombre} - {empleadoModel.CorreoElectronico}";
 
@@ -125,6 +128,7 @@ namespace ViajesCompartidos.Controllers
             {
                 return HttpNotFound();
             }
+
             return View(vehiculoModel);
         }
 
@@ -133,11 +137,33 @@ namespace ViajesCompartidos.Controllers
         [RevisarRoles(RolesEmpleadoFlag.RRHH)]
         public ActionResult Validar(VehiculoModel vehiculoModel)
         {
-            if (ModelState.IsValid)
+            bool fechasInconclusas = false;
+            ViewBag.FechaVencimientoPoliza = null;
+            ViewBag.FechaVencimientoCarnet = null;
+
+            if (vehiculoModel.ComprobantePolizaValidado && vehiculoModel.FechaVencimientoComprobantePoliza == null)
+            {
+                ViewBag.FechaVencimientoPoliza = "Debe indicar una fecha de vencimiento";
+                fechasInconclusas = true;
+            }
+
+            if (vehiculoModel.ComprobanteCarnetValidado && vehiculoModel.FechaVencimientoCarnetConducir == null)
+            {
+                ViewBag.FechaVencimientoCarnet = "Debe indicar una fecha de vencimiento";
+                fechasInconclusas = true;
+            }
+
+            if (ModelState.IsValid && ! fechasInconclusas)
             {
                 VehiculoHandler.ValidarVehiculo(vehiculoModel);
                 return RedirectToAction("Detalles", new { ID = vehiculoModel.ID });
             }
+            else
+            {
+                EmpleadoModel empleadoModel = EmpleadoHandler.GetEmpleado(vehiculoModel.Empleado_ID);
+                ViewBag.empleado = $"{empleadoModel.Nombre} - {empleadoModel.CorreoElectronico}";
+            }
+
             return View(vehiculoModel);
         }
 

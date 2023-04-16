@@ -66,7 +66,6 @@ namespace ViajesCompartidos.Controllers
 
             CargarMapa(empleadoModel.Recorrido);
 
-
             return View(empleadoModel);
         }
 
@@ -104,9 +103,11 @@ namespace ViajesCompartidos.Controllers
             {
                 EmpresaModel_ID = ObtenerEmpresa((Guid)Session["SessionGUID"]);
             }
+
             ViewBag.Sucursales = GetSucursales(EmpresaModel_ID, null);
             ViewBag.Ingreso = 7;
             ViewBag.Salida = 16;
+
             return View();
         }
 
@@ -114,7 +115,8 @@ namespace ViajesCompartidos.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Crear(EmpleadoModel empleadoModel)
         {
-            var empresaID = ObtenerEmpresa((Guid)Session["SessionGUID"]);
+            var sucursal = SucursalHandler.GetSucursal(empleadoModel.SucursalModel_ID);
+            empleadoModel.EmpresaModel_ID = sucursal.EmpresaModel_ID;
 
             empleadoModel.HorarioIngreso = new TimeSpan(int.Parse(empleadoModel.HorarioIngresoTexto), 0, 0);
             empleadoModel.HorarioSalida = new TimeSpan(int.Parse(empleadoModel.HorarioSalidaTexto), 0, 0);
@@ -125,11 +127,11 @@ namespace ViajesCompartidos.Controllers
             }
             else if (ModelState.IsValid)
             {
-                EmpleadoHandler.CrearEmpleado(empleadoModel, empresaID);
+                EmpleadoHandler.CrearEmpleado(empleadoModel);
                 return RedirectToAction("Detalles", new { ID = empleadoModel.ID });
             }
 
-            ViewBag.Sucursales = GetSucursales(empresaID, empleadoModel.SucursalModel_ID);
+            ViewBag.Sucursales = GetSucursales(empleadoModel.EmpresaModel_ID, empleadoModel.SucursalModel_ID);
             ViewBag.Ingreso = empleadoModel.HorarioIngreso.Hours.ToString();
             ViewBag.Salida = empleadoModel.HorarioSalida.Hours.ToString();
 
