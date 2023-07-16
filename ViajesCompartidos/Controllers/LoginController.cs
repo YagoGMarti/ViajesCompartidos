@@ -43,6 +43,31 @@ namespace ViajesCompartidos.Controllers
                 return RedireccionarPorRol();
             }
 
+            EmpresaModel empresa = SesionHandler.IniciarSesionEmpresa(inicioSesion);
+            if (empresa != null)
+            {
+                var SessionGUID = Guid.NewGuid();
+                ActualizarSesiones(SessionGUID, empresa.ID, empresa.ID);
+                ViewBag.FailedLoggin = null;
+
+                Session.Remove("Usuario");
+                Session.Add("Usuario", empresa.Nombre);
+
+                Session.Remove("Roles");
+                Session.Add("Roles", RolesEmpleadoFlag.RRHH | RolesEmpleadoFlag.CORREOINSTITUCIONAL);
+
+                Session.Remove("Empleado_ID");
+                Session.Add("Empleado_ID", empresa.ID.ToString());
+                Session.Remove("Empresa_ID");
+                Session.Add("Empresa_ID", empresa.ID.ToString());
+
+                Session.Remove("SessionGUID");
+                Session.Add("SessionGUID", SessionGUID);
+
+                return RedirectToAction("Index", "Home");
+            }
+
+
             ViewBag.FailedLoggin = "No se pudo iniciar sesión.";
             return View();
         }
@@ -63,26 +88,52 @@ namespace ViajesCompartidos.Controllers
 
         public ActionResult CambiarClave()
         {
-            return View();
+            var inicioSesion = new InicioSesion();
+            inicioSesion.Email = "placeholder@mail.com";
+
+            return View(inicioSesion);
         }
 
         [HttpPost]
         public ActionResult CambiarClave(InicioSesion inicioSesion)
         {
             ViewBag.ClavesNoCoinciden = null;
-            var empleadoID = ObtenerUsuario((Guid)Session["SessionGUID"]);
-
-            if (inicioSesion.Clave == inicioSesion.ClaveNueva)
+            if (ModelState.IsValid)
             {
-                SesionHandler.CambiarClave(empleadoID, inicioSesion.Clave);
-                return RedireccionarPorRol();
-            }
-            else
-            {
-                ViewBag.ClavesNoCoinciden = "Las claves no coinciden";
+                if (inicioSesion.ConfirmarClaveNueva == inicioSesion.ClaveNueva)
+                {
+                    var SessionID = ObtenerUsuario((Guid)Session["SessionGUID"]);
+                    var empleado = EmpleadoHandler.GetEmpleado(SessionID);
+                    if (empleado != null)
+                    {
+                        if (EncriptadoHandler.Encriptar(inicioSesion.Clave).SequenceEqual(empleado.ClaveEncriptada))
+                        {
+                            SesionHandler.CambiarClave(empleado.ID, inicioSesion.ClaveNueva);
+                            return RedireccionarPorRol();
+                        }
+
+                        ViewBag.ClavesNoCoinciden = "La clave provista es incorrecta.";
+                    }
+
+                    var empresa = EmpresaHandler.GetEmpresa(SessionID);
+                    if (empresa != null)
+                    {
+                        if (EncriptadoHandler.Encriptar(inicioSesion.Clave) == empresa.ClaveEncriptada)
+                        {
+                            SesionHandler.CambiarClaveEmpresa(empresa.ID, inicioSesion.ClaveNueva);
+                            return RedirectToAction("Index", "Home");
+                        }
+
+                        ViewBag.ClavesNoCoinciden = "La clave provista es incorrecta.";
+                    }
+                }
+                else
+                {
+                    ViewBag.ClavesNoCoinciden = "Las claves no coinciden";
+                }
             }
 
-            return View();
+            return View(inicioSesion);
         }
 
         public ActionResult Logout()

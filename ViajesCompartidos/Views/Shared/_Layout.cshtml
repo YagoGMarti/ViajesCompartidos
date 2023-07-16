@@ -31,13 +31,19 @@
                         }
                         else
                         {
-                            <li>@Html.ActionLink("Home", $"Detalles/{Session["Empleado_ID"]}", "Empleados")</li>
+                            if ((int)@Session["Roles"] <= 31)
+                            {
+                                <li>@Html.ActionLink("Home", $"Detalles/{Session["Empleado_ID"]}", "Empleados")</li>
+                            }
 
                             if ((int)@Session["Roles"] % 2 == 1)
                             {
                                 <li>@Html.ActionLink("Sucursales", "Index", "Sucursales")</li>
                                 <li>@Html.ActionLink("Empleados", "Index", "Empleados")</li>
-                                <li>@Html.ActionLink("Vehiculos", "Index", "Vehiculos")</li>
+                                if ((int)@Session["Roles"] <= 31)
+                                {
+                                    <li>@Html.ActionLink("Vehiculos", "Index", "Vehiculos")</li>
+                                }
                                 <li>@Html.ActionLink("Reporte", "ReportePorEmpresa", "Reportes")</li>
                             }
                         }

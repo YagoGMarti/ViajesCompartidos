@@ -21,7 +21,12 @@ namespace ViajesCompartidos.Controllers
             if (EmpresaID == null)
             {
                 var empleadoID = ObtenerUsuario((Guid)Session["SessionGUID"]);
-                EmpresaID = EmpleadoHandler.GetEmpleado(empleadoID).EmpresaModel_ID;
+                var empleado = EmpleadoHandler.GetEmpleado(empleadoID);
+                if (empleado != null)
+                {
+                    EmpresaID = empleado.EmpresaModel_ID;
+                }
+                else { EmpresaID = empleadoID; }
             }
 
             return View("ReportePorEmpresa", ReporteHandler.GetReportePorEmpresa(EmpresaID.Value));

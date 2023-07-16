@@ -15,10 +15,17 @@ namespace SistemaViajesCompartidos.Temporal
         [Required(ErrorMessage = "Debe ingresar una clave")]
         [DisplayName("Contraseña")]
         public string Clave { get; set; }
-        [DataType(DataType.Password)]
-        [Required(ErrorMessage = "Debe ingresar una clave")]
-        [DisplayName("Confirmar contraseña")] 
-        public string ClaveNueva { get; set; }
         public byte[] ClaveEncriptada { get; set; }
+
+        [DataType(DataType.Password)]
+        [DisplayName("Nueva contraseña")]
+        [RegularExpressionAttribute(@"^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[#?|!@$%^&*-/_]).{8,}$", ErrorMessage = "La clave debe tener una letra, un número y un carácter especial. Longitud mínima = 8")]
+        public string ClaveNueva { get; set; }
+
+        [DataType(DataType.Password)]
+        [DisplayName("Confirmar nueva contraseña")]
+        [RegularExpressionAttribute(@"^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[#?|!@$%^&*-/_]).{8,}$", ErrorMessage = "La clave debe tener una letra, un número y un carácter especial. Longitud mínima = 8")]
+        public string ConfirmarClaveNueva { get; set; }
+
     }
 }

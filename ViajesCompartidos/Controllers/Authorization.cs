@@ -43,14 +43,33 @@ namespace ViajesCompartidos.Controllers
             {
                 var sessionID = (Guid)filterContext.HttpContext.Session["SessionGUID"];
                 var usuarioID = ObtenerUsuario(sessionID);
-                var rolesUsuario = EmpleadoHandler.GetEmpleado(usuarioID).Roles.ToString()
+                var empleado = EmpleadoHandler.GetEmpleado(usuarioID);
+                var enabled = false;
+
+                if (empleado != null)
+                {
+                    var rolesUsuario = empleado.Roles.ToString()
                     .Split(new[] { ", " }, StringSplitOptions.None);
 
-                var enabled = false;
-                foreach (var rol in rolesRequeridos.ToString().Split(new[] { ", " }, StringSplitOptions.None))
+                    foreach (var rol in rolesRequeridos.ToString().Split(new[] { ", " }, StringSplitOptions.None))
+                    {
+                        if (rolesUsuario.Any(x => x.Equals(rol)))
+                            enabled = true;
+                    }
+                }
+                else
                 {
-                    if(rolesUsuario.Any(x => x.Equals(rol)))
-                        enabled = true;
+                    var empresa = EmpresaHandler.GetEmpresa(usuarioID);
+                    if (empresa != null)
+                    {
+                        var roles = new string[1] { "RRHH" };
+
+                        foreach (var rol in rolesRequeridos.ToString().Split(new[] { ", " }, StringSplitOptions.None))
+                        {
+                            if (roles.Any(x => x.Equals(rol)))
+                                enabled = true;
+                        }
+                    }
                 }
                
                 //if (!rolesRequeridos.HasFlag(roles))

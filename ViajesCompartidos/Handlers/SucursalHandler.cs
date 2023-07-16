@@ -19,11 +19,10 @@ namespace ViajesCompartidos.Handlers
         {
             if(!estado)
             {
-                //var recorridos = RecorridoHandler.GetRecorridosPorSucursal(ID);
-                //foreach (var recorrido in recorridos)
-                //{
-                //    RecorridoHandler.CancelarRuta(recorrido.ID);
-                //}
+                foreach (var recorrido in RecorridoHandler.GetRecorridosPorSucursal(ID))
+                {
+                    RecorridoHandler.CancelarRuta(recorrido.ID);
+                }
             }
 
             ViajesCompartidosContext.CambiarEstadoActivoSucursal(ID, estado);
@@ -37,6 +36,7 @@ namespace ViajesCompartidos.Handlers
         public static void EditarSucursal(SucursalModel sucursalModel)
         {
             SucursalModel sucursal = GetSucursal(sucursalModel.ID);
+
             if (sucursalModel.Ubicacion.UbicacionTexto != sucursal.Ubicacion.UbicacionTexto)
             {
                 foreach (var recorrido in RecorridoHandler.GetRecorridosPorSucursal(sucursalModel.ID))
@@ -50,6 +50,7 @@ namespace ViajesCompartidos.Handlers
 
         public static void CrearSucursal(SucursalModel sucursalModel)
         {
+            sucursalModel.Ubicacion.Fill();
             ViajesCompartidosContext.CrearSucursal(sucursalModel);
         }
     }

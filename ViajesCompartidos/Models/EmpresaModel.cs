@@ -26,6 +26,16 @@ namespace SistemaViajesCompartidos.Models
         [DisplayName("Tipo de sociedad")]
         public TipoEmpresaEnum TipoEmpresa { get; set; }
 
+        [NotMapped]
+        [DisplayName("Email")]
+        [Required(ErrorMessage = "Es necesario un email", AllowEmptyStrings = false)]
+        [EmailAddress(ErrorMessage = "El email no cumple con el formato esperado")]
+        public string CorreoElectronico { get; set; }
+
+        public string CorreoElectronicoEncriptado { get; set; }
+
+        public byte[] ClaveEncriptada { get; set; }
+
         //[NotMapped]
         //[DisplayName("Logo")]
         //public HttpPostedFileBase Imagen { get; set; }
@@ -47,7 +57,8 @@ namespace SistemaViajesCompartidos.Models
             this.RazonSocial = empresaModel.RazonSocial;
             this.CUIT = empresaModel.CUIT;
             this.TipoEmpresa = empresaModel.TipoEmpresa;
-
+            this.CorreoElectronicoEncriptado = empresaModel.CorreoElectronicoEncriptado;
+            
             //this.Logo = empresaModel.Logo;
             //this.FormatoImagenLogo = empresaModel.FormatoImagenLogo;
             //this.NombreImagenLogo = empresaModel.NombreImagenLogo;

@@ -21,10 +21,9 @@ namespace SistemaViajesCompartidos.Models
         [Required(ErrorMessage = "Es necesario un email", AllowEmptyStrings = false)]
         [EmailAddress(ErrorMessage = "El email no cumple con el formato esperado")]
         public string CorreoElectronico { get; set; }
+        public string CorreoElectronicoEncriptado { get; set; }
 
         [Required(ErrorMessage = "Debe ingresar un mensaje", AllowEmptyStrings = false)]
         public string Mensaje { get; set; }
-
-        public string CorreoElectronicoEncriptado { get; set; }
     }
 }

@@ -24,13 +24,18 @@ namespace SistemaViajesCompartidos.Models
         [DisplayName("Dirección")]
         public string UbicacionTexto { get; set; }
 
+        internal void Fill()
+        {
+            Latitud = double.Parse(LatitudTexto.Replace('.', ','));
+            Longitud = double.Parse(LongitudTexto.Replace('.', ','));
+        }
+
         internal void Update(UbicacionModel ubicacion)
         {
             LatitudTexto = ubicacion.LatitudTexto;
-            Latitud = double.Parse(ubicacion.LatitudTexto.Replace('.',','));
             LongitudTexto = ubicacion.LongitudTexto;
-            Longitud = double.Parse(ubicacion.LongitudTexto.Replace('.', ','));
             UbicacionTexto = ubicacion.UbicacionTexto;
+            Fill();
         }
 
         //public byte[] MapaDescargado { get; set; }

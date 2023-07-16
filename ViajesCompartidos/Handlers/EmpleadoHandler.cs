@@ -14,6 +14,9 @@ namespace ViajesCompartidos.Handlers
         public static EmpleadoModel GetEmpleado(Guid ID)
         {
             var empleado = ViajesCompartidosContext.GetEmpleado(ID);
+            if (empleado == null)
+                return null;
+
             empleado = DesencriptarDatos(empleado);
             empleado.RRHH = empleado.Roles.HasFlag(RolesEmpleadoFlag.RRHH);
 
@@ -73,6 +76,7 @@ namespace ViajesCompartidos.Handlers
         public static void CrearEmpleado(EmpleadoModel empleadoModel)
         {
             empleadoModel.ActualizarRoles();
+            empleadoModel.Ubicacion.Fill();
             empleadoModel.CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar(empleadoModel.CorreoElectronico));
 
             if (ViajesCompartidosContext.GetEmpleadoPorCorreoElectronico(empleadoModel.CorreoElectronicoEncriptado) != null)
@@ -92,13 +96,15 @@ namespace ViajesCompartidos.Handlers
         public static void EditarEmpleado(EmpleadoModel empleadoModel)
         {
             empleadoModel.ActualizarRoles();
-            
-            {
-                EmpleadoModel empleado = GetEmpleado(empleadoModel.ID);
-                if(empleadoModel.Ubicacion.UbicacionTexto != empleado.Ubicacion.UbicacionTexto
-                    && empleado.RecorridoActivo)
-                    RecorridoHandler.RemoverPasajero(empleado.RecorridoModel_ID, empleadoModel.ID);
-            }
+
+            EmpleadoModel empleado = GetEmpleado(empleadoModel.ID);
+            if ((empleadoModel.Ubicacion.UbicacionTexto != empleado.Ubicacion.UbicacionTexto
+                && empleado.RecorridoActivo)
+                || empleadoModel.HorarioIngreso != empleado.HorarioIngreso
+                || empleadoModel.HorarioSalida != empleado.HorarioSalida
+                || empleadoModel.SucursalModel_ID != empleado.SucursalModel_ID
+                )
+                RecorridoHandler.RemoverPasajero(empleado.RecorridoModel_ID, empleadoModel.ID);
 
             if (!string.IsNullOrWhiteSpace(empleadoModel.Telefono))
                 empleadoModel.TelefonoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar(empleadoModel.Telefono));

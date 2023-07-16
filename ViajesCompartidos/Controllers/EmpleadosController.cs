@@ -153,8 +153,7 @@ namespace ViajesCompartidos.Controllers
                 return HttpNotFound();
             }
 
-            var empresaID = ObtenerEmpresa((Guid)Session["SessionGUID"]);
-            ViewBag.Sucursales = GetSucursales(empresaID, empleadoModel.SucursalModel_ID);
+            ViewBag.Sucursales = GetSucursales(empleadoModel.EmpresaModel_ID, empleadoModel.SucursalModel_ID);
             ViewBag.Ingreso = empleadoModel.HorarioIngreso.Hours;
             ViewBag.Salida = empleadoModel.HorarioSalida.Hours;
             ViewBag.Latitud = empleadoModel.Ubicacion.LatitudTexto;

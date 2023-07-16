@@ -305,6 +305,16 @@ namespace SistemaViajesCompartidos.Context
             return empleado;
         }
 
+        public static EmpresaModel GetEmpresasPorCorreoElectronico(string emailEncriptado)
+        {
+            EmpresaModel empresa;
+            using (ViajesCompartidosContext context = new ViajesCompartidosContext())
+            {
+                empresa = context.Empresas.FirstOrDefault(x => x.CorreoElectronicoEncriptado == emailEncriptado);
+            }
+            return empresa;
+        }
+
         public static RolesEmpleadoFlag GetRolEmpleado(Guid empleadoID)
         {
             RolesEmpleadoFlag rolesEmpleado;
@@ -580,6 +590,20 @@ namespace SistemaViajesCompartidos.Context
                 empleado.ClaveEncriptada = claveEncriptada;
                 context.SaveChanges();
                 email = empleado.CorreoElectronicoEncriptado;
+            }
+
+            return email;
+        }
+
+        internal static string ReiniciarClaveEmpresa(Guid empresaID, byte[] claveEncriptada)
+        {
+            string email;
+            using (ViajesCompartidosContext context = new ViajesCompartidosContext())
+            {
+                var empresa = context.Empresas.Find(empresaID);
+                empresa.ClaveEncriptada = claveEncriptada;
+                context.SaveChanges();
+                email = empresa.CorreoElectronicoEncriptado;
             }
 
             return email;

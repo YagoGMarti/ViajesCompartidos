@@ -41,13 +41,17 @@ namespace ViajesCompartidos.Context
                     Nombre = "Demo",
                     RazonSocial = "Empresa Demo S.R.L.",
                     CUIT = Int64.Parse("20355727395"),
-                    TipoEmpresa = TipoEmpresaEnum.DEMO
+                    TipoEmpresa = TipoEmpresaEnum.DEMO,
+                    CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("yago.g.marti@gmail.com")),
+                    ClaveEncriptada = EncriptadoHandler.Encriptar("yago.g.marti@gmail")
                 },
                 new EmpresaModel () {
                     Nombre = "Admin",
                     RazonSocial = "Admin Demo",
-                    CUIT = Int64.Parse("20355727395"),
-                    TipoEmpresa = TipoEmpresaEnum.DEMO
+                    CUIT = Int64.Parse("20355727397"),
+                    TipoEmpresa = TipoEmpresaEnum.DEMO,
+                    CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar("yaguito_marti@hotmail.com")),
+                    ClaveEncriptada = EncriptadoHandler.Encriptar("yaguito_marti@hotmail")
                 }
             };
 

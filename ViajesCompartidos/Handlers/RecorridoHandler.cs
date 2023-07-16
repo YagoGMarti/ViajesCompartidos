@@ -183,12 +183,23 @@ namespace ViajesCompartidos.Handlers
                 pasajero.CorreoElectronico = EncriptadoHandler.DesEncriptar(EncriptadoHandler.StringToBytes(pasajero.CorreoElectronicoEncriptado));
                 _mails.EnviarCorreoElectronico(pasajero.CorreoElectronico, pasajero.Nombre, SistemaViajesCompartidos.Enums.TipoCorreoEnum.RutaCancelada);
             }
+
+            {
+                var conductor = EmpleadoHandler.GetEmpleado(recorrido.Conductor_ID);
+                _mails.EnviarCorreoElectronico(conductor.CorreoElectronico, conductor.Nombre, SistemaViajesCompartidos.Enums.TipoCorreoEnum.RutaCancelada);
+            }
+
             ViajesCompartidosContext.CancelarRuta(recorrido_ID.Value);
         }
 
         internal static void RemoverPasajero(Guid? recorrido_ID, Guid pasajero_ID)
         {
             RecorridoModel recorrido = GetRecorrido(recorrido_ID);
+            if (recorrido == null)
+            {
+                return;
+            }
+
             if (recorrido.Conductor_ID == pasajero_ID
                 || recorrido.Pasajeros.All(x => x.ID == pasajero_ID))
             {

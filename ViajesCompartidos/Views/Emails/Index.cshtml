@@ -20,13 +20,13 @@
         <th class="col-lg-3 text-center">
             @Html.DisplayNameFor(model => model.Destinatario)
         </th>
-        <th class="col-lg-3 text-center">
+        <th class="col-lg-2 text-center">
             @Html.DisplayNameFor(model => model.Asunto)
         </th>
         <th class="col-lg-1 text-center">
             @Html.DisplayNameFor(model => model.Enviado)
         </th>
-        <th class="col-lg-3 text-center">Mensaje</th>
+        <th class="col-lg-5 text-center">Mensaje</th>
         <th></th>
     </tr>
 
@@ -46,7 +46,7 @@
                 @Html.DisplayFor(modelItem => item.Enviado)
             </td>
             <td class="text-center">
-                @Html.TextBoxFor(modelItem => item.MensajeFlattened)
+                @Html.TextBoxFor(modelItem => item.MensajeFlattened, htmlAttributes: new { @style = "width:100%" })
             </td>
 
             @*<td class="text-center">

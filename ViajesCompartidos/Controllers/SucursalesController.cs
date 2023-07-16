@@ -22,7 +22,7 @@ namespace ViajesCompartidos.Controllers
             if (EmpresaID == null)
             {
                 var empleadoID = ObtenerUsuario((Guid)Session["SessionGUID"]);
-                var empresaID = EmpleadoHandler.GetEmpleado(empleadoID).EmpresaModel_ID;
+                var empresaID = EmpleadoHandler.GetEmpleado(empleadoID)?.EmpresaModel_ID ?? empleadoID;
                 ViewBag.EmpresaModel_ID = empresaID;
                 return View("Index", SucursalHandler.GetSucursalesPorEmpresa(empresaID));
             }

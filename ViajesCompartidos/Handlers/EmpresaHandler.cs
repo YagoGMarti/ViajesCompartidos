@@ -16,17 +16,30 @@ namespace ViajesCompartidos.Handlers
 
         public static EmpresaModel GetEmpresa(Guid ID)
         {
-            return ViajesCompartidosContext.GetEmpresa(ID);
+            var empresa = ViajesCompartidosContext.GetEmpresa(ID);
+
+            if (empresa == null)
+                return null;
+
+            empresa.CorreoElectronico = EncriptadoHandler.DesEncriptar(EncriptadoHandler.StringToBytes(empresa.CorreoElectronicoEncriptado));
+            return empresa;
         }
 
         public static void CrearEmpresa(EmpresaModel empresaModel)
         {
+            empresaModel.CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar(empresaModel.CorreoElectronico));
             ViajesCompartidosContext.CrearEmpresa(empresaModel);
+            SesionHandler.RestablecerClaveEmpresa(empresaModel.ID);
         }
 
         public static void EditarEmpresa(EmpresaModel empresaModel)
         {
+            var empresa = ViajesCompartidosContext.GetEmpresa(empresaModel.ID);
+            empresaModel.CorreoElectronicoEncriptado = EncriptadoHandler.BytesToString(EncriptadoHandler.Encriptar(empresaModel.CorreoElectronico));
             ViajesCompartidosContext.EditarEmpresa(empresaModel);
+
+            if (empresa.CorreoElectronicoEncriptado != empresaModel.CorreoElectronicoEncriptado)
+                SesionHandler.RestablecerClaveEmpresa(empresaModel.ID);
         }
 
         internal static void CambiarEstadoActivo(Guid ID, bool estado)
@@ -37,6 +50,19 @@ namespace ViajesCompartidos.Handlers
         internal static Guid GetEmpresaBySucursal(Guid sucursalID)
         {
             return ViajesCompartidosContext.GetEmpresaBySucursal(sucursalID);
+        }
+
+        public static Tuple<string, string> ReiniciarClave(Guid empresaID)
+        {
+            string clave = Guid.NewGuid().ToString();
+            return ReiniciarClave(empresaID, clave);
+        }
+
+        public static Tuple<string, string> ReiniciarClave(Guid empresaID, string clave)
+        {
+            var claveEncriptada = EncriptadoHandler.Encriptar(clave);
+            var email = ViajesCompartidosContext.ReiniciarClaveEmpresa(empresaID, claveEncriptada);
+            return new Tuple<string, string>(email, clave);
         }
     }
 }
